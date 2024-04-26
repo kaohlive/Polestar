@@ -51,10 +51,10 @@ class PolestarVehicle extends Device {
             await this.removeCapability('measure_battery');
         if (!this.hasCapability('measure_polestarBattery'))
             await this.addCapability('measure_polestarBattery');
-        // if(!this.hasCapability('measure_current'))
-        //   await this.addCapability('measure_current');
-        // if(!this.hasCapability('measure_power'))
-        //   await this.addCapability('measure_power');
+        if(!this.hasCapability('measure_current'))
+           await this.addCapability('measure_current');
+        if(!this.hasCapability('measure_power'))
+           await this.addCapability('measure_power');
         if (!this.hasCapability('measure_vehicleChargeTimeRemaining'))
             await this.addCapability('measure_vehicleChargeTimeRemaining');
         if (!this.hasCapability('measure_vehicleOdometer'))
@@ -88,10 +88,8 @@ class PolestarVehicle extends Device {
 
             //this.setCapabilityValue('measure_battery', batteryInfo.batteryChargeLevelPercentage);
             this.setCapabilityValue('measure_polestarBattery', batteryInfo.batteryChargeLevelPercentage);
-            // this.setCapabilityValue('measure_current', batteryInfo.chargingCurrentAmps);
-            // this.setCapabilityValue('measure_power', batteryInfo.chargingPowerWatts);
-
-
+            this.setCapabilityValue('measure_current', batteryInfo.chargingCurrentAmps);
+            this.setCapabilityValue('measure_power', batteryInfo.chargingPowerWatts);
             this.setCapabilityValue('measure_vehicleRange', batteryInfo.estimatedDistanceToEmptyKm);
             if (batteryInfo.chargingStatus == 'CHARGING_STATUS_CHARGING') {
                 this.setCapabilityValue('measure_vehicleChargeState', true);
