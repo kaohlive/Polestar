@@ -1,6 +1,6 @@
 {
   "id": "com.Coderax.Polestar",
-  "version": "2.1.0",
+  "version": "2.1.2",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "platforms": [
@@ -17,9 +17,7 @@
     "nl": "Geniet van de weg met Polestar en Homey – Slimme technologie voor slimme bestuurders"
   },
   "category": "internet",
-  "permissions": [
-    "homey:manager:api"
-  ],
+  "permissions": [],
   "images": {
     "small": "/assets/images/small.png",
     "large": "/assets/images/large.png",
@@ -88,5 +86,9 @@
     ]
   },
   "homeyCommunityTopicId": 95083,
-  "homepage": "https://coderax.dev"
+  "homepage": "https://coderax.dev",
+  "source": "https://github.com/Coderaxx/Polestar",
+  "bugs": {
+    "url": "https://github.com/Coderaxx/Polestar/issues"
+  }
 }
