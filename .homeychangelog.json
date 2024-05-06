@@ -70,5 +70,8 @@
   },
   "2.1.2": {
     "en": "Removed summary images from the device"
+  },
+  "2.2.0": {
+    "en": "Added support for charge speed details"
   }
 }
