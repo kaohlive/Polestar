@@ -4,7 +4,7 @@
     "no": "Min Polestar",
     "nl": "Mijn Polestar"
   },
-  "class": "other",
+  "class": "car",
   "capabilities": [ ],
   "energy": {
     "batteries": ["INTERNAL"]
