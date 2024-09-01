@@ -1,6 +1,34 @@
 {
     "triggers": [
         {
+            "id": "measure_polestarConnected_false",
+            "title": {
+                "en": "Car disconnected from a charger",
+                "no": "Bil frakoblet lader",
+                "nl": "Auto is niet meer verbonden met de lader"
+            },
+            "hint": {
+                "en": "When the car detects it is no longer connected to a charge port",
+                "no": "Når bilen oppdager at ladepunktet er frakoblet",
+                "nl": "Als de auto detecteerd dat de laadpoort niet meer verbonden is met een lader"
+            },
+            "$filter": "capabilities=measure_polestarConnected"
+        },
+        {
+            "id": "measure_polestarConnected_true",
+            "title": {
+                "en": "Car connected to a charger",
+                "no": "Bil tilkoblet lader",
+                "nl": "Auto is verbonden met een lader"
+            },
+            "hint": {
+                "en": "When the car detects a charger connected to a charge port",
+                "no": "Når bilen oppdager at en lader er tilkoblet ladepunktet",
+                "nl": "Wanneer de auto detecteerd dat de laadpoort verbonden is met een lader"
+            },
+            "$filter": "capabilities=measure_polestarConnected"
+        },
+        {
             "id": "chargingStarted",
             "title": {
                 "en": "Charging started",

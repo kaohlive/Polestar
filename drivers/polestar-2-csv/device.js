@@ -372,7 +372,7 @@ class PolestarBetaDevice extends Device {
             await this.setCapabilityValue('measure_polestarBattery', soc);
             await this.setCapabilityValue('measure_polestarRange', range);
             await this.setCapabilityValue('measure_polestarBatteryLevel', batteryLevel);
-            await this.setCapabilityValue('measure_polestarConnected', connected);
+            await this.setCapabilityValue('measure_polestarConnected.csv', connected);
             await this.setCapabilityValue('measure_polestarIgnitionState', ignitionState);
             await this.setCapabilityValue('measure_polestarLocation', location);
             await this.setCapabilityValue('measure_polestarSpeed', speed);
