@@ -79,5 +79,8 @@
   },
   "2.3.1": {
     "en": "Fix for trigger events"
+  },
+  "2.3.2": {
+    "en": "hotfix on the csv driver"
   }
 }
