@@ -76,5 +76,8 @@
   },
   "2.3.0": {
     "en": "Changed polestar vehicle to new device class car"
+  },
+  "2.3.1": {
+    "en": "Fix for trigger events"
   }
 }

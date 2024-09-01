@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.Coderax.Polestar",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "compatibility": ">=12.0.0",
   "sdk": 3,
   "platforms": [
@@ -88,6 +88,7 @@
   "flow": {
     "triggers": [
       {
+        "id": "measure_polestarConnected_false",
         "title": {
           "en": "Car disconnected from a charger",
           "no": "Bil frakoblet lader",
@@ -100,14 +101,14 @@
         },
         "args": [
           {
-            "name": "Vehicle",
             "type": "device",
-            "filter": "driver_id=vehicle"
+            "name": "device",
+            "filter": "driver_id=polestar-2-csv&capabilities=measure_polestarConnected"
           }
-        ],
-        "id": "chargeportconnected_false"
+        ]
       },
       {
+        "id": "measure_polestarConnected_true",
         "title": {
           "en": "Car connected to a charger",
           "no": "Bil tilkoblet lader",
@@ -120,52 +121,11 @@
         },
         "args": [
           {
-            "name": "Vehicle",
             "type": "device",
-            "filter": "driver_id=vehicle"
+            "name": "device",
+            "filter": "driver_id=polestar-2-csv&capabilities=measure_polestarConnected"
           }
-        ],
-        "id": "chargeportconnected_true"
-      },
-      {
-        "title": {
-          "en": "Car stopped charging",
-          "no": "Lading stoppet",
-          "nl": "Auto is gestopt met laden"
-        },
-        "hint": {
-          "en": "When the car stopped drawing power from the socket",
-          "no": "Når bilen sluttet å trekke strøm fra laderen",
-          "nl": "Als de auto zelf gestopt is met het opnemen van stroom uit via laadpoort"
-        },
-        "args": [
-          {
-            "name": "Vehicle",
-            "type": "device",
-            "filter": "driver_id=vehicle"
-          }
-        ],
-        "id": "charging_false"
-      },
-      {
-        "title": {
-          "en": "Car started charging",
-          "no": "Lading startet",
-          "nl": "Auto is begonnen met laden"
-        },
-        "hint": {
-          "en": "When the car started to draw power from the socket",
-          "no": "Når bilen startet å trekke strøm fra laderen",
-          "nl": "Als de auto is begonnen met het opnemen van stroom via de laadpoort"
-        },
-        "args": [
-          {
-            "name": "Vehicle",
-            "type": "device",
-            "filter": "driver_id=vehicle"
-          }
-        ],
-        "id": "charging_true"
+        ]
       },
       {
         "id": "chargingStarted",
@@ -452,6 +412,86 @@
             "type": "device",
             "name": "device",
             "filter": "driver_id=polestar-2-csv"
+          }
+        ]
+      },
+      {
+        "id": "measure_vehicleChargeState_false",
+        "title": {
+          "en": "Car stopped charging",
+          "no": "Lading stoppet",
+          "nl": "Auto is gestopt met laden"
+        },
+        "hint": {
+          "en": "When the car stopped drawing power from the socket",
+          "no": "Når bilen sluttet å trekke strøm fra laderen",
+          "nl": "Als de auto zelf gestopt is met het opnemen van stroom uit via laadpoort"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle&capabilities=measure_vehicleChargeState"
+          }
+        ]
+      },
+      {
+        "id": "measure_vehicleChargeState_true",
+        "title": {
+          "en": "Car started charging",
+          "no": "Lading startet",
+          "nl": "Auto is begonnen met laden"
+        },
+        "hint": {
+          "en": "When the car started to draw power from the socket",
+          "no": "Når bilen startet å trekke strøm fra laderen",
+          "nl": "Als de auto is begonnen met het opnemen van stroom via de laadpoort"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle&capabilities=measure_vehicleChargeState"
+          }
+        ]
+      },
+      {
+        "id": "measure_vehicleConnected_false",
+        "title": {
+          "en": "Car disconnected from a charger",
+          "no": "Bil frakoblet lader",
+          "nl": "Auto is niet meer verbonden met de lader"
+        },
+        "hint": {
+          "en": "When the car detects it is no longer connected to a charge port",
+          "no": "Når bilen oppdager at ladepunktet er frakoblet",
+          "nl": "Als de auto detecteerd dat de laadpoort niet meer verbonden is met een lader"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle&capabilities=measure_vehicleConnected"
+          }
+        ]
+      },
+      {
+        "id": "measure_vehicleConnected_true",
+        "title": {
+          "en": "Car connected to a charger",
+          "no": "Bil tilkoblet lader",
+          "nl": "Auto is verbonden met een lader"
+        },
+        "hint": {
+          "en": "When the car detects a charger connected to a charge port",
+          "no": "Når bilen oppdager at en lader er tilkoblet ladepunktet",
+          "nl": "Wanneer de auto detecteerd dat de laadpoort verbonden is met een lader"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle&capabilities=measure_vehicleConnected"
           }
         ]
       }
