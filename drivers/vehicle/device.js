@@ -89,7 +89,13 @@ class PolestarVehicle extends Device {
             //this.setCapabilityValue('measure_battery', batteryInfo.batteryChargeLevelPercentage);
             this.setCapabilityValue('measure_polestarBattery', batteryInfo.batteryChargeLevelPercentage);
             this.setCapabilityValue('measure_current', batteryInfo.chargingCurrentAmps);
-            this.setCapabilityValue('measure_power', batteryInfo.chargingPowerWatts);
+            if(batteryInfo.chargingPowerWatts!==null){
+                this.setCapabilityValue('measure_power', batteryInfo.chargingPowerWatts);
+            } else {
+                this.setCapabilityValue('measure_power', 0); //We set 0 first, this is for insights sake
+                this.setCapabilityValue('measure_power', batteryInfo.chargingPowerWatts);
+            }
+            
             this.setCapabilityValue('measure_vehicleRange', batteryInfo.estimatedDistanceToEmptyKm);
             if (batteryInfo.chargingStatus == 'CHARGING_STATUS_CHARGING') {
                 this.setCapabilityValue('measure_vehicleChargeState', true);
