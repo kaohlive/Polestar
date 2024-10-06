@@ -82,5 +82,8 @@
   },
   "2.3.2": {
     "en": "hotfix on the csv driver"
+  },
+  "2.3.3": {
+    "en": "Improved insights on power measurements"
   }
 }
