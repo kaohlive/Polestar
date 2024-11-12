@@ -85,5 +85,8 @@
   },
   "2.3.3": {
     "en": "Improved insights on power measurements"
+  },
+  "2.3.4": {
+    "en": "update to fix api changes"
   }
 }
