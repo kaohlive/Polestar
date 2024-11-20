@@ -88,5 +88,8 @@
   },
   "2.3.4": {
     "en": "update to fix api changes"
+  },
+  "2.3.5": {
+    "en": "Update npm modules"
   }
 }
