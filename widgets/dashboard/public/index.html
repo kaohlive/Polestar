@@ -82,6 +82,20 @@
         left: 30%; top: 45px; height: 42px; width: 36%;
       }
       @keyframes fadeInOut { 0% { opacity: 1; } 50% { opacity: 0.1; } 100% { opacity: 1; } }
+      .alarm-triangle { 
+        top: 105px; left: 70%;
+        width: 0; height: 0; 
+        border-left: 15px solid transparent; border-right: 15px solid transparent; 
+        border-bottom: 25px solid rgb(249, 0, 0); ; 
+        position: relative; 
+      } 
+      .alarm-triangle::before { 
+        content: '!'; 
+        position: absolute; 
+        top: 3px; left: -3px; 
+        font-size: 20px; font-weight: bold; 
+        color: rgb(29, 29, 29); 
+      }
     </style>
   </head>
 
@@ -103,6 +117,8 @@
           <div id="device-status-range-unit">KM</div>
         </div>
         <div id="device-status-odometer">88888 KM</div>
+        
+        <div id="device-status-servicewarning" class="alarm-triangle"></div>
       </div>
     </div>
 
@@ -110,10 +126,11 @@
       let status;
 
       function onHomeyReady(Homey) {
-        syncStatus();
+        syncStatus(false);
+        Homey.on('updatevehicle', syncStatus(true));
       }
 
-      function syncStatus() {
+      function syncStatus(event) {
         const { device } = Homey.getSettings();
         if (!device) {
           showError('Please select your Polestar from the widget\'s settings.');
@@ -133,7 +150,7 @@
           })
           .finally(() => {
             Homey.ready();
-          });
+          });        
       }
 
       function renderStatus() {
@@ -156,6 +173,12 @@
         } else {
           dash.classList.remove('connected-border'); dash.classList.remove('charging-border'); dash.classList.add('no-border');
           document.getElementById('device-status-measurements').style.display = 'none';
+        }
+        if(status.service)
+        {
+          document.getElementById('device-status-servicewarning').style.display = 'block';
+        } else {
+          document.getElementById('device-status-servicewarning').style.display = 'none';
         }
       }
     </script>

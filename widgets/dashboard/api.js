@@ -33,6 +33,7 @@ module.exports = {
       time_remaining: vehicle.getCapabilityValue('measure_vehicleChargeTimeRemaining'),
       odometer: vehicle.getCapabilityValue('measure_vehicleOdometer'),
       range: vehicle.getCapabilityValue('measure_vehicleRange'),
+      service: vehicle.getCapabilityValue('alarm_generic'),
     };
   },
 

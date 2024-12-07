@@ -43,11 +43,14 @@ class PolestarVehicle extends Device {
         this._timerTimers = this.homey.setInterval(async () => {
             await this.updateVehicleState();
         }, interval);
+        await this.updateHealthState();
+        let intervalHealth = 3600000;
+        this._timerHealth = this.homey.setInterval(async () => {
+            await this.updateHealthState();
+        }, intervalHealth);
     }
 
     async fixCapabilities() {
-        // if (!this.hasCapability('measure_battery'))
-        //     await this.addCapability('measure_battery');
         if (this.hasCapability('measure_battery'))
             await this.removeCapability('measure_battery');
         if (!this.hasCapability('measure_polestarBattery'))
@@ -66,6 +69,15 @@ class PolestarVehicle extends Device {
             await this.addCapability('measure_vehicleChargeState');
         if (!this.hasCapability('measure_vehicleConnected'))
             await this.addCapability('measure_vehicleConnected');
+        if (!this.hasCapability('alarm_generic'))
+            await this.addCapability('alarm_generic');
+    }
+
+    async updateHealthState(){
+        this.homey.app.log('Retrieve vehicle health', 'PolestarVehicle', 'DEBUG');
+        var healthInfo = await this.polestar.getHealthData();
+        this.homey.app.log(JSON.stringify(healthInfo));
+        this.setCapabilityValue('alarm_generic', healthInfo.serviceWarning.startsWith('SERVICE_WARNING_'));
     }
 
     async updateVehicleState() {
@@ -112,6 +124,7 @@ class PolestarVehicle extends Device {
         } catch {
             this.homey.app.log('Failed to retrieve batterystate', 'PolestarVehicle', 'ERROR');
         }
+        this.homey.app.emit('updatevehicle');
     }
 
     async onAdded() {
