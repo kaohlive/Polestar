@@ -1,0 +1,26 @@
+{
+  "name": {
+    "en": "Vehicle Dashboard"
+  },
+  "height": 188,
+  "transparent": true,
+  "settings": [
+    {
+      "id": "device",
+      "type": "autocomplete",
+      "title": {
+        "en": "Vehicle"
+      }
+    }
+  ],
+  "api": {
+    "getVehicles":{
+      "method": "GET",
+      "path": "/"      
+    },
+    "getVehicleStatus":{
+      "method": "GET",
+      "path": "/status"      
+    }
+  }
+}

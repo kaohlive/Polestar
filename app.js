@@ -22,6 +22,26 @@ class Polestar extends Homey.App {
 				no: 'Innstilling oppdatert:'
 			}), 'Polestar App', 'DEBUG', `${key}: ${key == 'polestar_token' ? '********' : this.homey.settings.get(key)}`);
 		});
+
+		try {
+			this.homey.dashboards
+			  .getWidget('dashboard')
+			  .registerSettingAutocompleteListener('device', async (query, settings) => {
+				this.log("List Polestar vehicles for widget settings")
+				const driver = await this.homey.drivers.getDriver('vehicle');
+				const devices = await driver.getDevices();
+				this.log('Located '+devices.length+' vehicles: filter using '+query)
+				this.log(devices[0].getData().registration)
+				return Object.values(devices)
+				  .map(device => ({
+					name: device.getName(),
+					registration: device.getData().registration,
+				  }))
+				  .filter(vehicle => vehicle.name.toLowerCase().includes(query.toLowerCase()));
+			  });
+		  } catch (err) {
+			this.log(`Dashboards might not be available: ${err.message}`);
+		  }
 	}
 
 	async log(message, instance = 'Polestar App', severity = 'DEBUG', data = null) {

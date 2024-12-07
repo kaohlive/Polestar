@@ -139,13 +139,20 @@ class Vehicle extends Driver {
             })
             this.homey.app.log('Password encrypted, credentials stored. Clear existing tokens.', 'Polestar Driver');
             //Now we have the encrypted password stored we can start testing the info
+            var polestar = new Polestar(data.username, data.password);
+            this.homey.app.log('Credential test password:', 'Polestar Driver', 'DEBUG', data.password);
             try {
-                var polestar = new Polestar(data.username, data.password);
                 await polestar.login();
-                var vehicles = await polestar.getVehicles();
                 this.homey.app.log('Credential test ok:', 'Polestar Driver', 'DEBUG', vehicles);
+            } catch (err) {
+                this.homey.app.log('Credential test failed:', 'Polestar Driver', 'ERROR', err);
+                return false;
+            }
+            try {
+                var vehicles = await polestar.getVehicles();
                 return true;
-            } catch {
+            } catch (err) {
+                this.homey.app.log('Retrieve vehicles failed:', 'Polestar Driver', 'ERROR', err);
                 return false;
             }
         });

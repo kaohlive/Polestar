@@ -1,0 +1,163 @@
+<html>
+  <head>
+    <style>
+      .oval-border { 
+        width: 100%; 
+        height: 160px; 
+        position: relative; /* Needed for positioning pseudo-element */ 
+        display: flex;
+      } 
+      .oval-border::before { 
+        content: ''; 
+        position: absolute; 
+        top: 0; left: 0; right: 0; bottom: 0; 
+        border: 8px solid; 
+        border-radius: 80px;
+      }
+      .no-border::before { 
+        border-color: rgb(36, 36, 36); 
+      }
+      .charging-border::before {
+        border-color: rgb(35, 206, 35);
+        animation: fadeInOut 15s infinite; 
+      }
+      .connected-border::before { 
+        border-color: rgb(255, 237, 40); 
+      }
+      .content { 
+        position: relative;
+        left: 9px; top: 8px;
+        border-radius: 80px; 
+        width: 95%; 
+        height: 90%; 
+        display: flex; 
+        background-color: rgb(29, 29, 29);
+      }
+      #device-status-battery{
+        position: absolute;
+        left: 7%; top: 45px; height: 42px; width: 20%;
+        text-align: right; padding-right: 8px;
+        border-right: 4px solid white;
+      }
+      #device-status-battery-name{
+        font-size: 12px;
+        color: rgb(255, 145, 1);
+      }
+      #device-status-battery-charge{
+        font-size: 24px; font-weight: bold;
+        color: rgb(255, 255, 255);
+      }
+      #device-status-range{
+        position: absolute;
+        display: inline-block;
+        left: 67%; top: 45px; height: 42px; 
+        text-align: left; padding-left: 8px;
+        border-left: 4px solid white;
+        color: rgb(255, 255, 255);
+      }
+      #device-status-range-name{
+        font-size: 12px;
+        color: rgb(255, 145, 1);
+      }
+      #device-status-range-value{
+        display: inline-block;
+        font-size: 24px; font-weight: bold;
+      }
+      #device-status-range-unit{
+        display: inline-block;
+        font-size: 20px; font-weight: normal;
+      }
+      #device-status-odometer{
+        font-size: 16px; font-weight: normal;
+        color: rgb(255, 255, 255);
+        position: absolute;
+        text-align: center;
+        left: -10px; top: 110px; height: 42px; width: 100%;
+      }
+      #device-status-measurements{
+        font-size: 16px; font-weight: normal;
+        color: rgb(255, 255, 255);
+        position: absolute;
+        text-align: center;
+        left: 30%; top: 45px; height: 42px; width: 36%;
+      }
+      @keyframes fadeInOut { 0% { opacity: 1; } 50% { opacity: 0.1; } 100% { opacity: 1; } }
+    </style>
+  </head>
+
+  <body class="homey-widget">
+
+    <div id="vehicle-dashboard" class="oval-border no-border">
+      <div class="content">
+        <div  id="device-status-battery">
+          <div id="device-status-battery-name">charge</div>
+          <div id="device-status-battery-charge">10%</div>
+        </div>
+        <div id="device-status-measurements">
+          <div id="device-status-measurements-power">4 A | 4 kW</div>
+          <div id="device-status-measurements-time">360</div>
+        </div>
+        <div  id="device-status-range">
+          <div id="device-status-range-name">range</div>
+          <div id="device-status-range-value">200</div>
+          <div id="device-status-range-unit">KM</div>
+        </div>
+        <div id="device-status-odometer">88888 KM</div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      let status;
+
+      function onHomeyReady(Homey) {
+        syncStatus();
+      }
+
+      function syncStatus() {
+        const { device } = Homey.getSettings();
+        if (!device) {
+          showError('Please select your Polestar from the widget\'s settings.');
+          return;
+        }
+
+        Homey.api('GET', `/status?registration=${device.registration}`)
+          .then(status_ => {
+            status = status_;
+            //status.connected=false;
+            //status.charging=false;
+            renderStatus();
+          })
+          .catch(err => {
+            showError(`Please select your Polestar from the widget's settings.`);
+            return;
+          })
+          .finally(() => {
+            Homey.ready();
+          });
+      }
+
+      function renderStatus() {
+        
+        document.getElementById('device-status-battery-charge').innerText = status.battery+'%';
+        document.getElementById('device-status-range-value').innerText = status.range;
+        document.getElementById('device-status-odometer').innerText = status.odometer.toFixed(1)+' KM';
+        document.getElementById('device-status-measurements-power').innerText = status.current+' A | '+(status.power/1000).toFixed(1) +' kW';
+        document.getElementById('device-status-measurements-time').innerText = Math.floor(status.time_remaining / 60)+'h'+(status.time_remaining % 60)+'m';
+        const dash = document.getElementById('vehicle-dashboard');
+        if(status.connected) {
+          dash.classList.remove('no-border');
+          if(status.charging){
+            dash.classList.remove('connected-border'); dash.classList.add('charging-border');
+            document.getElementById('device-status-measurements').style.display = 'block';
+          } else {
+            dash.classList.remove('charging-border'); dash.classList.add('connected-border');
+            document.getElementById('device-status-measurements').style.display = 'none';
+          }
+        } else {
+          dash.classList.remove('connected-border'); dash.classList.remove('charging-border'); dash.classList.add('no-border');
+          document.getElementById('device-status-measurements').style.display = 'none';
+        }
+      }
+    </script>
+  </body>
+</html>
