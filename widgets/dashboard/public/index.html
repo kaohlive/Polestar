@@ -127,7 +127,9 @@
 
       function onHomeyReady(Homey) {
         syncStatus(false);
-        Homey.on('updatevehicle', syncStatus(true));
+        Homey.on('updatevehicle', () => {
+          syncStatus(true);
+        });
       }
 
       function syncStatus(event) {
