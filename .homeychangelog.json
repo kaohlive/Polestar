@@ -91,5 +91,8 @@
   },
   "2.3.5": {
     "en": "Update npm modules"
+  },
+  "2.4.0": {
+    "en": "Widget, service warning and login bug fix"
   }
 }
