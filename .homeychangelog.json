@@ -94,5 +94,8 @@
   },
   "2.4.0": {
     "en": "Widget, service warning and login bug fix"
+  },
+  "2.4.1": {
+    "en": "preview images"
   }
 }
