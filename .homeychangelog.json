@@ -97,5 +97,8 @@
   },
   "2.4.1": {
     "en": "preview images"
+  },
+  "2.4.2": {
+    "en": "fix widget update on device state change"
   }
 }
