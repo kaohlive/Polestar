@@ -124,7 +124,7 @@ class PolestarVehicle extends Device {
         } catch {
             this.homey.app.log('Failed to retrieve batterystate', 'PolestarVehicle', 'ERROR');
         }
-        this.homey.app.emit('updatevehicle');
+        this.homey.api.realtime('updatevehicle');
     }
 
     async onAdded() {
