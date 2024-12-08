@@ -76,8 +76,13 @@ class PolestarVehicle extends Device {
     async updateHealthState(){
         this.homey.app.log('Retrieve vehicle health', 'PolestarVehicle', 'DEBUG');
         var healthInfo = await this.polestar.getHealthData();
-        this.homey.app.log(JSON.stringify(healthInfo));
-        this.setCapabilityValue('alarm_generic', healthInfo.serviceWarning.startsWith('SERVICE_WARNING_'));
+        this.homey.app.log('Health:', 'PolestarVehicle', 'DEBUG', healthInfo);
+        if(healthInfo!=null)
+        {
+            this.setCapabilityValue('alarm_generic', healthInfo.serviceWarning.startsWith('SERVICE_WARNING_'));
+        } else {
+            this.setCapabilityValue('alarm_generic', false);
+        }
     }
 
     async updateVehicleState() {
