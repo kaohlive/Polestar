@@ -79,7 +79,7 @@ class PolestarVehicle extends Device {
         this.homey.app.log('Health:', 'PolestarVehicle', 'DEBUG', healthInfo);
         if(healthInfo!=null)
         {
-            this.setCapabilityValue('alarm_generic', healthInfo.serviceWarning.startsWith('SERVICE_WARNING_'));
+            this.setCapabilityValue('alarm_generic', healthInfo.serviceWarning!='SERVICE_WARNING_NO_WARNING');
         } else {
             this.setCapabilityValue('alarm_generic', false);
         }
