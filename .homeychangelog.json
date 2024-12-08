@@ -100,5 +100,8 @@
   },
   "2.4.2": {
     "en": "fix widget update on device state change"
+  },
+  "2.4.3": {
+    "en": "stability improvement"
   }
 }
