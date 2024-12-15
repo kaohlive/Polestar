@@ -109,5 +109,8 @@
   },
   "2.4.5": {
     "en": "Update preview of widget"
+  },
+  "2.4.6": {
+    "en": "Fix for another api change on polestar side"
   }
 }
