@@ -2,6 +2,7 @@
 
 const { Driver } = require('homey');
 const Polestar = require('@andysmithfal/polestar.js');
+//const Polestar = require('../../lib/polestar.js');
 const HomeyCrypt = require('../../lib/homeycrypt')
 
 class Vehicle extends Driver {
