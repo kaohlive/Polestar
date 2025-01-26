@@ -112,5 +112,8 @@
   },
   "2.4.6": {
     "en": "Fix for another api change on polestar side"
+  },
+  "2.5.0": {
+    "en": "Added power meter with estimated overall usage"
   }
 }
