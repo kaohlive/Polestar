@@ -5,6 +5,8 @@ const Polestar = require('@andysmithfal/polestar.js');
 //const Polestar = require('../../lib/polestar.js');
 const HomeyCrypt = require('../../lib/homeycrypt')
 
+const measureInterval = 60000;
+
 var polestar = null;
 
 class PolestarVehicle extends Device {
@@ -40,7 +42,7 @@ class PolestarVehicle extends Device {
 
     async update_loop_timers() {
         await this.updateVehicleState();
-        let interval = 60000;
+        let interval = measureInterval;
         this._timerTimers = this.homey.setInterval(async () => {
             await this.updateVehicleState();
         }, interval);
@@ -60,6 +62,8 @@ class PolestarVehicle extends Device {
            await this.addCapability('measure_current');
         if(!this.hasCapability('measure_power'))
            await this.addCapability('measure_power');
+        if(!this.hasCapability('meter_power'))
+            await this.addCapability('meter_power');
         if (!this.hasCapability('measure_vehicleChargeTimeRemaining'))
             await this.addCapability('measure_vehicleChargeTimeRemaining');
         if (!this.hasCapability('measure_vehicleOdometer'))
@@ -105,14 +109,20 @@ class PolestarVehicle extends Device {
             var batteryInfo = await this.polestar.getBattery();
             this.homey.app.log('Battery:', 'PolestarVehicle', 'DEBUG', batteryInfo);
 
-            //this.setCapabilityValue('measure_battery', batteryInfo.batteryChargeLevelPercentage);
             this.setCapabilityValue('measure_polestarBattery', batteryInfo.batteryChargeLevelPercentage);
             this.setCapabilityValue('measure_current', batteryInfo.chargingCurrentAmps);
+            if(batteryInfo.chargingCurrentAmps!==null){
+                this.setCapabilityValue('measure_current', batteryInfo.chargingCurrentAmps);
+            } else {
+                this.setCapabilityValue('measure_current', 0); //We set 0 first, this is for insights sake
+            }
             if(batteryInfo.chargingPowerWatts!==null){
                 this.setCapabilityValue('measure_power', batteryInfo.chargingPowerWatts);
+                let hours = measureInterval / (1000 * 60 * 60);
+                let usedPower = (batteryInfo.chargingPowerWatts/1000) * (hours);
+                this.setCapabilityValue('meter_power', (usedPower+this.getCapabilityValue('meter_power')));
             } else {
                 this.setCapabilityValue('measure_power', 0); //We set 0 first, this is for insights sake
-                this.setCapabilityValue('measure_power', batteryInfo.chargingPowerWatts);
             }
             
             this.setCapabilityValue('measure_vehicleRange', batteryInfo.estimatedDistanceToEmptyKm);

@@ -5,7 +5,7 @@
     "nl": "Mijn Polestar"
   },
   "class": "car",
-  "capabilities": [ ],
+  "capabilities": [ "measure_power", "meter_power" ],
   "energy": {
     "batteries": ["INTERNAL"]
   },
