@@ -15,7 +15,7 @@ class PolestarVehicle extends Device {
             let PolestarUser = this.homey.settings.get('user_email');
             try {
                 let PolestarPwd = await HomeyCrypt.decrypt(this.homey.settings.get('user_password'), PolestarUser);
-                this.log(PolestarPwd);
+                //this.log(PolestarPwd);
                 this.polestar = new Polestar(PolestarUser, PolestarPwd);
             } catch (err) {
                 this.homey.app.log('Could not decrypt using salt, network connection changed?', 'PolestarVehicle', 'ERROR', err);
