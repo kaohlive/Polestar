@@ -115,5 +115,8 @@
   },
   "2.5.0": {
     "en": "Added power meter with estimated overall usage"
+  },
+  "2.5.1": {
+    "en": "Attempt to fix new api issue"
   }
 }
