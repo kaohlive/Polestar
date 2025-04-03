@@ -1,0 +1,11 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Days till service",
+    "no": "Dager til service",
+    "nl": "Dagen tot service"
+  },
+  "getable": true,
+  "setable": false,
+  "icon": "/drivers/vehicle/assets/timeremaining.svg"
+}

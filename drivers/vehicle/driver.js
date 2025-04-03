@@ -1,8 +1,8 @@
 'use strict';
 
 const { Driver } = require('homey');
-const Polestar = require('@andysmithfal/polestar.js');
-//const Polestar = require('../../lib/polestar.js');
+//const Polestar = require('@andysmithfal/polestar.js');
+const Polestar = require('../../clone_modules/polestar.js');
 const HomeyCrypt = require('../../lib/homeycrypt')
 
 class Vehicle extends Driver {
@@ -141,7 +141,7 @@ class Vehicle extends Driver {
             this.homey.app.log('Password encrypted, credentials stored. Clear existing tokens.', 'Polestar Driver');
             //Now we have the encrypted password stored we can start testing the info
             var polestar = new Polestar(data.username, data.password);
-            this.homey.app.log('Credential test password:', 'Polestar Driver', 'DEBUG', data.password);
+            //this.homey.app.log('Credential test password:', 'Polestar Driver', 'DEBUG', data.password);
             try {
                 await polestar.login();
                 this.homey.app.log('Credential test ok:', 'Polestar Driver', 'DEBUG', vehicles);

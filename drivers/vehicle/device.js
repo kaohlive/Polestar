@@ -1,8 +1,8 @@
 'use strict';
 
 const { Device } = require('homey');
-const Polestar = require('@andysmithfal/polestar.js');
-//const Polestar = require('../../lib/polestar.js');
+//const Polestar = require('@andysmithfal/polestar.js');
+const Polestar = require('../../clone_modules/polestar.js');
 const HomeyCrypt = require('../../lib/homeycrypt')
 
 const measureInterval = 60000;
@@ -76,6 +76,10 @@ class PolestarVehicle extends Device {
             await this.addCapability('measure_vehicleConnected');
         if (!this.hasCapability('alarm_generic'))
             await this.addCapability('alarm_generic');
+        if (!this.hasCapability('measure_vehicleDaysTillService'))
+            await this.addCapability('measure_vehicleDaysTillService');
+        if (!this.hasCapability('measure_vehicleDistanceTillService'))
+            await this.addCapability('measure_vehicleDistanceTillService');
     }
 
     async updateHealthState(){
@@ -85,6 +89,8 @@ class PolestarVehicle extends Device {
         if(healthInfo!=null)
         {
             this.setCapabilityValue('alarm_generic', healthInfo.serviceWarning!='SERVICE_WARNING_NO_WARNING');
+            this.setCapabilityValue('measure_vehicleDaysTillService', healthInfo.daysToService);
+            this.setCapabilityValue('measure_vehicleDistanceTillService', healthInfo.distanceToServiceKm);
         } else {
             this.setCapabilityValue('alarm_generic', false);
         }
@@ -110,7 +116,7 @@ class PolestarVehicle extends Device {
             this.homey.app.log('Battery:', 'PolestarVehicle', 'DEBUG', batteryInfo);
 
             this.setCapabilityValue('measure_polestarBattery', batteryInfo.batteryChargeLevelPercentage);
-            this.setCapabilityValue('measure_current', batteryInfo.chargingCurrentAmps);
+            //this.setCapabilityValue('measure_current', batteryInfo.chargingCurrentAmps);
             if(batteryInfo.chargingCurrentAmps!==null){
                 this.setCapabilityValue('measure_current', batteryInfo.chargingCurrentAmps);
             } else {

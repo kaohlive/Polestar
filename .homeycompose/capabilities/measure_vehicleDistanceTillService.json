@@ -1,0 +1,14 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Distance till service",
+    "no": "Avstand til service",
+    "nl": "Afstand tot service"
+  },
+  "getable": true,
+  "setable": false,
+  "units": {
+    "en": "KM"
+  },
+  "icon": "/drivers/vehicle/assets/odometer.svg"
+}

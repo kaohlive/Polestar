@@ -11,6 +11,7 @@ class Polestar extends Homey.App {
 		this.homey.settings.set('debugLog', null);
 
 		this.log(this.homey.__({
+			nl: 'Polestar App is geinitialiseert',
 			en: 'Polestar App has been initialized',
 			no: 'Polestar App har blitt initialisert'
 		}));
@@ -18,6 +19,7 @@ class Polestar extends Homey.App {
 		this.homey.settings.on('set', (key) => {
 			if (key === 'debugLog') return;
 			this.log(this.homey.__({
+				nl: 'Setting bijgewerkt:',
 				en: 'Setting updated:',
 				no: 'Innstilling oppdatert:'
 			}), 'Polestar App', 'DEBUG', `${key}: ${key == 'polestar_token' ? '********' : this.homey.settings.get(key)}`);
