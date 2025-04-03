@@ -118,5 +118,8 @@
   },
   "2.5.1": {
     "en": "Attempt to fix new api issue"
+  },
+  "2.6.0": {
+    "en": "Authentication fix and new capabilities"
   }
 }
