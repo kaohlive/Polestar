@@ -121,5 +121,8 @@
   },
   "2.6.0": {
     "en": "Authentication fix and new capabilities"
+  },
+  "2.6.1": {
+    "en": "Another login fix"
   }
 }
