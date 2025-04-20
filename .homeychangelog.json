@@ -124,5 +124,8 @@
   },
   "2.6.1": {
     "en": "Another login fix"
+  },
+  "2.6.2": {
+    "en": "Fine tune the login error message"
   }
 }
