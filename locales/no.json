@@ -23,7 +23,7 @@
             },
             "account": {
                 "title": "Konto-innstillinger",
-                "email": "Epost-adresse",
+                "email": "E-postadresse",
                 "password": "Passord",
                 "saveBtn": "Lagre"
             },
@@ -38,10 +38,10 @@
     "Polestar2Beta": {
         "pair": {
             "title": "Vennligst logg inn på din Polestar-konto",
-            "email": "Epost-adresse",
+            "email": "E-postadresse",
             "password": "Passord",
             "loginButton": "Logg inn",
-            "loginFailed": "Innlogging feilet. Vennligst sjekk epost-adresse og passord og prøv igjen.",
+            "loginFailed": "Innlogging feilet. Vennligst sjekk e-postadresse og passord og prøv igjen.",
             "alertNoCarFound": "Fant ingen Polestar 2 på Polestar-kontoen din.",
             "fetchingCars": "Henter Polestar 2 fra Polestar-kontoen din...",
             "pairInfo": "Din Polestar-kontoinformasjon brukes kun for å koble din Polestar 2 til Homey. Dine påloggingsdata lagres kun lokalt på din Homey."
@@ -54,10 +54,10 @@
                 "headerText": "Før du kan legge til denne enheten:",
                 "infoText": {
                     "step1": "Logg inn på Homey Dev Tools: Logg inn med din Homey-konto på Homey Dev Tools.",
-                    "step2": "Konfigurer din Webhook: Besøk Homey Dev Tools Webhooks for å se en oversikt og opprette nye Webhooks.",
-                    "step3": "Opprett Ny Webhook: Velg 'Ny Webhook' og følg instruksjonene for å fullføre oppsettet. Sørg for at all informasjon er korrekt.",
-                    "step4": "Kopier ID og Hemmelig Nøkkel: Du vil motta en unik ID og hemmelig nøkkel (Secret) etter opprettelsen. Disse er nødvendige for autentisering.",
-                    "importantRemember": "Viktig å Huske: All kommunikasjon via Webhooken er sikret og kryptert. Hold den hemmelige nøkkelen trygg. Sørg for at Webhookens URL er korrekt konfigurert i produsentens systemer."
+                    "step2": "Konfigurer din webhook: Besøk Homey Dev Tools webhooks for å se en oversikt og opprette nye webhooks.",
+                    "step3": "Opprett ny Webhook: Velg 'Ny Webhook' og følg instruksjonene for å fullføre oppsettet. Sørg for at all informasjon er korrekt.",
+                    "step4": "Kopier ID og hemmelig nøkkel: Du vil motta en unik ID og hemmelig nøkkel (Secret) etter opprettelsen. Disse er nødvendige for autentisering.",
+                    "importantRemember": "Viktig å huske: All kommunikasjon via webhooken er sikret og kryptert. Hold den hemmelige nøkkelen trygg. Sørg for at Webhookens URL er korrekt konfigurert i produsentens systemer."
                 },
                 "webhookIdLabel": "Webhook-ID",
                 "webhookSecretLabel": "Webhook-Secret",
@@ -65,21 +65,21 @@
                 "webhookUrlInfo": "Dette er din standard webhook url. Om du ønsker å ha en kortere url, så kan du velge en slug under.",
                 "webhookSlugLabel": "Webhook-Slug (4-16 tegn)",
                 "webhookSlugInfo": "Webhook-slugen er en unik identifikator for webhooken. Du kan velge en hvilken som helst alfanumerisk streng (a-z, A-Z, 0-9) med en maksimal lengde på 16 tegn. Dette er valgfritt.",
-                "webhookUrlShortLabel": "Kort Webhook-URL",
+                "webhookUrlShortLabel": "Kort webhook-URL",
                 "continueButton": "Fortsett",
                 "slugAvailable": "Denne slugen er tilgjengelig.",
                 "slugNotAvailable": "Denne slugen er ikke tilgjengelig.",
-                "webhookCreationError": "Kunne ikke opprette Webhook",
-                "webhookCreationSuccess": "Webhook opprettet vellykket"
+                "webhookCreationError": "Kunne ikke opprette webhook",
+                "webhookCreationSuccess": "Webhook opprettet"
             }
         },
         "device": {
             "initialized": "__name__ har blitt initialisert",
             "intervalSet": "Intervall for __name__ har blitt satt",
             "updatedImage": "Oppdaterte bilde for __name__",
-            "webhookDataReceived": "Mottok webhook data med kjøretøydata for __name__",
-            "webhookTripDataReceived": "Mottok webhook data med turdata for __name__",
-            "dataMissing": "Mottok webhook data med kjøretøydata for __name__ men mangler data.",
+            "webhookDataReceived": "Mottok webhook-data med kjøretøydata for __name__",
+            "webhookTripDataReceived": "Mottok webhook-data med turdata for __name__",
+            "dataMissing": "Mottok webhook-data med kjøretøydata for __name__, men mangler data.",
             "failedToSaveData": "Kunne ikke lagre data for __name__",
             "dataSaved": "Lagret data for __name__",
             "usingPreviousAddress": "Bruker forrige adresse for __name__",
@@ -104,7 +104,7 @@
             "connected": "Tilkoblet",
             "disconnected": "Frakoblet",
             "added": "__name__ har blitt lagt til",
-            "lastTrip": "Din siste tur",
+            "lastTrip": "Din forrige tur",
             "lastTripInfo": "Turinformasjon"
         }
     }
