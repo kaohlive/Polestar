@@ -4,7 +4,7 @@
     "icon": "/drivers/vehicle/assets/charging.svg",
     "title": {
         "en": "Charged home this month",
-        "no": "Ladet hjemme denne mnd",
+        "no": "Ladet hjemme denne måneden",
         "nl": "Deze maand thuis geladen"
     },
     "getable": true,

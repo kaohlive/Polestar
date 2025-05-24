@@ -57,12 +57,12 @@
                     "name": "lastTrip",
                     "title": {
                         "en": "Your last trip",
-                        "no": "Din siste reise",
+                        "no": "Din forrige reise",
                         "nl": "Uw recente rit"
                     },
                     "example": {
                         "en": "An image visualizing your last trip, combined with useful trip data",
-                        "no": "Et bilde som viser din siste reise, kombinert med nyttige reise-data",
+                        "no": "Et bilde som viser din forrige reise, kombinert med nyttige reisedata",
                         "nl": "Een visuele weergave van uw recente trip, gecombineerd met nuttige rit info"
                     }
                 },
@@ -76,7 +76,7 @@
                     },
                     "example": {
                         "en": "An image visualizing data about your last trip",
-                        "no": "Et bilde som viser data om din siste reise",
+                        "no": "Et bilde som viser data om din forrige reise",
                         "nl": "Een afbeelding met uw recente rit weergegeven"
                     }
                 },
@@ -90,7 +90,7 @@
                     },
                     "example": {
                         "en": "An image visualizing how well your last trip was",
-                        "no": "Et bilde som viser hvor bra din siste reise var",
+                        "no": "Et bilde som viser hvor bra din forrige reise var",
                         "nl": "Een afbeelding over hoe goed uw rit was"
                     }
                 },
@@ -197,7 +197,7 @@
                     "name": "socStart",
                     "title": {
                         "en": "Start State of Charge",
-                        "no": "Starttilstand for lading",
+                        "no": "Startnivå for lading",
                         "nl": "Startniveau van batterijniveau"
                     },
                     "example": {
@@ -211,7 +211,7 @@
                     "name": "socEnd",
                     "title": {
                         "en": "End State of Charge",
-                        "no": "Slutttilstand for lading",
+                        "no": "Sluttnivå for lading",
                         "nl": "Eindniveau van batterijniveau"
                     },
                     "example": {
@@ -239,7 +239,7 @@
                     "name": "altStart",
                     "title": {
                         "en": "Start Altitude",
-                        "no": "Start høyde",
+                        "no": "Starthøyde",
                         "nl": "Start hoogte"
                     },
                     "example": {
@@ -253,7 +253,7 @@
                     "name": "altEnd",
                     "title": {
                         "en": "End Altitude",
-                        "no": "Slutt høyde",
+                        "no": "Slutthøyde",
                         "nl": "Eind hoogte"
                     },
                     "example": {
