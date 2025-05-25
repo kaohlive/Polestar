@@ -54,8 +54,10 @@ class PolestarVehicle extends Device {
     }
 
     async fixCapabilities() {
-        if (this.hasCapability('measure_battery'))
-            await this.removeCapability('measure_battery');
+        if (!this.hasCapability('measure_battery'))
+            await this.addCapability('measure_battery');
+        // if (!this.hasCapability('ev_charging_state'))
+        //     await this.addCapability('ev_charging_state');
         if (!this.hasCapability('measure_polestarBattery'))
             await this.addCapability('measure_polestarBattery');
         if(!this.hasCapability('measure_current'))
@@ -100,6 +102,7 @@ class PolestarVehicle extends Device {
         this.homey.app.log('Retrieve device details', 'PolestarVehicle', 'DEBUG');
         try {
             var odometer = await this.polestar.getOdometer();
+            this.homey.app.log('Odometers:', 'PolestarVehicle', 'DEBUG', odometer);
             var odo = odometer.odometerMeters;
             try {
                 odo = odo / 1000; //Convert to KM instead of M
@@ -116,33 +119,72 @@ class PolestarVehicle extends Device {
             this.homey.app.log('Battery:', 'PolestarVehicle', 'DEBUG', batteryInfo);
 
             this.setCapabilityValue('measure_polestarBattery', batteryInfo.batteryChargeLevelPercentage);
+            this.setCapabilityValue('measure_battery', batteryInfo.batteryChargeLevelPercentage);
             //this.setCapabilityValue('measure_current', batteryInfo.chargingCurrentAmps);
-            if(batteryInfo.chargingCurrentAmps!==null){
-                this.setCapabilityValue('measure_current', batteryInfo.chargingCurrentAmps);
-            } else {
-                this.setCapabilityValue('measure_current', 0); //We set 0 first, this is for insights sake
-            }
-            if(batteryInfo.chargingPowerWatts!==null){
-                this.setCapabilityValue('measure_power', batteryInfo.chargingPowerWatts);
-                let hours = measureInterval / (1000 * 60 * 60);
-                let usedPower = (batteryInfo.chargingPowerWatts/1000) * (hours);
-                this.setCapabilityValue('meter_power', (usedPower+this.getCapabilityValue('meter_power')));
-            } else {
-                this.setCapabilityValue('measure_power', 0); //We set 0 first, this is for insights sake
-            }
-            
+            // if(batteryInfo.chargingCurrentAmps!==null){
+            //     this.setCapabilityValue('measure_current', batteryInfo.chargingCurrentAmps);
+            // } else {
+            //     this.setCapabilityValue('measure_current', 0); //We set 0 first, this is for insights sake
+            // }
+            // if(batteryInfo.chargingPowerWatts!==null){
+            //     this.setCapabilityValue('measure_power', batteryInfo.chargingPowerWatts);
+            //     let hours = measureInterval / (1000 * 60 * 60);
+            //     let usedPower = (batteryInfo.chargingPowerWatts/1000) * (hours);
+            //     this.setCapabilityValue('meter_power', (usedPower+this.getCapabilityValue('meter_power')));
+            // } else {
+            //     this.setCapabilityValue('measure_power', 0); //We set 0 first, this is for insights sake
+            // }
+
+            //Set the estimated range for the vhicle
             this.setCapabilityValue('measure_vehicleRange', batteryInfo.estimatedDistanceToEmptyKm);
-            if (batteryInfo.chargingStatus == 'CHARGING_STATUS_CHARGING') {
-                this.setCapabilityValue('measure_vehicleChargeState', true);
-                this.setCapabilityValue('measure_vehicleChargeTimeRemaining', batteryInfo.estimatedChargingTimeToFullMinutes);
-            } else {
-                this.setCapabilityValue('measure_vehicleChargeState', false);
-                this.setCapabilityValue('measure_vehicleChargeTimeRemaining', null);
+
+            //Lets assign statusses we consider connected
+            const connectedStatuses = new Set([
+                'CHARGING_STATUS_CHARGING',
+                'CHARGING_STATUS_DONE',
+                'CHARGING_STATUS_SCHEDULED',
+                'CHARGING_STATUS_SMART_CHARGING',
+                'CHARGING_STATUS_ERROR',
+                'CHARGING_STATUS_FAULT'
+            ]);
+
+            //Lets see if the car is in a state that suggests the connector is connected
+            this.setCapabilityValue('measure_vehicleConnected', connectedStatuses.has(batteryInfo.chargingStatus));
+           
+            //Now Lets see if it is actually charging 
+            switch (batteryInfo.chargingStatus) {
+                case 'CHARGING_STATUS_CHARGING':
+                    this.setCapabilityValue('measure_vehicleChargeState', true);
+                    this.setCapabilityValue('measure_vehicleConnected', true);
+                    //this.setCapabilityValue('ev_charging_state', true);
+                    this.setCapabilityValue('measure_vehicleChargeTimeRemaining', batteryInfo.estimatedChargingTimeToFullMinutes);
+                break;
+                case 'CHARGING_STATUS_SCHEDULED':
+                case 'CHARGING_STATUS_SMART_CHARGING':
+                    this.setCapabilityValue('measure_vehicleChargeState', false);
+                    //this.setCapabilityValue('ev_charging_state', false);
+                    this.setCapabilityValue('measure_vehicleChargeTimeRemaining', null);
+                    // TODO: Add capability to show scheduled charging
+                break;
+
+                case 'CHARGING_STATUS_ERROR':
+                case 'CHARGING_STATUS_FAULT':
+                    this.setCapabilityValue('measure_vehicleChargeState', false);
+                    //this.setCapabilityValue('ev_charging_state', false);
+                    this.setCapabilityValue('measure_vehicleChargeTimeRemaining', null);
+                    // TODO: Add capability to show charging error
+                break;
+                default:
+                    this.setCapabilityValue('measure_vehicleChargeState', false);
+                    //this.setCapabilityValue('ev_charging_state', false);
+                    this.setCapabilityValue('measure_vehicleChargeTimeRemaining', null);
+                break;
             }
-            if (batteryInfo.chargerConnectionStatus == 'CHARGER_CONNECTION_STATUS_CONNECTED')
-                this.setCapabilityValue('measure_vehicleConnected', true);
-            else
-                this.setCapabilityValue('measure_vehicleConnected', false);
+
+            // if (batteryInfo.chargerConnectionStatus == 'CHARGER_CONNECTION_STATUS_CONNECTED')
+            //     this.setCapabilityValue('measure_vehicleConnected', true);
+            // else
+            //     this.setCapabilityValue('measure_vehicleConnected', false);
         } catch {
             this.homey.app.log('Failed to retrieve batterystate', 'PolestarVehicle', 'ERROR');
         }

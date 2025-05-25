@@ -1,7 +1,7 @@
 {
   "id": "com.Coderax.Polestar",
-  "version": "2.6.2",
-  "compatibility": ">=12.1.2",
+  "version": "2.7.0",
+  "compatibility": ">=12.4.4",
   "sdk": 3,
   "platforms": [
     "local"
