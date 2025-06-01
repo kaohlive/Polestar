@@ -127,5 +127,8 @@
   },
   "2.6.2": {
     "en": "Fine tune the login error message"
+  },
+  "2.7.1": {
+    "en": "Added support for new ev charging states"
   }
 }
