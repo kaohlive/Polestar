@@ -5,7 +5,7 @@
     "nl": "Mijn Polestar"
   },
   "class": "car",
-  "capabilities": [ "measure_power", "meter_power", "measure_battery" ],
+  "capabilities": [ "measure_power", "meter_power", "measure_battery", "ev_charging_state" ],
   "energy": {
     "electricCar": true
   },

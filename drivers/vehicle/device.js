@@ -56,8 +56,8 @@ class PolestarVehicle extends Device {
     async fixCapabilities() {
         if (!this.hasCapability('measure_battery'))
             await this.addCapability('measure_battery');
-        // if (!this.hasCapability('ev_charging_state'))
-        //     await this.addCapability('ev_charging_state');
+        if (!this.hasCapability('ev_charging_state'))
+            await this.addCapability('ev_charging_state');
         if (!this.hasCapability('measure_polestarBattery'))
             await this.addCapability('measure_polestarBattery');
         if(!this.hasCapability('measure_current'))
@@ -149,20 +149,26 @@ class PolestarVehicle extends Device {
             ]);
 
             //Lets see if the car is in a state that suggests the connector is connected
-            this.setCapabilityValue('measure_vehicleConnected', connectedStatuses.has(batteryInfo.chargingStatus));
+            if(connectedStatuses.has(batteryInfo.chargingStatus)){
+                this.setCapabilityValue('measure_vehicleConnected', true);
+                //Determine the ev_charging_state in our switch
+            } else {
+                this.setCapabilityValue('measure_vehicleConnected', false);
+                this.setCapabilityValue('ev_charging_state', 'plugged_out');
+            }
            
             //Now Lets see if it is actually charging 
             switch (batteryInfo.chargingStatus) {
                 case 'CHARGING_STATUS_CHARGING':
                     this.setCapabilityValue('measure_vehicleChargeState', true);
-                    this.setCapabilityValue('measure_vehicleConnected', true);
-                    //this.setCapabilityValue('ev_charging_state', true);
+                    this.setCapabilityValue('ev_charging_state', 'plugged_in_charging');
                     this.setCapabilityValue('measure_vehicleChargeTimeRemaining', batteryInfo.estimatedChargingTimeToFullMinutes);
                 break;
                 case 'CHARGING_STATUS_SCHEDULED':
+                case 'CHARGING_STATUS_DONE':
                 case 'CHARGING_STATUS_SMART_CHARGING':
                     this.setCapabilityValue('measure_vehicleChargeState', false);
-                    //this.setCapabilityValue('ev_charging_state', false);
+                    this.setCapabilityValue('ev_charging_state', 'plugged_in_paused');
                     this.setCapabilityValue('measure_vehicleChargeTimeRemaining', null);
                     // TODO: Add capability to show scheduled charging
                 break;
@@ -170,13 +176,13 @@ class PolestarVehicle extends Device {
                 case 'CHARGING_STATUS_ERROR':
                 case 'CHARGING_STATUS_FAULT':
                     this.setCapabilityValue('measure_vehicleChargeState', false);
-                    //this.setCapabilityValue('ev_charging_state', false);
+                    this.setCapabilityValue('ev_charging_state', 'plugged_in');
                     this.setCapabilityValue('measure_vehicleChargeTimeRemaining', null);
                     // TODO: Add capability to show charging error
                 break;
                 default:
                     this.setCapabilityValue('measure_vehicleChargeState', false);
-                    //this.setCapabilityValue('ev_charging_state', false);
+                    this.setCapabilityValue('ev_charging_state', 'plugged_out');
                     this.setCapabilityValue('measure_vehicleChargeTimeRemaining', null);
                 break;
             }
