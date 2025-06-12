@@ -104,9 +104,18 @@ class PolestarBetaDevice extends Device {
         const id = this.settings.webhook_id || null;
         const secret = this.settings.webhook_secret || null;
         const data = {};
+
         this.webhook = await this.homey.cloud.createWebhook(id, secret, data);
+        this.homey.app.log(this.homey.__({
+            en: 'Initializing webhook with ' + id
+        }), this.name, 'DEBUG');
 
         this.webhook.on('message', async args => {
+            this.homey.app.log(this.homey.__({
+                en: 'Received webhook message for ' + this.name,
+                no: 'Mottok webhook data med kjøretøydata for ' + this.name
+            }), this.name, 'DEBUG', args.body);
+
             const fields = ['ambientTemperature', 'batteryLevel', 'chargePortConnected', 'ignitionState', 'power', 'selectedGear', 'speed', 'stateOfCharge'];
             const isDataMissing = fields.some(field => args.body[field] === undefined || args.body[field] === null);
             const hasFields = ['drivingPoints'];

@@ -56,31 +56,31 @@ class PolestarBetaDriver extends Driver {
                     }
                 });
 
-                try {
-                    const registerPolestarUser = await axios.post(`https://homey.crdx.us/register/${args.slug}`, {
-                        slug: args.slug,
-                        homeyId: this.homeyId,
-                        webhookId: webhook.id,
-                        webhookSecret: webhook.secret,
-                        webhookUrl: webhookUrl,
-                        shortWebhookUrl: args.url_short,
-                    });
+                // try {
+                //     const registerPolestarUser = await axios.post(`https://homey.crdx.us/register/${args.slug}`, {
+                //         slug: args.slug,
+                //         homeyId: this.homeyId,
+                //         webhookId: webhook.id,
+                //         webhookSecret: webhook.secret,
+                //         webhookUrl: webhookUrl,
+                //         shortWebhookUrl: args.url_short,
+                //     });
 
-                    if (registerPolestarUser.status === 200 && registerPolestarUser.data.success) {
-                        this.homey.app.log(this.homey.__({
-                            en: 'Successfully registered user for webhook',
-                            no: 'Klarte å registrere bruker for webhook'
-                        }), 'Polestar Driver CSV ᴮᴱᵀᴬ', 'DEBUG', registerPolestarUser.data);
-                    }
-                } catch (error) {
-                    this.homey.app.log(this.homey.__({
-                        en: 'Failed to register user for webhook',
-                        no: 'Klarte ikke å registrere bruker for webhook'
-                    }), 'Polestar Driver CSV ᴮᴱᵀᴬ', 'ERROR', error.message);
-                    return { success: false, error: error.message };
-                }
+                //     if (registerPolestarUser.status === 200 && registerPolestarUser.data.success) {
+                //         this.homey.app.log(this.homey.__({
+                //             en: 'Successfully registered user for webhook',
+                //             no: 'Klarte å registrere bruker for webhook'
+                //         }), 'Polestar Driver CSV ᴮᴱᵀᴬ', 'DEBUG', registerPolestarUser.data);
+                //     }
+                // } catch (error) {
+                //     this.homey.app.log(this.homey.__({
+                //         en: 'Failed to register user for webhook',
+                //         no: 'Klarte ikke å registrere bruker for webhook'
+                //     }), 'Polestar Driver CSV ᴮᴱᵀᴬ', 'ERROR', error.message);
+                //     return { success: false, error: error.message };
+                // }
 
-                this.webhookUrl = webhookUrl;
+                // this.webhookUrl = webhookUrl;
 
                 this.homey.app.log(this.homey.__({ en: 'Webhook created', no: 'Webhook opprettet' }), 'Polestar Driver CSV ᴮᴱᵀᴬ', 'DEBUG');
                 return { success: true };
