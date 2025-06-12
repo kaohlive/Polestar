@@ -130,5 +130,8 @@
   },
   "2.7.1": {
     "en": "Added support for new ev charging states"
+  },
+  "2.7.2": {
+    "en": "Fixed CSV receiver driver"
   }
 }
