@@ -29,8 +29,9 @@ class PolestarVehicle extends Device {
                 return;
             }
         }
-
+        
         await this.fixCapabilities();
+        await this.fixEnergy();
         this.update_loop_timers();
 
         this.homey.app.log(this.homey.__({
@@ -51,6 +52,18 @@ class PolestarVehicle extends Device {
         this._timerHealth = this.homey.setInterval(async () => {
             await this.updateHealthState();
         }, intervalHealth);
+    }
+
+    async fixEnergy()
+    {
+        const currentEnergy = await this.getEnergy();
+        //Check if this ev was created with the right energy object
+        if(!currentEnergy.electricCar)
+        {
+            await this.setEnergy({
+                "electricCar": true
+            })
+        }
     }
 
     async fixCapabilities() {
