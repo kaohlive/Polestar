@@ -133,5 +133,8 @@
   },
   "2.7.2": {
     "en": "Fixed CSV receiver driver"
+  },
+  "2.7.3": {
+    "en": "Added upgrade path for existing cars for homey energy"
   }
 }
