@@ -58,7 +58,7 @@ class PolestarVehicle extends Device {
     {
         const currentEnergy = await this.getEnergy();
         //Check if this ev was created with the right energy object
-        if(!currentEnergy.electricCar)
+        if(!currentEnergy?.electricCar)
         {
             await this.setEnergy({
                 "electricCar": true
