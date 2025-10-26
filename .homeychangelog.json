@@ -139,5 +139,8 @@
   },
   "2.7.4": {
     "en": "More rebost energy upgrade detection"
+  },
+  "2.7.5": {
+    "en": "Changed api, no linger supports images"
   }
 }
