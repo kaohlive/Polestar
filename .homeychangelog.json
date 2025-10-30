@@ -142,5 +142,8 @@
   },
   "2.7.5": {
     "en": "Changed api, no linger supports images"
+  },
+  "2.7.6": {
+    "en": "Changed api, no linger supports images"
   }
 }
