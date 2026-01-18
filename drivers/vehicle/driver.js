@@ -103,7 +103,7 @@ class Vehicle extends Driver {
                                     internalVehicleIdentifier: bev.internalVehicleIdentifier,
                                     modelName: bev.content.model.name,
                                     modelYear: bev.modelYear,
-                                    carImage: bev.content.images.studio.url,
+                                    carImage: bev.content.images?.studio?.url || null,
                                     deliveryDate: bev.deliveryDate,
                                     hasPerformancePackage: bev.hasPerformancePackage
                                 }

@@ -6,10 +6,35 @@ const Polestar = require('../../clone_modules/polestar.js');
 const HomeyCrypt = require('../../lib/homeycrypt')
 
 const measureInterval = 60000;
+const KM_TO_MILES = 0.621371;
 
 var polestar = null;
 
 class PolestarVehicle extends Device {
+
+    /**
+     * Check if the user has selected miles as the distance unit
+     * @returns {boolean} true if miles, false if km (default)
+     */
+    usesMiles() {
+        return this.homey.settings.get('distance_unit') === 'miles';
+    }
+
+    /**
+     * Update capability units based on distance unit setting
+     */
+    async updateCapabilityUnits() {
+        const unit = this.usesMiles() ? { en: 'mi' } : { en: 'km' };
+        try {
+            await this.setCapabilityOptions('measure_vehicleOdometer', { units: unit });
+            await this.setCapabilityOptions('measure_vehicleRange', { units: unit });
+            await this.setCapabilityOptions('measure_vehicleDistanceTillService', { units: unit });
+            this.homey.app.log(`Updated capability units to ${this.usesMiles() ? 'miles' : 'km'}`, 'PolestarVehicle', 'DEBUG');
+        } catch (err) {
+            this.homey.app.log('Failed to update capability units', 'PolestarVehicle', 'ERROR', err);
+        }
+    }
+
     async onInit() {
         if (this.polestar == null) {
             let PolestarUser = this.homey.settings.get('user_email');
@@ -32,7 +57,21 @@ class PolestarVehicle extends Device {
         
         await this.fixCapabilities();
         await this.fixEnergy();
+        await this.updateCapabilityUnits();
         this.update_loop_timers();
+
+        // Listen for distance unit setting changes
+        this.homey.settings.on('set', async (key) => {
+            if (key === 'distance_unit') {
+                this.homey.app.log('Distance unit setting changed', 'PolestarVehicle', 'DEBUG');
+                await this.updateCapabilityUnits();
+                // Refresh values with new unit
+                await this.updateVehicleState();
+                await this.updateHealthState();
+                // Send specific event for widget to refresh
+                this.homey.api.realtime('distanceUnitChanged');
+            }
+        });
 
         this.homey.app.log(this.homey.__({
           en: `${this.name} has been initialized`,
@@ -105,7 +144,12 @@ class PolestarVehicle extends Device {
         {
             this.setCapabilityValue('alarm_generic', healthInfo.serviceWarning!='SERVICE_WARNING_NO_WARNING');
             this.setCapabilityValue('measure_vehicleDaysTillService', healthInfo.daysToService);
-            this.setCapabilityValue('measure_vehicleDistanceTillService', healthInfo.distanceToServiceKm);
+            // Convert distance to service based on user preference
+            let distanceToService = healthInfo.distanceToServiceKm;
+            if (this.usesMiles() && distanceToService != null) {
+                distanceToService = Math.round(distanceToService * KM_TO_MILES);
+            }
+            this.setCapabilityValue('measure_vehicleDistanceTillService', distanceToService);
         } else {
             this.setCapabilityValue('alarm_generic', false);
         }
@@ -119,10 +163,13 @@ class PolestarVehicle extends Device {
             var odo = odometer.odometerMeters;
             try {
                 odo = odo / 1000; //Convert to KM instead of M
+                if (this.usesMiles()) {
+                    odo = odo * KM_TO_MILES; //Convert to miles
+                }
             } catch {
                 odo = null;
             }
-            this.homey.app.log('KM:' + odo, 'PolestarVehicle', 'DEBUG');
+            this.homey.app.log((this.usesMiles() ? 'Miles:' : 'KM:') + odo, 'PolestarVehicle', 'DEBUG');
             this.setCapabilityValue('measure_vehicleOdometer', odo);
         } catch {
             this.homey.app.log('Failed to retrieve odometer', 'PolestarVehicle', 'ERROR');
@@ -148,8 +195,15 @@ class PolestarVehicle extends Device {
             //     this.setCapabilityValue('measure_power', 0); //We set 0 first, this is for insights sake
             // }
 
-            //Set the estimated range for the vhicle
-            this.setCapabilityValue('measure_vehicleRange', batteryInfo.estimatedDistanceToEmptyKm);
+            //Set the estimated range for the vehicle based on user preference
+            if (this.usesMiles() && batteryInfo.estimatedDistanceToEmptyMiles != null) {
+                this.setCapabilityValue('measure_vehicleRange', batteryInfo.estimatedDistanceToEmptyMiles);
+            } else if (this.usesMiles()) {
+                // Fallback: convert km to miles if miles not available from API
+                this.setCapabilityValue('measure_vehicleRange', Math.round(batteryInfo.estimatedDistanceToEmptyKm * KM_TO_MILES));
+            } else {
+                this.setCapabilityValue('measure_vehicleRange', batteryInfo.estimatedDistanceToEmptyKm);
+            }
 
             //Lets assign statusses we consider connected
             const connectedStatuses = new Set([

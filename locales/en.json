@@ -25,7 +25,10 @@
                 "title": "Account settings",
                 "email": "Email address",
                 "password": "Password",
-                "saveBtn": "Save"
+                "saveBtn": "Save",
+                "distanceUnit": "Distance unit",
+                "distanceUnitKm": "Kilometers (km)",
+                "distanceUnitMiles": "Miles (mi)"
             },
             "debug": {
                 "title": "Debug logs",

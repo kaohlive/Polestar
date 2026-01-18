@@ -25,7 +25,10 @@
                 "title": "Accountinstellingen",
                 "email": "E-mailadres",
                 "password": "Wachtwoord",
-                "saveBtn": "Opslaan"
+                "saveBtn": "Opslaan",
+                "distanceUnit": "Afstandseenheid",
+                "distanceUnitKm": "Kilometers (km)",
+                "distanceUnitMiles": "Mijlen (mi)"
             },
             "debug": {
                 "title": "Debug logger",

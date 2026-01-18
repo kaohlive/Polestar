@@ -148,6 +148,14 @@
 						data-i18n="Polestar2.settings.account.password"></label>
 					<input class="homey-form-input" id="password" type="password" value="" />
 				</div>
+				<div class="homey-form-group">
+					<label class="homey-form-label" for="distanceUnit"
+						data-i18n="Polestar2.settings.account.distanceUnit"></label>
+					<select class="homey-form-input" id="distanceUnit">
+						<option value="km" data-i18n="Polestar2.settings.account.distanceUnitKm"></option>
+						<option value="miles" data-i18n="Polestar2.settings.account.distanceUnitMiles"></option>
+					</select>
+				</div>
 				<button id="save" type="submit" class="homey-button-primary-full"
 					data-i18n="Polestar2.settings.account.saveBtn"></button>
 			</form>
@@ -286,6 +294,7 @@
 
 		var emailElement = document.getElementById("email");
 		var passwordElement = document.getElementById("password");
+		var distanceUnitElement = document.getElementById("distanceUnit");
 		var saveElement = document.getElementById("save");
 
 		Homey.get("user_email", function (err, username) {
@@ -298,6 +307,11 @@
 			passwordElement.value = password;
 		});
 
+		Homey.get("distance_unit", function (err, distanceUnit) {
+			if (err) return Homey.alert(err);
+			distanceUnitElement.value = distanceUnit || 'km';
+		});
+
 		saveElement.addEventListener("click", function (e) {
 			e.preventDefault();
 
@@ -307,7 +321,10 @@
 			Homey.set("user_password", passwordElement.value, function (err) {
 				if (err) return Homey.alert(err);
 			});
-			Homey.alert(Homey.__({ en: "Settings saved", no: "Innstillinger lagret" }));
+			Homey.set("distance_unit", distanceUnitElement.value, function (err) {
+				if (err) return Homey.alert(err);
+			});
+			Homey.alert(Homey.__({ en: "Settings saved", no: "Innstillinger lagret", nl: "Instellingen opgeslagen" }));
 		});
 	}
 </script>

@@ -25,7 +25,10 @@
                 "title": "Konto-innstillinger",
                 "email": "Epost-adresse",
                 "password": "Passord",
-                "saveBtn": "Lagre"
+                "saveBtn": "Lagre",
+                "distanceUnit": "Avstandsenhet",
+                "distanceUnitKm": "Kilometer (km)",
+                "distanceUnitMiles": "Miles (mi)"
             },
             "debug": {
                 "title": "Debug logger",

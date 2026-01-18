@@ -24,6 +24,10 @@ module.exports = {
     const { registration } = query;
     const vehicle = await getVehicle({ homey, registration });
 
+    // Get distance unit setting (default to 'km')
+    const distanceUnit = homey.settings.get('distance_unit') || 'km';
+    const unitLabel = distanceUnit === 'miles' ? 'MI' : 'KM';
+
     return {
       battery: vehicle.getCapabilityValue('measure_polestarBattery'),
       connected: vehicle.getCapabilityValue('measure_vehicleConnected'),
@@ -34,6 +38,7 @@ module.exports = {
       odometer: vehicle.getCapabilityValue('measure_vehicleOdometer'),
       range: vehicle.getCapabilityValue('measure_vehicleRange'),
       service: vehicle.getCapabilityValue('alarm_generic'),
+      distanceUnit: unitLabel,
     };
   },
 

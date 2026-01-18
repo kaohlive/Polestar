@@ -131,6 +131,10 @@
         Homey.on('updatevehicle', () => {
           syncStatus(true);
         });
+        Homey.on('distanceUnitChanged', () => {
+          // Small delay to ensure device capabilities are updated
+          setTimeout(() => syncStatus(true), 500);
+        });
       }
 
       function syncStatus(event) {
@@ -156,10 +160,12 @@
       }
 
       function renderStatus() {
-        
+        const unit = status.distanceUnit || 'KM';
+
         document.getElementById('device-status-battery-charge').innerText = status.battery+'%';
         document.getElementById('device-status-range-value').innerText = status.range;
-        document.getElementById('device-status-odometer').innerText = status.odometer.toFixed(1)+' KM';
+        document.getElementById('device-status-range-unit').innerText = unit;
+        document.getElementById('device-status-odometer').innerText = status.odometer.toFixed(1)+' '+unit;
         document.getElementById('device-status-measurements-power').innerText = status.current+' A | '+(status.power/1000).toFixed(1) +' kW';
         document.getElementById('device-status-measurements-time').innerText = Math.floor(status.time_remaining / 60)+'h'+(status.time_remaining % 60)+'m';
         const dash = document.getElementById('vehicle-dashboard');
