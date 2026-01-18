@@ -145,5 +145,8 @@
   },
   "2.7.6": {
     "en": "Changed api, no linger supports images"
+  },
+  "2.7.7": {
+    "en": "Added support to switch to miles"
   }
 }
