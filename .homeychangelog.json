@@ -148,5 +148,8 @@
   },
   "2.7.7": {
     "en": "Added support to switch to miles"
+  },
+  "2.7.8": {
+    "en": "Rounding and stability improvements"
   }
 }
