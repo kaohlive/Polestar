@@ -429,33 +429,42 @@ class PolestarBetaDevice extends Device {
         }
 
         const url = `https://nominatim.openstreetmap.org/reverse.php?lat=${lat}&lon=${lon}&zoom=18&format=jsonv2`;
-        const response = await axios.get(url);
-        if (response.data && response.data.address) {
-            //const address = response.data.features[0].properties.formatted;
-            //const address = `${response.data.address.road} ${response.data.address.house_number}, ${response.data.address.postcode} ${response.data.address.suburb}`;
-            const address = {
-                road: response.data.address.road || null,
-                house_number: response.data.address.house_number || null,
-                postcode: response.data.address.postcode || null,
-                city: response.data.address.suburb || null,
-                city_district: response.data.address.city_district || null,
-                county: response.data.address.county || null,
-                country: response.data.address.country || null,
+        try {
+            const response = await axios.get(url);
+            if (response.data && response.data.address) {
+                //const address = response.data.features[0].properties.formatted;
+                //const address = `${response.data.address.road} ${response.data.address.house_number}, ${response.data.address.postcode} ${response.data.address.suburb}`;
+                const address = {
+                    road: response.data.address.road || null,
+                    house_number: response.data.address.house_number || null,
+                    postcode: response.data.address.postcode || null,
+                    city: response.data.address.suburb || null,
+                    city_district: response.data.address.city_district || null,
+                    county: response.data.address.county || null,
+                    country: response.data.address.country || null,
+                }
+
+                // Update the previous values with the current values
+                this.previousLat = lat;
+                this.previousLon = lon;
+                this.previousAddress = address;
+
+                this.homey.app.log(this.homey.__({
+                    en: 'Using new address',
+                    no: 'Bruker ny adresse'
+                }), this.name, 'DEBUG');
+
+                return address;
             }
-
-            // Update the previous values with the current values
-            this.previousLat = lat;
-            this.previousLon = lon;
-            this.previousAddress = address;
-
+            return null;
+        } catch (err) {
             this.homey.app.log(this.homey.__({
-                en: 'Using new address',
-                no: 'Bruker ny adresse'
-            }), this.name, 'DEBUG');
-
-            return address;
+                en: 'Reverse geocoding failed',
+                no: 'Omvendt geokoding feilet'
+            }), this.name, 'WARNING', err.message);
+            // Return previous address if available, otherwise null
+            return this.previousAddress || null;
         }
-        return null;
     }
 
     async onAdded() {

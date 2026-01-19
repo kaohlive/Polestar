@@ -35,7 +35,7 @@
       }
       #device-status-battery{
         position: absolute;
-        left: 7%; top: 45px; height: 42px; width: 20%;
+        left: 10%; top: 45px; height: 42px; width: 20%;
         text-align: right; padding-right: 8px;
         border-right: 4px solid white;
       }
@@ -78,7 +78,7 @@
         font-size: 16px; font-weight: normal;
         color: rgb(255, 255, 255);
         position: absolute;
-        text-align: center;
+        display: none;
         left: 30%; top: 45px; height: 42px; width: 36%;
       }
       @keyframes fadeInOut { 0% { opacity: 1; } 50% { opacity: 0.1; } 100% { opacity: 1; } }
@@ -162,10 +162,10 @@
       function renderStatus() {
         const unit = status.distanceUnit || 'KM';
 
-        document.getElementById('device-status-battery-charge').innerText = status.battery+'%';
-        document.getElementById('device-status-range-value').innerText = status.range;
+        document.getElementById('device-status-battery-charge').innerText = Math.floor(status.battery)+'%';
+        document.getElementById('device-status-range-value').innerText = Math.floor(status.range);
         document.getElementById('device-status-range-unit').innerText = unit;
-        document.getElementById('device-status-odometer').innerText = status.odometer.toFixed(1)+' '+unit;
+        document.getElementById('device-status-odometer').innerText = Math.floor(status.odometer)+' '+unit;
         document.getElementById('device-status-measurements-power').innerText = status.current+' A | '+(status.power/1000).toFixed(1) +' kW';
         document.getElementById('device-status-measurements-time').innerText = Math.floor(status.time_remaining / 60)+'h'+(status.time_remaining % 60)+'m';
         const dash = document.getElementById('vehicle-dashboard');

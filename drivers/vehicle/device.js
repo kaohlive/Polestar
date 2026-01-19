@@ -35,6 +35,33 @@ class PolestarVehicle extends Device {
         }
     }
 
+    /**
+     * Attempt to re-login when session has expired
+     */
+    async attemptReLogin() {
+        // Prevent multiple simultaneous re-login attempts
+        if (this._reLoginInProgress) {
+            this.homey.app.log('Re-login already in progress, skipping', 'PolestarVehicle', 'DEBUG');
+            return;
+        }
+
+        this._reLoginInProgress = true;
+        try {
+            let PolestarUser = this.homey.settings.get('user_email');
+            let PolestarPwd = await HomeyCrypt.decrypt(this.homey.settings.get('user_password'), PolestarUser);
+
+            this.polestar = new Polestar(PolestarUser, PolestarPwd);
+            await this.polestar.login();
+            await this.polestar.setVehicle(this.getData().vin);
+
+            this.homey.app.log('Re-login successful', 'PolestarVehicle', 'DEBUG');
+        } catch (err) {
+            this.homey.app.log('Re-login failed', 'PolestarVehicle', 'ERROR', err);
+        } finally {
+            this._reLoginInProgress = false;
+        }
+    }
+
     async onInit() {
         if (this.polestar == null) {
             let PolestarUser = this.homey.settings.get('user_email');
@@ -138,20 +165,31 @@ class PolestarVehicle extends Device {
 
     async updateHealthState(){
         this.homey.app.log('Retrieve vehicle health', 'PolestarVehicle', 'DEBUG');
-        var healthInfo = await this.polestar.getHealthData();
-        this.homey.app.log('Health:', 'PolestarVehicle', 'DEBUG', healthInfo);
-        if(healthInfo!=null)
-        {
-            this.setCapabilityValue('alarm_generic', healthInfo.serviceWarning!='SERVICE_WARNING_NO_WARNING');
-            this.setCapabilityValue('measure_vehicleDaysTillService', healthInfo.daysToService);
-            // Convert distance to service based on user preference
-            let distanceToService = healthInfo.distanceToServiceKm;
-            if (this.usesMiles() && distanceToService != null) {
-                distanceToService = Math.round(distanceToService * KM_TO_MILES);
+        try {
+            var healthInfo = await this.polestar.getHealthData();
+            this.homey.app.log('Health:', 'PolestarVehicle', 'DEBUG', healthInfo);
+            if(healthInfo!=null)
+            {
+                this.setCapabilityValue('alarm_generic', healthInfo.serviceWarning!='SERVICE_WARNING_NO_WARNING');
+                this.setCapabilityValue('measure_vehicleDaysTillService', healthInfo.daysToService);
+                // Convert distance to service based on user preference
+                let distanceToService = healthInfo.distanceToServiceKm;
+                if (this.usesMiles() && distanceToService != null) {
+                    distanceToService = Math.floor(distanceToService * KM_TO_MILES);
+                } else if (distanceToService != null) {
+                    distanceToService = Math.floor(distanceToService);
+                }
+                this.setCapabilityValue('measure_vehicleDistanceTillService', distanceToService);
+            } else {
+                this.setCapabilityValue('alarm_generic', false);
             }
-            this.setCapabilityValue('measure_vehicleDistanceTillService', distanceToService);
-        } else {
-            this.setCapabilityValue('alarm_generic', false);
+        } catch (err) {
+            if (err.message === 'Not logged in') {
+                this.homey.app.log('Session expired, attempting to re-login', 'PolestarVehicle', 'WARNING');
+                await this.attemptReLogin();
+            } else {
+                this.homey.app.log('Failed to retrieve health state', 'PolestarVehicle', 'ERROR', err);
+            }
         }
     }
 
@@ -164,22 +202,30 @@ class PolestarVehicle extends Device {
             try {
                 odo = odo / 1000; //Convert to KM instead of M
                 if (this.usesMiles()) {
-                    odo = odo * KM_TO_MILES; //Convert to miles
+                    odo = Math.floor(odo * KM_TO_MILES); //Convert to miles
+                } else {
+                    odo = Math.floor(odo);
                 }
             } catch {
                 odo = null;
             }
             this.homey.app.log((this.usesMiles() ? 'Miles:' : 'KM:') + odo, 'PolestarVehicle', 'DEBUG');
             this.setCapabilityValue('measure_vehicleOdometer', odo);
-        } catch {
-            this.homey.app.log('Failed to retrieve odometer', 'PolestarVehicle', 'ERROR');
+        } catch (err) {
+            if (err.message === 'Not logged in') {
+                this.homey.app.log('Session expired, attempting to re-login', 'PolestarVehicle', 'WARNING');
+                await this.attemptReLogin();
+                return; // Exit early, next interval will retry
+            }
+            this.homey.app.log('Failed to retrieve odometer', 'PolestarVehicle', 'ERROR', err);
         };
         try {
             var batteryInfo = await this.polestar.getBattery();
             this.homey.app.log('Battery:', 'PolestarVehicle', 'DEBUG', batteryInfo);
 
-            this.setCapabilityValue('measure_polestarBattery', batteryInfo.batteryChargeLevelPercentage);
-            this.setCapabilityValue('measure_battery', batteryInfo.batteryChargeLevelPercentage);
+            const batterySoc = Math.floor(batteryInfo.batteryChargeLevelPercentage);
+            this.setCapabilityValue('measure_polestarBattery', batterySoc);
+            this.setCapabilityValue('measure_battery', batterySoc);
             //this.setCapabilityValue('measure_current', batteryInfo.chargingCurrentAmps);
             // if(batteryInfo.chargingCurrentAmps!==null){
             //     this.setCapabilityValue('measure_current', batteryInfo.chargingCurrentAmps);
@@ -196,14 +242,16 @@ class PolestarVehicle extends Device {
             // }
 
             //Set the estimated range for the vehicle based on user preference
+            let range;
             if (this.usesMiles() && batteryInfo.estimatedDistanceToEmptyMiles != null) {
-                this.setCapabilityValue('measure_vehicleRange', batteryInfo.estimatedDistanceToEmptyMiles);
+                range = Math.floor(batteryInfo.estimatedDistanceToEmptyMiles);
             } else if (this.usesMiles()) {
                 // Fallback: convert km to miles if miles not available from API
-                this.setCapabilityValue('measure_vehicleRange', Math.round(batteryInfo.estimatedDistanceToEmptyKm * KM_TO_MILES));
+                range = Math.floor(batteryInfo.estimatedDistanceToEmptyKm * KM_TO_MILES);
             } else {
-                this.setCapabilityValue('measure_vehicleRange', batteryInfo.estimatedDistanceToEmptyKm);
+                range = Math.floor(batteryInfo.estimatedDistanceToEmptyKm);
             }
+            this.setCapabilityValue('measure_vehicleRange', range);
 
             //Lets assign statusses we consider connected
             const connectedStatuses = new Set([
@@ -258,8 +306,13 @@ class PolestarVehicle extends Device {
             //     this.setCapabilityValue('measure_vehicleConnected', true);
             // else
             //     this.setCapabilityValue('measure_vehicleConnected', false);
-        } catch {
-            this.homey.app.log('Failed to retrieve batterystate', 'PolestarVehicle', 'ERROR');
+        } catch (err) {
+            if (err.message === 'Not logged in') {
+                this.homey.app.log('Session expired, attempting to re-login', 'PolestarVehicle', 'WARNING');
+                await this.attemptReLogin();
+                return; // Exit early, next interval will retry
+            }
+            this.homey.app.log('Failed to retrieve batterystate', 'PolestarVehicle', 'ERROR', err);
         }
         this.homey.api.realtime('updatevehicle');
     }

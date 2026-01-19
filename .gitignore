@@ -7,3 +7,4 @@ drivers/polestar-2/*
 drivers/polestar-2-beta/*
 .homeyignore
 /env_secret.json
+tmpclaude-7720-cwd
