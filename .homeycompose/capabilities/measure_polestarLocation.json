@@ -4,7 +4,7 @@
   "icon": "/drivers/polestar-2-csv/assets/images/location.svg",
   "title": {
     "en": "Location",
-    "no": "Plassering",
+    "no": "Posisjon",
     "nl": "Locatie"
   },
   "getable": true,

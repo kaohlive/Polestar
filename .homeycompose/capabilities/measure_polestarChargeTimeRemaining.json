@@ -4,7 +4,7 @@
     "icon": "/drivers/vehicle/assets/timeremaining.svg",
     "title": {
         "en": "Time remaining",
-        "no": "Gjenstaende tid",
+        "no": "Gjenstående tid",
         "nl": "Resterende tijd"
     },
     "getable": true,
