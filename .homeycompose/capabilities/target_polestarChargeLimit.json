@@ -1,0 +1,18 @@
+{
+    "type": "number",
+    "uiComponent": "slider",
+    "icon": "/drivers/polestar-2-csv/assets/images/battery-100.svg",
+    "title": {
+        "en": "Charge limit",
+        "no": "Ladegrense",
+        "nl": "Laadlimiet"
+    },
+    "units": "%",
+    "decimals": 0,
+    "min": 50,
+    "max": 100,
+    "step": 5,
+    "getable": true,
+    "setable": true,
+    "insights": true
+}

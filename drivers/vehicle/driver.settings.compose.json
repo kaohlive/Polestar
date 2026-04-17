@@ -1,0 +1,38 @@
+[
+    {
+        "id": "writes_enabled",
+        "type": "checkbox",
+        "label": {
+            "en": "Allow remote commands",
+            "no": "Tillat fjernkommandoer",
+            "nl": "Afstandscommando's toestaan"
+        },
+        "value": true,
+        "hint": {
+            "en": "Master switch for write flows: start/stop charging, charge limit, amp limit, and (later) locks, windows, climate. Disable to make every write flow fail instantly.",
+            "no": "Hovedbryter for skriveflyter. Slå av for å få alle skriveflyter til å feile umiddelbart.",
+            "nl": "Hoofdschakelaar voor schrijfflows. Zet uit om alle schrijfflows direct te laten falen."
+        }
+    },
+    {
+        "id": "target_soc_setting_type",
+        "type": "dropdown",
+        "label": {
+            "en": "Charge limit slot",
+            "no": "Ladegrense-slot",
+            "nl": "Laadlimiet-slot"
+        },
+        "value": "1",
+        "hint": {
+            "en": "Which charge-limit slot the car should use when Homey writes a new value. Some Polestar models silently ignore writes to the wrong slot. Try 'Custom' if changes don't appear in the Polestar app.",
+            "no": "Hvilket ladegrenseslot bilen bruker når Homey skriver en ny verdi. Prøv 'Egendefinert' om endringer ikke vises i Polestar-appen.",
+            "nl": "Welk slot voor de laadlimiet de auto gebruikt als Homey een nieuwe waarde schrijft. Sommige Polestar-modellen negeren writes naar het verkeerde slot stil. Probeer 'Aangepast' als wijzigingen niet in de Polestar-app verschijnen."
+        },
+        "values": [
+            { "id": "1", "label": { "en": "Daily (default)", "no": "Daglig (standard)", "nl": "Dagelijks (standaard)" } },
+            { "id": "2", "label": { "en": "Long trip",       "no": "Lang tur",          "nl": "Lange rit" } },
+            { "id": "3", "label": { "en": "Custom",          "no": "Egendefinert",      "nl": "Aangepast" } },
+            { "id": "0", "label": { "en": "Unspecified",     "no": "Uspesifisert",      "nl": "Niet gespecificeerd" } }
+        ]
+    }
+]

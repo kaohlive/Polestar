@@ -144,6 +144,15 @@ class PolestarCompat {
         };
     }
 
+    // --- Write commands (C3-only; legacy client does not implement these) ---
+
+    chargeStart() { return this._client.chargeStart(); }
+    chargeStop() { return this._client.chargeStop(); }
+    getTargetSoc() { return this._client.getTargetSoc(); }
+    setTargetSoc(level, settingType) { return this._client.setTargetSoc(level, settingType); }
+    getAmpLimit() { return this._client.getAmpLimit(); }
+    setAmpLimit(amperage) { return this._client.setAmpLimit(amperage); }
+
     getAccessToken() { return this._client._auth.accessToken; }
     getVehicleVin() { return this._client._vin; }
 }

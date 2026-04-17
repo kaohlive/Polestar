@@ -1,0 +1,18 @@
+{
+    "type": "number",
+    "uiComponent": "slider",
+    "icon": "/drivers/polestar-2-csv/assets/images/charging.svg",
+    "title": {
+        "en": "Charging amp limit",
+        "no": "Amperegrense ved lading",
+        "nl": "Ampère-limiet bij laden"
+    },
+    "units": "A",
+    "decimals": 0,
+    "min": 6,
+    "max": 32,
+    "step": 1,
+    "getable": true,
+    "setable": true,
+    "insights": true
+}

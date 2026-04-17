@@ -8,9 +8,35 @@ const HomeyCrypt = require('../../lib/homeycrypt')
 const measureInterval = 60000;
 const KM_TO_MILES = 0.621371;
 
+// Map feature-key → { capabilities: [...] } for auto-remove on UNIMPLEMENTED.
+const OPTIONAL_FEATURES = {
+    amp_limit: { capabilities: ['target_polestarAmpLimit'] },
+    target_soc: { capabilities: ['target_polestarChargeLimit'] },
+};
+
 function selectClient(homey) {
     const legacy = homey.settings.get('c3_backend_disabled') === true;
     return legacy ? LegacyPolestar : PolestarC3Compat;
+}
+
+function isUnimplementedError(err) {
+    if (!err || !err.message) return false;
+    return /status=12\b|UNIMPLEMENTED|not supported/i.test(err.message);
+}
+
+/** Convert a raw gRPC error into a message Homey can surface usefully. */
+function friendlyGrpcError(message, label) {
+    if (!message) return `${label} failed`;
+    const m = /status=(\d+)[^m]*message="([^"]*)"/.exec(message);
+    if (!m) return message;
+    const code = Number(m[1]);
+    const detail = m[2];
+    if (code === 12) return `${label}: not supported for this vehicle (${detail})`;
+    if (code === 7)  return `${label}: permission denied (${detail || 'VIN not linked to this account'})`;
+    if (code === 16) return `${label}: authentication expired — try again`;
+    if (code === 14) return `${label}: service temporarily unavailable`;
+    if (code === 4)  return `${label}: command timed out`;
+    return `${label}: ${detail || 'error'} (code ${code})`;
 }
 
 var polestar = null;
@@ -91,7 +117,9 @@ class PolestarVehicle extends Device {
         await this.fixCapabilities();
         await this.fixEnergy();
         await this.updateCapabilityUnits();
+        this._registerWriteCapabilityListeners();
         this.update_loop_timers();
+        this.refreshChargingTargets();  // best-effort initial read
 
         // Listen for distance unit setting changes
         this.homey.settings.on('set', async (key) => {
@@ -115,15 +143,23 @@ class PolestarVehicle extends Device {
 
     async update_loop_timers() {
         await this.updateVehicleState();
-        let interval = measureInterval;
         this._timerTimers = this.homey.setInterval(async () => {
             await this.updateVehicleState();
-        }, interval);
-        await this.updateHealthState();
-        let intervalHealth = 3600000;
+        }, measureInterval);
+
+        // Health, tyre pressures, current target SoC / amp limit: refresh every 15 min
+        // so externally-made changes (e.g. via the Polestar mobile app) show up in Homey
+        // within that window without hammering the backend.
+        const slowInterval = 15 * 60 * 1000;
+        await this._runSlowCycle();
         this._timerHealth = this.homey.setInterval(async () => {
-            await this.updateHealthState();
-        }, intervalHealth);
+            await this._runSlowCycle();
+        }, slowInterval);
+    }
+
+    async _runSlowCycle() {
+        await this.updateHealthState();
+        await this.refreshAmpLimit();
     }
 
     async fixEnergy()
@@ -177,14 +213,41 @@ class PolestarVehicle extends Device {
             await this.addCapability('measure_polestarSessionKwh');
         if (!this.hasCapability('alarm_polestarTyrePressure'))
             await this.addCapability('alarm_polestarTyrePressure');
-        if (!this.hasCapability('measure_polestarTyrePressureFL'))
-            await this.addCapability('measure_polestarTyrePressureFL');
-        if (!this.hasCapability('measure_polestarTyrePressureFR'))
-            await this.addCapability('measure_polestarTyrePressureFR');
-        if (!this.hasCapability('measure_polestarTyrePressureRL'))
-            await this.addCapability('measure_polestarTyrePressureRL');
-        if (!this.hasCapability('measure_polestarTyrePressureRR'))
-            await this.addCapability('measure_polestarTyrePressureRR');
+        // Optional features — only add the slider if we haven't previously learned
+        // this vehicle doesn't support the underlying service (e.g. Polestar 4 AMP_LIMIT).
+        if (!this._isFeatureUnsupported('target_soc')) {
+            if (!this.hasCapability('target_polestarChargeLimit'))
+                await this.addCapability('target_polestarChargeLimit');
+        } else if (this.hasCapability('target_polestarChargeLimit')) {
+            try { await this.removeCapability('target_polestarChargeLimit'); } catch (_) {}
+        }
+        if (!this._isFeatureUnsupported('amp_limit')) {
+            if (!this.hasCapability('target_polestarAmpLimit'))
+                await this.addCapability('target_polestarAmpLimit');
+        } else if (this.hasCapability('target_polestarAmpLimit')) {
+            try { await this.removeCapability('target_polestarAmpLimit'); } catch (_) {}
+        }
+        if (!this.hasCapability('button.charge_start'))
+            await this.addCapability('button.charge_start');
+        if (!this.hasCapability('button.charge_stop'))
+            await this.addCapability('button.charge_stop');
+
+        // Migrate legacy custom tyre capabilities → standard measure_pressure with sub-IDs.
+        for (const legacy of [
+            'measure_polestarTyrePressureFL',
+            'measure_polestarTyrePressureFR',
+            'measure_polestarTyrePressureRL',
+            'measure_polestarTyrePressureRR',
+        ]) {
+            if (this.hasCapability(legacy)) {
+                try { await this.removeCapability(legacy); }
+                catch (err) { this.homey.app.log(`Failed to remove legacy cap ${legacy}`, this.name, 'WARNING', err); }
+            }
+        }
+        for (const sub of ['front_left', 'front_right', 'rear_left', 'rear_right']) {
+            const id = `measure_pressure.${sub}`;
+            if (!this.hasCapability(id)) await this.addCapability(id);
+        }
     }
 
     async updateHealthState(){
@@ -208,10 +271,10 @@ class PolestarVehicle extends Device {
                 // C3-only fields — legacy GraphQL does not supply these, so guard each one.
                 if (healthInfo.tyrePressures) {
                     const tp = healthInfo.tyrePressures;
-                    if (Number.isFinite(tp.frontLeftKpa)) this.setCapabilityValue('measure_polestarTyrePressureFL', tp.frontLeftKpa);
-                    if (Number.isFinite(tp.frontRightKpa)) this.setCapabilityValue('measure_polestarTyrePressureFR', tp.frontRightKpa);
-                    if (Number.isFinite(tp.rearLeftKpa)) this.setCapabilityValue('measure_polestarTyrePressureRL', tp.rearLeftKpa);
-                    if (Number.isFinite(tp.rearRightKpa)) this.setCapabilityValue('measure_polestarTyrePressureRR', tp.rearRightKpa);
+                    if (Number.isFinite(tp.frontLeftKpa))  this.setCapabilityValue('measure_pressure.front_left',  tp.frontLeftKpa);
+                    if (Number.isFinite(tp.frontRightKpa)) this.setCapabilityValue('measure_pressure.front_right', tp.frontRightKpa);
+                    if (Number.isFinite(tp.rearLeftKpa))   this.setCapabilityValue('measure_pressure.rear_left',   tp.rearLeftKpa);
+                    if (Number.isFinite(tp.rearRightKpa))  this.setCapabilityValue('measure_pressure.rear_right',  tp.rearRightKpa);
                 }
                 if (typeof healthInfo.anyTyreWarning === 'boolean') {
                     this.setCapabilityValue('alarm_polestarTyrePressure', healthInfo.anyTyreWarning);
@@ -389,7 +452,224 @@ class PolestarVehicle extends Device {
             }
             this.homey.app.log('Failed to retrieve batterystate', 'PolestarVehicle', 'ERROR', err);
         }
+
+        // Also refresh the user-setable charge limit every tick. The Get call is a single
+        // server-streaming frame (cheap) and catches changes the user makes in the Polestar
+        // app / in-car menu within the 60 s window instead of the 15-min slow cycle.
+        await this.refreshChargeLimit();
+
         this.homey.api.realtime('updatevehicle');
+    }
+
+    /**
+     * Master-switch check for write commands. Defaults to allowed; users can
+     * flip the device setting off to kill-switch all write flows instantly.
+     */
+    _requireWritesEnabled() {
+        const enabled = this.getSetting('writes_enabled');
+        // Treat undefined (never set) as true to match default value in compose.
+        if (enabled === false) {
+            this.homey.app.log('Remote command blocked: writes_enabled is off', this.name, 'WARNING');
+            throw new Error('Remote commands are disabled for this vehicle (see device settings)');
+        }
+    }
+
+    /** Guard a write command: master-switch check + client check + error logging. */
+    async _invokeWrite(label, fn) {
+        this._requireWritesEnabled();
+        if (!this.polestar) throw new Error('Polestar client not ready');
+        if (this.homey.settings.get('c3_backend_disabled') === true) {
+            throw new Error('C3 backend is disabled on this device — write commands unavailable');
+        }
+        try {
+            const result = await fn();
+            this.homey.app.log(`${label} OK`, this.name, 'DEBUG', result);
+            return result;
+        } catch (err) {
+            if (err.message === 'Not logged in') {
+                this.homey.app.log(`${label}: session expired, re-logging in`, this.name, 'WARNING');
+                await this.attemptReLogin();
+                const result = await fn();
+                this.homey.app.log(`${label} OK (after re-login)`, this.name, 'DEBUG', result);
+                return result;
+            }
+            this.homey.app.log(`${label} FAILED`, this.name, 'ERROR', err);
+            // If the write revealed a feature isn't supported, clean up right away
+            // so the user won't see a sad slider next run.
+            if (isUnimplementedError(err)) {
+                const featureKey = label.toLowerCase().includes('amplimit') || label.toLowerCase().includes('amp_limit') ? 'amp_limit'
+                    : label.toLowerCase().includes('targetsoc') || label.toLowerCase().includes('chargelimit') ? 'target_soc'
+                    : null;
+                if (featureKey) await this._markFeatureUnsupported(featureKey, err.message);
+            }
+            throw new Error(friendlyGrpcError(err.message, label));
+        }
+    }
+
+    chargeStart() { return this._invokeWrite('chargeStart', () => this.polestar.chargeStart()); }
+    chargeStop()  { return this._invokeWrite('chargeStop',  () => this.polestar.chargeStop());  }
+    _getTargetSocSettingType() {
+        const raw = this.getSetting('target_soc_setting_type');
+        const n = raw === undefined || raw === null ? 1 : Number(raw);
+        return Number.isInteger(n) && n >= 0 && n <= 3 ? n : 1;
+    }
+
+    async setTargetSoc(args) {
+        const level = Math.round(args.level);
+        const slot = this._getTargetSocSettingType();
+        const returned = await this._invokeWrite('setTargetSoc',
+            () => this.polestar.setTargetSoc(level, slot));
+        await this._applyTargetSocResult(level, returned);
+    }
+    async setAmpLimit(args) {
+        const amps = Math.round(args.amperage);
+        const returned = await this._invokeWrite('setAmpLimit', () => this.polestar.setAmpLimit(amps));
+        await this._applyAmpLimitResult(amps, returned);
+    }
+
+    /**
+     * Intentionally DON'T trust the Set response — on Polestar 4 the server
+     * returns an echo of setting_type plus a stale copy of the previous level
+     * (field 1 of the inner payload), not the newly committed level. Leave the
+     * slider on what the user moved to and correct it 3 s later via a Get.
+     * If the Get still disagrees, warn the user once to check their slot setting.
+     */
+    async _applyTargetSocResult(requested, _returnedIgnored) {
+        this.homey.setTimeout(async () => {
+            try {
+                const actual = await this.polestar.getTargetSoc();
+                if (!Number.isFinite(actual)) return;
+                if (actual !== requested) {
+                    await this.setCapabilityValue('target_polestarChargeLimit', actual);
+                    this.homey.app.log(
+                        `Charge limit did not change to ${requested}% (server reports ${actual}%). ` +
+                        `Try switching 'Charge limit slot' in device settings.`,
+                        this.name, 'WARNING');
+                }
+            } catch (err) { this.homey.app.log('post-write SoC re-read failed', this.name, 'DEBUG', err.message); }
+        }, 3000);
+    }
+
+    async _applyAmpLimitResult(requested, _returnedIgnored) {
+        this.homey.setTimeout(async () => {
+            try {
+                const actual = await this.polestar.getAmpLimit();
+                if (!Number.isFinite(actual)) return;
+                if (actual !== requested) {
+                    await this.setCapabilityValue('target_polestarAmpLimit', actual);
+                    this.homey.app.log(`Amp limit differs after write: requested ${requested}A, server reports ${actual}A`,
+                        this.name, 'WARNING');
+                }
+            } catch (err) { this.homey.app.log('post-write amp limit re-read failed', this.name, 'DEBUG', err.message); }
+        }, 3000);
+    }
+
+    /** Check if the backend has previously told us this feature isn't supported on this vehicle. */
+    _isFeatureUnsupported(key) {
+        const unsupported = this.getStoreValue('unsupportedFeatures') || {};
+        return unsupported[key] === true;
+    }
+
+    /** Mark a feature as unsupported based on a gRPC UNIMPLEMENTED response,
+     *  remove its capabilities, and log once. */
+    async _markFeatureUnsupported(key, reason = '') {
+        if (this._isFeatureUnsupported(key)) return; // already marked
+        const spec = OPTIONAL_FEATURES[key];
+        if (!spec) return;
+        const unsupported = { ...(this.getStoreValue('unsupportedFeatures') || {}), [key]: true };
+        await this.setStoreValue('unsupportedFeatures', unsupported);
+        this.homey.app.log(`Feature '${key}' not supported on this vehicle — removing related capabilities. ${reason}`,
+            this.name, 'WARNING');
+        for (const cap of spec.capabilities) {
+            if (this.hasCapability(cap)) {
+                try { await this.removeCapability(cap); }
+                catch (err) { this.homey.app.log(`Failed to remove ${cap}`, this.name, 'WARNING', err); }
+            }
+        }
+    }
+
+    /** Register tile/slider handlers for the setable write capabilities. */
+    _registerWriteCapabilityListeners() {
+        this.registerCapabilityListener('target_polestarChargeLimit', async (value) => {
+            const level = Math.round(value);
+            const slot = this._getTargetSocSettingType();
+            const returned = await this._invokeWrite('target_polestarChargeLimit',
+                () => this.polestar.setTargetSoc(level, slot));
+            await this._applyTargetSocResult(level, returned);
+        });
+        this.registerCapabilityListener('target_polestarAmpLimit', async (value) => {
+            const amps = Math.round(value);
+            const returned = await this._invokeWrite('target_polestarAmpLimit',
+                () => this.polestar.setAmpLimit(amps));
+            await this._applyAmpLimitResult(amps, returned);
+        });
+        this.registerCapabilityListener('button.charge_start', async () => {
+            await this._invokeWrite('button.charge_start', () => this.polestar.chargeStart());
+        });
+        this.registerCapabilityListener('button.charge_stop', async () => {
+            await this._invokeWrite('button.charge_stop', () => this.polestar.chargeStop());
+        });
+    }
+
+    /**
+     * Populate the read-side of the target_* capabilities. Called at init and
+     * after any flow-card or tile change so the slider reflects reality.
+     * Silently tolerates UNIMPLEMENTED (Polestar 4 amp limit case).
+     */
+    /** Fast-cycle refresh: charge limit only. User can change it several times a day
+     *  (via Polestar app, in-car menu), so keep up with the 60 s cycle. */
+    async refreshChargeLimit() {
+        if (!this.polestar || typeof this.polestar.getTargetSoc !== 'function') return;
+        if (this._isFeatureUnsupported('target_soc')) return;
+        try {
+            const soc = await this.polestar.getTargetSoc();
+            if (Number.isFinite(soc) && soc >= 50 && soc <= 100) {
+                await this.setCapabilityValue('target_polestarChargeLimit', soc);
+            }
+        } catch (err) {
+            if (isUnimplementedError(err)) await this._markFeatureUnsupported('target_soc', err.message);
+            else this.homey.app.log('refresh target SoC failed', this.name, 'DEBUG', err.message);
+        }
+    }
+
+    /** Slow-cycle refresh: amp limit. Changes rarely (per charging location), so 15 min
+     *  is plenty and saves a gRPC round-trip every minute. Skipped entirely on Polestar 4. */
+    async refreshAmpLimit() {
+        if (!this.polestar || typeof this.polestar.getAmpLimit !== 'function') return;
+        if (this._isFeatureUnsupported('amp_limit')) return;
+        try {
+            const amps = await this.polestar.getAmpLimit();
+            if (Number.isFinite(amps) && amps >= 6 && amps <= 32) {
+                await this.setCapabilityValue('target_polestarAmpLimit', amps);
+            }
+        } catch (err) {
+            if (isUnimplementedError(err)) await this._markFeatureUnsupported('amp_limit', err.message);
+            else this.homey.app.log('refresh amp limit failed', this.name, 'DEBUG', err.message);
+        }
+    }
+
+    /** Back-compat shim for callers that still invoke the old combined method. */
+    async refreshChargingTargets() {
+        await this.refreshChargeLimit();
+        await this.refreshAmpLimit();
+    }
+
+    async getCurrentTargetSoc() {
+        if (!this.polestar) return null;
+        try { return await this.polestar.getTargetSoc(); }
+        catch (err) {
+            this.homey.app.log('getTargetSoc failed', this.name, 'ERROR', err);
+            return null;
+        }
+    }
+
+    async getCurrentAmpLimit() {
+        if (!this.polestar) return null;
+        try { return await this.polestar.getAmpLimit(); }
+        catch (err) {
+            this.homey.app.log('getAmpLimit failed', this.name, 'ERROR', err);
+            return null;
+        }
     }
 
     async onAdded() {

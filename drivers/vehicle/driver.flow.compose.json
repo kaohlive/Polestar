@@ -56,5 +56,119 @@
         },
         "$filter": "capabilities=measure_vehicleConnected"
     }
+    ],
+    "conditions": [
+        {
+            "id": "target_soc_is",
+            "title": {
+                "en": "Charge limit !{{is|is not}} at least",
+                "no": "Ladegrense !{{er|er ikke}} minst",
+                "nl": "Laadlimiet !{{is|is niet}} minimaal"
+            },
+            "titleFormatted": {
+                "en": "Charge limit !{{is|is not}} at least [[level]]%",
+                "no": "Ladegrense !{{er|er ikke}} minst [[level]]%",
+                "nl": "Laadlimiet !{{is|is niet}} minimaal [[level]]%"
+            },
+            "args": [
+                { "type": "number", "name": "level", "min": 50, "max": 100, "step": 1, "placeholder": { "en": "%", "no": "%", "nl": "%" } }
+            ]
+        },
+        {
+            "id": "amp_limit_is",
+            "title": {
+                "en": "Amp limit !{{is|is not}} at least",
+                "no": "Amperebegrensning !{{er|er ikke}} minst",
+                "nl": "Amperebegrenzing !{{is|is niet}} minimaal"
+            },
+            "titleFormatted": {
+                "en": "Amp limit !{{is|is not}} at least [[amperage]] A",
+                "no": "Amperebegrensning !{{er|er ikke}} minst [[amperage]] A",
+                "nl": "Amperebegrenzing !{{is|is niet}} minimaal [[amperage]] A"
+            },
+            "args": [
+                { "type": "number", "name": "amperage", "min": 6, "max": 32, "step": 1, "placeholder": { "en": "A", "no": "A", "nl": "A" } }
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "id": "charge_start",
+            "title": {
+                "en": "Start charging (override timer)",
+                "no": "Start lading (overstyr tidtaker)",
+                "nl": "Laden starten (negeer timer)"
+            },
+            "titleFormatted": {
+                "en": "Start charging (override timer)",
+                "no": "Start lading (overstyr tidtaker)",
+                "nl": "Laden starten (negeer timer)"
+            },
+            "hint": {
+                "en": "Overrides any scheduled charging timer and starts drawing power now. Requires the charger to be connected and 'Allow remote commands' to be enabled in device settings.",
+                "no": "Overstyr planlagt lading og start nå. Laderen må være tilkoblet og 'Tillat fjernkommandoer' må være på i enhetsinnstillingene.",
+                "nl": "Overschrijft een geplande laadtimer en begint direct met laden. Lader moet verbonden zijn en 'Afstandscommando's toestaan' moet aan staan in de device-instellingen."
+            }
+        },
+        {
+            "id": "charge_stop",
+            "title": {
+                "en": "Stop charging (override timer)",
+                "no": "Stopp lading (overstyr tidtaker)",
+                "nl": "Laden stoppen (negeer timer)"
+            },
+            "titleFormatted": {
+                "en": "Stop charging (override timer)",
+                "no": "Stopp lading (overstyr tidtaker)",
+                "nl": "Laden stoppen (negeer timer)"
+            },
+            "hint": {
+                "en": "Cancels the charge-now override and lets the scheduled timer take over again.",
+                "no": "Avbryt lad-nå-overstyringen og overlat kontrollen til planlagt tidtaker.",
+                "nl": "Heft de lad-nu-override op; de geplande timer neemt het weer over."
+            }
+        },
+        {
+            "id": "set_target_soc",
+            "title": {
+                "en": "Set charge limit",
+                "no": "Sett ladegrense",
+                "nl": "Laadlimiet instellen"
+            },
+            "titleFormatted": {
+                "en": "Set charge limit to [[level]]%",
+                "no": "Sett ladegrense til [[level]]%",
+                "nl": "Laadlimiet instellen op [[level]]%"
+            },
+            "hint": {
+                "en": "Target state-of-charge where the car stops charging (50–100%).",
+                "no": "Ladegrense der bilen stopper ladingen (50–100%).",
+                "nl": "SoC-doel waarop de auto stopt met laden (50–100%)."
+            },
+            "args": [
+                { "type": "number", "name": "level", "min": 50, "max": 100, "step": 1, "placeholder": { "en": "%", "no": "%", "nl": "%" } }
+            ]
+        },
+        {
+            "id": "set_amp_limit",
+            "title": {
+                "en": "Set charging amperage limit",
+                "no": "Sett maks ampere ved lading",
+                "nl": "Ampère-limiet instellen bij laden"
+            },
+            "titleFormatted": {
+                "en": "Set amperage limit to [[amperage]] A",
+                "no": "Sett ampere-grense til [[amperage]] A",
+                "nl": "Ampère-limiet instellen op [[amperage]] A"
+            },
+            "hint": {
+                "en": "Caps the AC charging current (6–32 A). Note: Polestar 4 currently reports this feature as unsupported.",
+                "no": "Maks vekselstrømsladestrøm (6–32 A). Merk: Polestar 4 rapporterer dette som ikke støttet.",
+                "nl": "Maximum AC-laadstroom (6–32 A). Let op: Polestar 4 meldt dat deze functie niet wordt ondersteund."
+            },
+            "args": [
+                { "type": "number", "name": "amperage", "min": 6, "max": 32, "step": 1, "placeholder": { "en": "A", "no": "A", "nl": "A" } }
+            ]
+        }
     ]
 }

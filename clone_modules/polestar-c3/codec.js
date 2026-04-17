@@ -190,8 +190,46 @@ function decode(schema, buf) {
     return result;
 }
 
+/** Raw decoder that keeps every field keyed by number, ignoring any schema.
+ *  Intended for debugging/introspection of responses whose layout we don't know yet. */
+function decodeRaw(buf) {
+    const result = {};
+    let pos = 0;
+    while (pos < buf.length) {
+        let tag;
+        [tag, pos] = decodeVarint(buf, pos);
+        const t = Number(tag);
+        const fn = t >> 3;
+        const wt = t & 0x07;
+        let raw;
+        switch (wt) {
+            case WIRE_VARINT: [raw, pos] = decodeVarint(buf, pos); break;
+            case WIRE_FIXED64: raw = buf.readDoubleLE(pos); pos += 8; break;
+            case WIRE_LEN: {
+                let len; [len, pos] = decodeVarint(buf, pos);
+                const l = Number(len);
+                raw = buf.slice(pos, pos + l);
+                pos += l;
+                break;
+            }
+            case WIRE_FIXED32: raw = buf.readFloatLE(pos); pos += 4; break;
+            default: return result; // unknown / group / end-group: stop parsing
+        }
+        if (typeof raw === 'bigint' && raw <= BigInt(Number.MAX_SAFE_INTEGER)) raw = Number(raw);
+        const key = `field${fn}(wt=${wt})`;
+        if (key in result) {
+            if (!Array.isArray(result[key])) result[key] = [result[key]];
+            result[key].push(raw);
+        } else {
+            result[key] = raw;
+        }
+    }
+    return result;
+}
+
 module.exports = {
     encodeVarint, decodeVarint,
-    encode, decode,
+    encodeField, encodeLenDelim,
+    encode, decode, decodeRaw,
     WIRE_VARINT, WIRE_FIXED64, WIRE_LEN, WIRE_FIXED32,
 };

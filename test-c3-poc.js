@@ -61,12 +61,16 @@ async function main() {
     };
 
     try {
-        await step('[4/6] BatteryService/GetLatestBattery (unary)…',
+        await step('[4/8] BatteryService/GetLatestBattery (unary)…',
             () => client.getLatestBattery({ debug }));
-        await step('[5/6] OdometerService/GetOdometer (server-stream, first frame)…',
+        await step('[5/8] OdometerService/GetOdometer (server-stream, first frame)…',
             () => client.getLatestOdometer({ debug }));
-        await step('[6/6] HealthService/GetHealth (server-stream, first frame)…',
+        await step('[6/8] HealthService/GetHealth (server-stream, first frame)…',
             () => client.getLatestHealth({ debug }));
+        await step('[7/8] TargetSocService/GetTargetSoc (chronos read)…',
+            async () => ({ target_level_pct: await client.getTargetSoc({ debug }) }));
+        await step('[8/8] AmpLimitService/GetAmpLimit (chronos read)…',
+            async () => ({ amperage_limit: await client.getAmpLimit({ debug }) }));
     } finally {
         client.close();
     }

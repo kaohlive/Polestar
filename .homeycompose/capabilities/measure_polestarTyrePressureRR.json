@@ -1,14 +1,15 @@
 {
+    "_deprecated": "Replaced by measure_pressure.rear_right. Kept only so existing devices can migrate cleanly via removeCapability. Remove this file in a future release once migration window closes.",
     "type": "number",
     "uiComponent": "sensor",
     "title": {
-        "en": "Tyre pressure RR",
-        "no": "Dekktrykk BH",
-        "nl": "Bandenspanning RA"
+        "en": "Tyre pressure RR (legacy)",
+        "no": "Dekktrykk BH (legacy)",
+        "nl": "Bandenspanning RA (legacy)"
     },
     "units": "kPa",
     "decimals": 0,
     "getable": true,
     "setable": false,
-    "insights": true
+    "insights": false
 }

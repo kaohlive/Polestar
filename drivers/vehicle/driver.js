@@ -14,6 +14,33 @@ function Polestar(email, password, homey) {
 class Vehicle extends Driver {
     async onInit() {
         this.homey.app.log('Polestar Driver has been initialized', 'Polestar Driver', 'DEBUG');
+        this._registerFlowCards();
+    }
+
+    _registerFlowCards() {
+        const actionRun = (method) => async (args) => {
+            if (!args.device) throw new Error('No device supplied to flow card');
+            await args.device[method](args);
+            return true;
+        };
+
+        this.homey.flow.getActionCard('charge_start').registerRunListener(actionRun('chargeStart'));
+        this.homey.flow.getActionCard('charge_stop').registerRunListener(actionRun('chargeStop'));
+        this.homey.flow.getActionCard('set_target_soc').registerRunListener(actionRun('setTargetSoc'));
+        this.homey.flow.getActionCard('set_amp_limit').registerRunListener(actionRun('setAmpLimit'));
+
+        this.homey.flow.getConditionCard('target_soc_is').registerRunListener(async (args) => {
+            if (!args.device) return false;
+            const current = await args.device.getCurrentTargetSoc();
+            return Number.isFinite(current) ? current >= args.level : false;
+        });
+        this.homey.flow.getConditionCard('amp_limit_is').registerRunListener(async (args) => {
+            if (!args.device) return false;
+            const current = await args.device.getCurrentAmpLimit();
+            return Number.isFinite(current) ? current >= args.amperage : false;
+        });
+
+        this.homey.app.log('Polestar flow cards registered', 'Polestar Driver', 'DEBUG');
     }
 
     async onRepair(session, device) {

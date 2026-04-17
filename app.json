@@ -495,6 +495,198 @@
           }
         ]
       }
+    ],
+    "conditions": [
+      {
+        "id": "target_soc_is",
+        "title": {
+          "en": "Charge limit !{{is|is not}} at least",
+          "no": "Ladegrense !{{er|er ikke}} minst",
+          "nl": "Laadlimiet !{{is|is niet}} minimaal"
+        },
+        "titleFormatted": {
+          "en": "Charge limit !{{is|is not}} at least [[level]]%",
+          "no": "Ladegrense !{{er|er ikke}} minst [[level]]%",
+          "nl": "Laadlimiet !{{is|is niet}} minimaal [[level]]%"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "type": "number",
+            "name": "level",
+            "min": 50,
+            "max": 100,
+            "step": 1,
+            "placeholder": {
+              "en": "%",
+              "no": "%",
+              "nl": "%"
+            }
+          }
+        ]
+      },
+      {
+        "id": "amp_limit_is",
+        "title": {
+          "en": "Amp limit !{{is|is not}} at least",
+          "no": "Amperebegrensning !{{er|er ikke}} minst",
+          "nl": "Amperebegrenzing !{{is|is niet}} minimaal"
+        },
+        "titleFormatted": {
+          "en": "Amp limit !{{is|is not}} at least [[amperage]] A",
+          "no": "Amperebegrensning !{{er|er ikke}} minst [[amperage]] A",
+          "nl": "Amperebegrenzing !{{is|is niet}} minimaal [[amperage]] A"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "type": "number",
+            "name": "amperage",
+            "min": 6,
+            "max": 32,
+            "step": 1,
+            "placeholder": {
+              "en": "A",
+              "no": "A",
+              "nl": "A"
+            }
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "charge_start",
+        "title": {
+          "en": "Start charging (override timer)",
+          "no": "Start lading (overstyr tidtaker)",
+          "nl": "Laden starten (negeer timer)"
+        },
+        "titleFormatted": {
+          "en": "Start charging (override timer)",
+          "no": "Start lading (overstyr tidtaker)",
+          "nl": "Laden starten (negeer timer)"
+        },
+        "hint": {
+          "en": "Overrides any scheduled charging timer and starts drawing power now. Requires the charger to be connected and 'Allow remote commands' to be enabled in device settings.",
+          "no": "Overstyr planlagt lading og start nå. Laderen må være tilkoblet og 'Tillat fjernkommandoer' må være på i enhetsinnstillingene.",
+          "nl": "Overschrijft een geplande laadtimer en begint direct met laden. Lader moet verbonden zijn en 'Afstandscommando's toestaan' moet aan staan in de device-instellingen."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "charge_stop",
+        "title": {
+          "en": "Stop charging (override timer)",
+          "no": "Stopp lading (overstyr tidtaker)",
+          "nl": "Laden stoppen (negeer timer)"
+        },
+        "titleFormatted": {
+          "en": "Stop charging (override timer)",
+          "no": "Stopp lading (overstyr tidtaker)",
+          "nl": "Laden stoppen (negeer timer)"
+        },
+        "hint": {
+          "en": "Cancels the charge-now override and lets the scheduled timer take over again.",
+          "no": "Avbryt lad-nå-overstyringen og overlat kontrollen til planlagt tidtaker.",
+          "nl": "Heft de lad-nu-override op; de geplande timer neemt het weer over."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "set_target_soc",
+        "title": {
+          "en": "Set charge limit",
+          "no": "Sett ladegrense",
+          "nl": "Laadlimiet instellen"
+        },
+        "titleFormatted": {
+          "en": "Set charge limit to [[level]]%",
+          "no": "Sett ladegrense til [[level]]%",
+          "nl": "Laadlimiet instellen op [[level]]%"
+        },
+        "hint": {
+          "en": "Target state-of-charge where the car stops charging (50–100%).",
+          "no": "Ladegrense der bilen stopper ladingen (50–100%).",
+          "nl": "SoC-doel waarop de auto stopt met laden (50–100%)."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "type": "number",
+            "name": "level",
+            "min": 50,
+            "max": 100,
+            "step": 1,
+            "placeholder": {
+              "en": "%",
+              "no": "%",
+              "nl": "%"
+            }
+          }
+        ]
+      },
+      {
+        "id": "set_amp_limit",
+        "title": {
+          "en": "Set charging amperage limit",
+          "no": "Sett maks ampere ved lading",
+          "nl": "Ampère-limiet instellen bij laden"
+        },
+        "titleFormatted": {
+          "en": "Set amperage limit to [[amperage]] A",
+          "no": "Sett ampere-grense til [[amperage]] A",
+          "nl": "Ampère-limiet instellen op [[amperage]] A"
+        },
+        "hint": {
+          "en": "Caps the AC charging current (6–32 A). Note: Polestar 4 currently reports this feature as unsupported.",
+          "no": "Maks vekselstrømsladestrøm (6–32 A). Merk: Polestar 4 rapporterer dette som ikke støttet.",
+          "nl": "Maximum AC-laadstroom (6–32 A). Let op: Polestar 4 meldt dat deze functie niet wordt ondersteund."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "type": "number",
+            "name": "amperage",
+            "min": 6,
+            "max": 32,
+            "step": 1,
+            "placeholder": {
+              "en": "A",
+              "no": "A",
+              "nl": "A"
+            }
+          }
+        ]
+      }
     ]
   },
   "drivers": [
@@ -881,12 +1073,18 @@
         "measure_current",
         "measure_voltage",
         "meter_power",
+        "measure_polestarDrivingKwh",
+        "measure_polestarSessionKwh",
         "measure_polestarChargingType",
+        "target_polestarChargeLimit",
+        "target_polestarAmpLimit",
+        "button.charge_start",
+        "button.charge_stop",
         "alarm_polestarTyrePressure",
-        "measure_polestarTyrePressureFL",
-        "measure_polestarTyrePressureFR",
-        "measure_polestarTyrePressureRL",
-        "measure_polestarTyrePressureRR"
+        "measure_pressure.front_left",
+        "measure_pressure.front_right",
+        "measure_pressure.rear_left",
+        "measure_pressure.rear_right"
       ],
       "energy": {
         "electricCar": true
@@ -894,6 +1092,78 @@
       "capabilitiesOptions": {
         "measure_power": {
           "approximated": true
+        },
+        "button.charge_start": {
+          "title": {
+            "en": "Start charging",
+            "no": "Start lading",
+            "nl": "Laden starten"
+          },
+          "desc": {
+            "en": "Override the charge timer and start charging now.",
+            "no": "Overstyr ladetidtakeren og start lading nå.",
+            "nl": "Negeer de laadtimer en begin direct met laden."
+          }
+        },
+        "button.charge_stop": {
+          "title": {
+            "en": "Stop charging",
+            "no": "Stopp lading",
+            "nl": "Laden stoppen"
+          },
+          "desc": {
+            "en": "Cancel the charge-now override.",
+            "no": "Avbryt lad-nå-overstyringen.",
+            "nl": "Heft de lad-nu-override op."
+          }
+        },
+        "measure_pressure.front_left": {
+          "title": {
+            "en": "Tyre pressure FL",
+            "no": "Dekktrykk FV",
+            "nl": "Bandenspanning LV"
+          },
+          "units": {
+            "en": "kPa"
+          },
+          "decimals": 0,
+          "insights": true
+        },
+        "measure_pressure.front_right": {
+          "title": {
+            "en": "Tyre pressure FR",
+            "no": "Dekktrykk FH",
+            "nl": "Bandenspanning RV"
+          },
+          "units": {
+            "en": "kPa"
+          },
+          "decimals": 0,
+          "insights": true
+        },
+        "measure_pressure.rear_left": {
+          "title": {
+            "en": "Tyre pressure RL",
+            "no": "Dekktrykk BV",
+            "nl": "Bandenspanning LA"
+          },
+          "units": {
+            "en": "kPa"
+          },
+          "decimals": 0,
+          "insights": true
+        },
+        "measure_pressure.rear_right": {
+          "title": {
+            "en": "Tyre pressure RR",
+            "no": "Dekktrykk BH",
+            "nl": "Bandenspanning RA"
+          },
+          "units": {
+            "en": "kPa"
+          },
+          "decimals": 0,
+          "insights": true
         }
       },
       "platforms": [
@@ -928,7 +1198,73 @@
           "template": "add_devices"
         }
       ],
-      "id": "vehicle"
+      "id": "vehicle",
+      "settings": [
+        {
+          "id": "writes_enabled",
+          "type": "checkbox",
+          "label": {
+            "en": "Allow remote commands",
+            "no": "Tillat fjernkommandoer",
+            "nl": "Afstandscommando's toestaan"
+          },
+          "value": true,
+          "hint": {
+            "en": "Master switch for write flows: start/stop charging, charge limit, amp limit, and (later) locks, windows, climate. Disable to make every write flow fail instantly.",
+            "no": "Hovedbryter for skriveflyter. Slå av for å få alle skriveflyter til å feile umiddelbart.",
+            "nl": "Hoofdschakelaar voor schrijfflows. Zet uit om alle schrijfflows direct te laten falen."
+          }
+        },
+        {
+          "id": "target_soc_setting_type",
+          "type": "dropdown",
+          "label": {
+            "en": "Charge limit slot",
+            "no": "Ladegrense-slot",
+            "nl": "Laadlimiet-slot"
+          },
+          "value": "1",
+          "hint": {
+            "en": "Which charge-limit slot the car should use when Homey writes a new value. Some Polestar models silently ignore writes to the wrong slot. Try 'Custom' if changes don't appear in the Polestar app.",
+            "no": "Hvilket ladegrenseslot bilen bruker når Homey skriver en ny verdi. Prøv 'Egendefinert' om endringer ikke vises i Polestar-appen.",
+            "nl": "Welk slot voor de laadlimiet de auto gebruikt als Homey een nieuwe waarde schrijft. Sommige Polestar-modellen negeren writes naar het verkeerde slot stil. Probeer 'Aangepast' als wijzigingen niet in de Polestar-app verschijnen."
+          },
+          "values": [
+            {
+              "id": "1",
+              "label": {
+                "en": "Daily (default)",
+                "no": "Daglig (standard)",
+                "nl": "Dagelijks (standaard)"
+              }
+            },
+            {
+              "id": "2",
+              "label": {
+                "en": "Long trip",
+                "no": "Lang tur",
+                "nl": "Lange rit"
+              }
+            },
+            {
+              "id": "3",
+              "label": {
+                "en": "Custom",
+                "no": "Egendefinert",
+                "nl": "Aangepast"
+              }
+            },
+            {
+              "id": "0",
+              "label": {
+                "en": "Unspecified",
+                "no": "Uspesifisert",
+                "nl": "Niet gespecificeerd"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "widgets": {
@@ -1070,6 +1406,21 @@
       "setable": false,
       "insights": true
     },
+    "measure_polestarDrivingKwh": {
+      "type": "number",
+      "uiComponent": "sensor",
+      "icon": "/drivers/polestar-2-csv/assets/images/hvbattery.svg",
+      "title": {
+        "en": "Driving energy (total)",
+        "no": "Kjøreenergi (totalt)",
+        "nl": "Rijverbruik (totaal)"
+      },
+      "units": "kWh",
+      "decimals": 1,
+      "getable": true,
+      "setable": false,
+      "insights": true
+    },
     "measure_polestarGear": {
       "type": "string",
       "uiComponent": "sensor",
@@ -1165,6 +1516,21 @@
       "setable": false,
       "insights": true
     },
+    "measure_polestarSessionKwh": {
+      "type": "number",
+      "uiComponent": "sensor",
+      "icon": "/drivers/polestar-2-csv/assets/images/charging.svg",
+      "title": {
+        "en": "Session charge",
+        "no": "Øktens lading",
+        "nl": "Laadsessie"
+      },
+      "units": "kWh",
+      "decimals": 2,
+      "getable": true,
+      "setable": false,
+      "insights": true
+    },
     "measure_polestarSpeed": {
       "type": "number",
       "uiComponent": "sensor",
@@ -1197,60 +1563,64 @@
       "insights": true
     },
     "measure_polestarTyrePressureFL": {
+      "_deprecated": "Replaced by measure_pressure.front_left. Kept only so existing devices can migrate cleanly via removeCapability. Remove this file in a future release once migration window closes.",
       "type": "number",
       "uiComponent": "sensor",
       "title": {
-        "en": "Tyre pressure FL",
-        "no": "Dekktrykk FV",
-        "nl": "Bandenspanning LV"
+        "en": "Tyre pressure FL (legacy)",
+        "no": "Dekktrykk FV (legacy)",
+        "nl": "Bandenspanning LV (legacy)"
       },
       "units": "kPa",
       "decimals": 0,
       "getable": true,
       "setable": false,
-      "insights": true
+      "insights": false
     },
     "measure_polestarTyrePressureFR": {
+      "_deprecated": "Replaced by measure_pressure.front_right. Kept only so existing devices can migrate cleanly via removeCapability. Remove this file in a future release once migration window closes.",
       "type": "number",
       "uiComponent": "sensor",
       "title": {
-        "en": "Tyre pressure FR",
-        "no": "Dekktrykk FH",
-        "nl": "Bandenspanning RV"
+        "en": "Tyre pressure FR (legacy)",
+        "no": "Dekktrykk FH (legacy)",
+        "nl": "Bandenspanning RV (legacy)"
       },
       "units": "kPa",
       "decimals": 0,
       "getable": true,
       "setable": false,
-      "insights": true
+      "insights": false
     },
     "measure_polestarTyrePressureRL": {
+      "_deprecated": "Replaced by measure_pressure.rear_left. Kept only so existing devices can migrate cleanly via removeCapability. Remove this file in a future release once migration window closes.",
       "type": "number",
       "uiComponent": "sensor",
       "title": {
-        "en": "Tyre pressure RL",
-        "no": "Dekktrykk BV",
-        "nl": "Bandenspanning LA"
+        "en": "Tyre pressure RL (legacy)",
+        "no": "Dekktrykk BV (legacy)",
+        "nl": "Bandenspanning LA (legacy)"
       },
       "units": "kPa",
       "decimals": 0,
       "getable": true,
       "setable": false,
-      "insights": true
+      "insights": false
     },
     "measure_polestarTyrePressureRR": {
+      "_deprecated": "Replaced by measure_pressure.rear_right. Kept only so existing devices can migrate cleanly via removeCapability. Remove this file in a future release once migration window closes.",
       "type": "number",
       "uiComponent": "sensor",
       "title": {
-        "en": "Tyre pressure RR",
-        "no": "Dekktrykk BH",
-        "nl": "Bandenspanning RA"
+        "en": "Tyre pressure RR (legacy)",
+        "no": "Dekktrykk BH (legacy)",
+        "nl": "Bandenspanning RA (legacy)"
       },
       "units": "kPa",
       "decimals": 0,
       "getable": true,
       "setable": false,
-      "insights": true
+      "insights": false
     },
     "measure_polestarUpdated": {
       "type": "string",
@@ -1355,6 +1725,42 @@
         "en": "KM"
       },
       "icon": "/drivers/vehicle/assets/range.svg"
+    },
+    "target_polestarAmpLimit": {
+      "type": "number",
+      "uiComponent": "slider",
+      "icon": "/drivers/polestar-2-csv/assets/images/charging.svg",
+      "title": {
+        "en": "Charging amp limit",
+        "no": "Amperegrense ved lading",
+        "nl": "Ampère-limiet bij laden"
+      },
+      "units": "A",
+      "decimals": 0,
+      "min": 6,
+      "max": 32,
+      "step": 1,
+      "getable": true,
+      "setable": true,
+      "insights": true
+    },
+    "target_polestarChargeLimit": {
+      "type": "number",
+      "uiComponent": "slider",
+      "icon": "/drivers/polestar-2-csv/assets/images/battery-100.svg",
+      "title": {
+        "en": "Charge limit",
+        "no": "Ladegrense",
+        "nl": "Laadlimiet"
+      },
+      "units": "%",
+      "decimals": 0,
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "getable": true,
+      "setable": true,
+      "insights": true
     }
   }
 }
