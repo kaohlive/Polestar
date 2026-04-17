@@ -1,0 +1,14 @@
+{
+    "type": "number",
+    "uiComponent": "sensor",
+    "title": {
+        "en": "Tyre pressure RL",
+        "no": "Dekktrykk BV",
+        "nl": "Bandenspanning LA"
+    },
+    "units": "kPa",
+    "decimals": 0,
+    "getable": true,
+    "setable": false,
+    "insights": true
+}

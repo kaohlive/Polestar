@@ -1,0 +1,12 @@
+{
+    "type": "boolean",
+    "uiComponent": "sensor",
+    "title": {
+        "en": "Tyre pressure warning",
+        "no": "Dekktrykk-varsel",
+        "nl": "Bandenspanningswaarschuwing"
+    },
+    "getable": true,
+    "setable": false,
+    "insights": true
+}

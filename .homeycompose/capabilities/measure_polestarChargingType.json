@@ -1,0 +1,13 @@
+{
+    "type": "string",
+    "uiComponent": "sensor",
+    "icon": "/drivers/polestar-2-csv/assets/images/powerdc.svg",
+    "title": {
+        "en": "Charging type",
+        "no": "Ladetype",
+        "nl": "Laadtype"
+    },
+    "getable": true,
+    "setable": false,
+    "insights": false
+}

@@ -1,0 +1,15 @@
+{
+    "type": "number",
+    "uiComponent": "sensor",
+    "icon": "/drivers/polestar-2-csv/assets/images/charging.svg",
+    "title": {
+        "en": "Session charge",
+        "no": "Øktens lading",
+        "nl": "Laadsessie"
+    },
+    "units": "kWh",
+    "decimals": 2,
+    "getable": true,
+    "setable": false,
+    "insights": true
+}

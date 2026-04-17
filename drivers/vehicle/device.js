@@ -1,12 +1,17 @@
 'use strict';
 
 const { Device } = require('homey');
-//const Polestar = require('@andysmithfal/polestar.js');
-const Polestar = require('../../clone_modules/polestar.js');
+const LegacyPolestar = require('../../clone_modules/polestar.js');
+const PolestarC3Compat = require('../../clone_modules/polestar-c3/compat');
 const HomeyCrypt = require('../../lib/homeycrypt')
 
 const measureInterval = 60000;
 const KM_TO_MILES = 0.621371;
+
+function selectClient(homey) {
+    const legacy = homey.settings.get('c3_backend_disabled') === true;
+    return legacy ? LegacyPolestar : PolestarC3Compat;
+}
 
 var polestar = null;
 
@@ -50,7 +55,8 @@ class PolestarVehicle extends Device {
             let PolestarUser = this.homey.settings.get('user_email');
             let PolestarPwd = await HomeyCrypt.decrypt(this.homey.settings.get('user_password'), PolestarUser);
 
-            this.polestar = new Polestar(PolestarUser, PolestarPwd);
+            const Client = selectClient(this.homey);
+            this.polestar = new Client(PolestarUser, PolestarPwd);
             await this.polestar.login();
             await this.polestar.setVehicle(this.getData().vin);
 
@@ -67,8 +73,8 @@ class PolestarVehicle extends Device {
             let PolestarUser = this.homey.settings.get('user_email');
             try {
                 let PolestarPwd = await HomeyCrypt.decrypt(this.homey.settings.get('user_password'), PolestarUser);
-                //this.log(PolestarPwd);
-                this.polestar = new Polestar(PolestarUser, PolestarPwd);
+                const Client = selectClient(this.homey);
+                this.polestar = new Client(PolestarUser, PolestarPwd);
             } catch (err) {
                 this.homey.app.log('Could not decrypt using salt, network connection changed?', 'PolestarVehicle', 'ERROR', err);
                 return;
@@ -161,6 +167,24 @@ class PolestarVehicle extends Device {
             await this.addCapability('measure_vehicleDaysTillService');
         if (!this.hasCapability('measure_vehicleDistanceTillService'))
             await this.addCapability('measure_vehicleDistanceTillService');
+        if (!this.hasCapability('measure_voltage'))
+            await this.addCapability('measure_voltage');
+        if (!this.hasCapability('measure_polestarChargingType'))
+            await this.addCapability('measure_polestarChargingType');
+        if (!this.hasCapability('measure_polestarDrivingKwh'))
+            await this.addCapability('measure_polestarDrivingKwh');
+        if (!this.hasCapability('measure_polestarSessionKwh'))
+            await this.addCapability('measure_polestarSessionKwh');
+        if (!this.hasCapability('alarm_polestarTyrePressure'))
+            await this.addCapability('alarm_polestarTyrePressure');
+        if (!this.hasCapability('measure_polestarTyrePressureFL'))
+            await this.addCapability('measure_polestarTyrePressureFL');
+        if (!this.hasCapability('measure_polestarTyrePressureFR'))
+            await this.addCapability('measure_polestarTyrePressureFR');
+        if (!this.hasCapability('measure_polestarTyrePressureRL'))
+            await this.addCapability('measure_polestarTyrePressureRL');
+        if (!this.hasCapability('measure_polestarTyrePressureRR'))
+            await this.addCapability('measure_polestarTyrePressureRR');
     }
 
     async updateHealthState(){
@@ -180,6 +204,18 @@ class PolestarVehicle extends Device {
                     distanceToService = Math.floor(distanceToService);
                 }
                 this.setCapabilityValue('measure_vehicleDistanceTillService', distanceToService);
+
+                // C3-only fields — legacy GraphQL does not supply these, so guard each one.
+                if (healthInfo.tyrePressures) {
+                    const tp = healthInfo.tyrePressures;
+                    if (Number.isFinite(tp.frontLeftKpa)) this.setCapabilityValue('measure_polestarTyrePressureFL', tp.frontLeftKpa);
+                    if (Number.isFinite(tp.frontRightKpa)) this.setCapabilityValue('measure_polestarTyrePressureFR', tp.frontRightKpa);
+                    if (Number.isFinite(tp.rearLeftKpa)) this.setCapabilityValue('measure_polestarTyrePressureRL', tp.rearLeftKpa);
+                    if (Number.isFinite(tp.rearRightKpa)) this.setCapabilityValue('measure_polestarTyrePressureRR', tp.rearRightKpa);
+                }
+                if (typeof healthInfo.anyTyreWarning === 'boolean') {
+                    this.setCapabilityValue('alarm_polestarTyrePressure', healthInfo.anyTyreWarning);
+                }
             } else {
                 this.setCapabilityValue('alarm_generic', false);
             }
@@ -226,20 +262,47 @@ class PolestarVehicle extends Device {
             const batterySoc = Math.floor(batteryInfo.batteryChargeLevelPercentage);
             this.setCapabilityValue('measure_polestarBattery', batterySoc);
             this.setCapabilityValue('measure_battery', batterySoc);
-            //this.setCapabilityValue('measure_current', batteryInfo.chargingCurrentAmps);
-            // if(batteryInfo.chargingCurrentAmps!==null){
-            //     this.setCapabilityValue('measure_current', batteryInfo.chargingCurrentAmps);
-            // } else {
-            //     this.setCapabilityValue('measure_current', 0); //We set 0 first, this is for insights sake
-            // }
-            // if(batteryInfo.chargingPowerWatts!==null){
-            //     this.setCapabilityValue('measure_power', batteryInfo.chargingPowerWatts);
-            //     let hours = measureInterval / (1000 * 60 * 60);
-            //     let usedPower = (batteryInfo.chargingPowerWatts/1000) * (hours);
-            //     this.setCapabilityValue('meter_power', (usedPower+this.getCapabilityValue('meter_power')));
-            // } else {
-            //     this.setCapabilityValue('measure_power', 0); //We set 0 first, this is for insights sake
-            // }
+
+            // Restored charging metrics — C3 fills these reliably; GraphQL used to leave them null.
+            const amps = Number.isFinite(batteryInfo.chargingCurrentAmps) ? batteryInfo.chargingCurrentAmps : 0;
+            const watts = Number.isFinite(batteryInfo.chargingPowerWatts) ? batteryInfo.chargingPowerWatts : 0;
+            const volts = Number.isFinite(batteryInfo.chargingVoltageVolts) ? batteryInfo.chargingVoltageVolts : 0;
+            this.setCapabilityValue('measure_current', amps);
+            this.setCapabilityValue('measure_power', watts);
+            this.setCapabilityValue('measure_voltage', volts);
+            const isCharging = batteryInfo.chargingStatus === 'CHARGING_STATUS_CHARGING';
+            const hoursPerPoll = measureInterval / (1000 * 60 * 60);
+            const deltaKwh = isCharging && watts > 0 ? (watts / 1000) * hoursPerPoll : 0;
+
+            // meter_power — monotonic lifetime charging meter.
+            // Never reset, never overwritten by C3 driving-consumption (different semantics).
+            let meterPower = this.getCapabilityValue('meter_power');
+            if (meterPower === null || meterPower === undefined) meterPower = 0;
+            if (deltaKwh > 0) meterPower += deltaKwh;
+            this.setCapabilityValue('meter_power', meterPower);
+
+            // measure_polestarSessionKwh — resets on idle→charging transition, accumulates
+            // while charging, holds the last session total while idle.
+            const wasCharging = this._wasCharging === true;
+            let sessionKwh = this.getCapabilityValue('measure_polestarSessionKwh');
+            if (sessionKwh === null || sessionKwh === undefined) sessionKwh = 0;
+            if (isCharging && !wasCharging) sessionKwh = 0; // new session starts
+            if (deltaKwh > 0) sessionKwh += deltaKwh;
+            this.setCapabilityValue('measure_polestarSessionKwh', sessionKwh);
+            this._wasCharging = isCharging;
+
+            // measure_polestarDrivingKwh — monotonic lifetime driving consumption from C3.
+            // Guard against downward jumps (rare but cheap to ignore).
+            if (Number.isFinite(batteryInfo.totalEnergyConsumedKwh) && batteryInfo.totalEnergyConsumedKwh > 0) {
+                const prevDriving = this.getCapabilityValue('measure_polestarDrivingKwh') || 0;
+                if (batteryInfo.totalEnergyConsumedKwh >= prevDriving) {
+                    this.setCapabilityValue('measure_polestarDrivingKwh', batteryInfo.totalEnergyConsumedKwh);
+                }
+            }
+
+            if (batteryInfo.chargingTypeLabel) {
+                this.setCapabilityValue('measure_polestarChargingType', batteryInfo.chargingTypeLabel);
+            }
 
             //Set the estimated range for the vehicle based on user preference
             let range;
@@ -253,39 +316,51 @@ class PolestarVehicle extends Device {
             }
             this.setCapabilityValue('measure_vehicleRange', range);
 
-            //Lets assign statusses we consider connected
-            const connectedStatuses = new Set([
+            // C3 exposes charger_connection_status as a separate, authoritative field.
+            // Fall back to the chargingStatus heuristic only when that label is absent (legacy client).
+            const connectedByStatus = new Set([
                 'CHARGING_STATUS_CHARGING',
                 'CHARGING_STATUS_DONE',
                 'CHARGING_STATUS_SCHEDULED',
                 'CHARGING_STATUS_SMART_CHARGING',
+                'CHARGING_STATUS_SMART_CHARGING_PAUSED',
                 'CHARGING_STATUS_ERROR',
                 'CHARGING_STATUS_FAULT'
             ]);
+            const isConnected = batteryInfo.chargerConnectionStatusLabel
+                ? batteryInfo.chargerConnectionStatusLabel === 'CONNECTED'
+                : connectedByStatus.has(batteryInfo.chargingStatus);
 
-            //Lets see if the car is in a state that suggests the connector is connected
-            if(connectedStatuses.has(batteryInfo.chargingStatus)){
+            if (isConnected) {
                 this.setCapabilityValue('measure_vehicleConnected', true);
-                //Determine the ev_charging_state in our switch
             } else {
                 this.setCapabilityValue('measure_vehicleConnected', false);
                 this.setCapabilityValue('ev_charging_state', 'plugged_out');
             }
-           
-            //Now Lets see if it is actually charging 
+
             switch (batteryInfo.chargingStatus) {
                 case 'CHARGING_STATUS_CHARGING':
                     this.setCapabilityValue('measure_vehicleChargeState', true);
                     this.setCapabilityValue('ev_charging_state', 'plugged_in_charging');
                     this.setCapabilityValue('measure_vehicleChargeTimeRemaining', batteryInfo.estimatedChargingTimeToFullMinutes);
                 break;
+                case 'CHARGING_STATUS_IDLE':
+                    this.setCapabilityValue('measure_vehicleChargeState', false);
+                    this.setCapabilityValue('ev_charging_state', isConnected ? 'plugged_in' : 'plugged_out');
+                    this.setCapabilityValue('measure_vehicleChargeTimeRemaining', null);
+                break;
                 case 'CHARGING_STATUS_SCHEDULED':
                 case 'CHARGING_STATUS_DONE':
                 case 'CHARGING_STATUS_SMART_CHARGING':
+                case 'CHARGING_STATUS_SMART_CHARGING_PAUSED':
                     this.setCapabilityValue('measure_vehicleChargeState', false);
                     this.setCapabilityValue('ev_charging_state', 'plugged_in_paused');
                     this.setCapabilityValue('measure_vehicleChargeTimeRemaining', null);
-                    // TODO: Add capability to show scheduled charging
+                break;
+                case 'CHARGING_STATUS_DISCHARGING':
+                    this.setCapabilityValue('measure_vehicleChargeState', false);
+                    this.setCapabilityValue('ev_charging_state', 'plugged_in');
+                    this.setCapabilityValue('measure_vehicleChargeTimeRemaining', null);
                 break;
 
                 case 'CHARGING_STATUS_ERROR':

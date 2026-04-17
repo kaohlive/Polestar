@@ -1,9 +1,15 @@
 'use strict';
 
 const { Driver } = require('homey');
-//const Polestar = require('@andysmithfal/polestar.js');
-const Polestar = require('../../clone_modules/polestar.js');
+const LegacyPolestar = require('../../clone_modules/polestar.js');
+const PolestarC3Compat = require('../../clone_modules/polestar-c3/compat');
 const HomeyCrypt = require('../../lib/homeycrypt')
+
+function Polestar(email, password, homey) {
+    const legacy = homey && homey.settings.get('c3_backend_disabled') === true;
+    const Client = legacy ? LegacyPolestar : PolestarC3Compat;
+    return new Client(email, password);
+}
 
 class Vehicle extends Driver {
     async onInit() {
@@ -35,7 +41,7 @@ class Vehicle extends Driver {
             this.homey.app.log('Password encrypted, credentials stored. Clear existing tokens.', 'Polestar Driver');
             //Now we have the encrypted password stored we can start testing the info
             try {
-                var polestar = new Polestar(data.username, data.password);
+                var polestar = Polestar(data.username, data.password, this.homey);
                 await polestar.login();
                 var testresult = await polestar.getVehicles();
                 this.homey.app.log('Credential test ok:', 'Polestar Driver', 'DEBUG', testresult);
@@ -86,7 +92,7 @@ class Vehicle extends Driver {
             let PolestarPwd = await HomeyCrypt.decrypt(this.homey.settings.get('user_password'), PolestarUser);
             try {
                 this.homey.app.log('Attempting to login to Polestar', 'Polestar Driver');
-                var polestar = new Polestar(PolestarUser, PolestarPwd);
+                var polestar = Polestar(PolestarUser, PolestarPwd, this.homey);
                 await polestar.login();
                 this.homey.app.log('Login successful, retrieving vehicles', 'Polestar Driver');
                 var vehiclelist = await polestar.getVehicles();
@@ -140,7 +146,7 @@ class Vehicle extends Driver {
             })
             this.homey.app.log('Password encrypted, credentials stored. Clear existing tokens.', 'Polestar Driver');
             //Now we have the encrypted password stored we can start testing the info
-            var polestar = new Polestar(data.username, data.password);
+            var polestar = Polestar(data.username, data.password, this.homey);
             //this.homey.app.log('Credential test password:', 'Polestar Driver', 'DEBUG', data.password);
             try {
                 await polestar.login();

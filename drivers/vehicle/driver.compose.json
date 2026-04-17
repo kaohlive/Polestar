@@ -5,7 +5,22 @@
     "nl": "Mijn Polestar"
   },
   "class": "car",
-  "capabilities": [ "measure_power", "meter_power", "measure_battery", "ev_charging_state" ],
+  "capabilities": [
+    "measure_battery",
+    "ev_charging_state",
+    "measure_power",
+    "measure_current",
+    "measure_voltage",
+    "meter_power",
+    "measure_polestarDrivingKwh",
+    "measure_polestarSessionKwh",
+    "measure_polestarChargingType",
+    "alarm_polestarTyrePressure",
+    "measure_polestarTyrePressureFL",
+    "measure_polestarTyrePressureFR",
+    "measure_polestarTyrePressureRL",
+    "measure_polestarTyrePressureRR"
+  ],
   "energy": {
     "electricCar": true
   },

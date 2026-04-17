@@ -1,0 +1,7 @@
+{
+  "name": "polestar-c3",
+  "version": "0.0.1",
+  "private": true,
+  "main": "client.js",
+  "description": "C3 gRPC client for Polestar (Fase 0 PoC scaffold)"
+}

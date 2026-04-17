@@ -1,0 +1,14 @@
+{
+    "type": "number",
+    "uiComponent": "sensor",
+    "title": {
+        "en": "Tyre pressure FL",
+        "no": "Dekktrykk FV",
+        "nl": "Bandenspanning LV"
+    },
+    "units": "kPa",
+    "decimals": 0,
+    "getable": true,
+    "setable": false,
+    "insights": true
+}
