@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.Coderax.Polestar",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "compatibility": ">=12.4.5",
   "sdk": 3,
   "platforms": [
@@ -2227,6 +2227,7 @@
     "alarm_polestarOtaAvailable": {
       "type": "boolean",
       "uiComponent": "sensor",
+      "icon": "/drivers/vehicle/assets/update.svg",
       "title": {
         "en": "Software update available",
         "no": "Programvareoppdatering tilgjengelig",
@@ -2239,6 +2240,7 @@
     "alarm_polestarTyrePressure": {
       "type": "boolean",
       "uiComponent": "sensor",
+      "icon": "/drivers/vehicle/assets/tire-pressure.svg",
       "title": {
         "en": "Tyre pressure warning",
         "no": "Dekktrykk-varsel",
@@ -2265,7 +2267,7 @@
     "measure_polestarBattery": {
       "type": "number",
       "uiComponent": "sensor",
-      "icon": "/drivers/polestar-2-csv/assets/images/battery-75.svg",
+      "icon": "/drivers/vehicle/assets/battery-75.svg",
       "title": {
         "en": "Battery",
         "no": "Batteri",
@@ -2322,7 +2324,7 @@
     "measure_polestarChargingType": {
       "type": "string",
       "uiComponent": "sensor",
-      "icon": "/drivers/polestar-2-csv/assets/images/powerdc.svg",
+      "icon": "/drivers/vehicle/assets/powerdc.svg",
       "title": {
         "en": "Charging type",
         "no": "Ladetype",
@@ -2335,7 +2337,7 @@
     "measure_polestarClimateRemaining": {
       "type": "number",
       "uiComponent": "sensor",
-      "icon": "/drivers/polestar-2-csv/assets/images/update.svg",
+      "icon": "/drivers/vehicle/assets/update.svg",
       "title": {
         "en": "Climate time remaining",
         "no": "Klima-tid igjen",
@@ -2363,7 +2365,7 @@
     "measure_polestarDrivingKwh": {
       "type": "number",
       "uiComponent": "sensor",
-      "icon": "/drivers/polestar-2-csv/assets/images/hvbattery.svg",
+      "icon": "/drivers/vehicle/assets/hvbattery.svg",
       "title": {
         "en": "Driving energy (total)",
         "no": "Kjøreenergi (totalt)",
@@ -2404,7 +2406,7 @@
     "measure_polestarLocation": {
       "type": "string",
       "uiComponent": "sensor",
-      "icon": "/drivers/polestar-2-csv/assets/images/location.svg",
+      "icon": "/drivers/vehicle/assets/location.svg",
       "title": {
         "en": "Location",
         "no": "Plassering",
@@ -2445,7 +2447,7 @@
     "measure_polestarOtaState": {
       "type": "string",
       "uiComponent": "sensor",
-      "icon": "/drivers/polestar-2-csv/assets/images/update.svg",
+      "icon": "/drivers/vehicle/assets/update.svg",
       "title": {
         "en": "OTA state",
         "no": "OTA-status",
@@ -2458,6 +2460,7 @@
     "measure_polestarOtaVersion": {
       "type": "string",
       "uiComponent": "sensor",
+      "icon": "/drivers/vehicle/assets/update.svg",
       "title": {
         "en": "New software version",
         "no": "Ny programvareversjon",
@@ -2498,7 +2501,7 @@
     "measure_polestarSessionKwh": {
       "type": "number",
       "uiComponent": "sensor",
-      "icon": "/drivers/polestar-2-csv/assets/images/charging.svg",
+      "icon": "/drivers/vehicle/assets/charging.svg",
       "title": {
         "en": "Session charge",
         "no": "Øktens lading",
@@ -2648,7 +2651,7 @@
     "target_polestarAmpLimit": {
       "type": "number",
       "uiComponent": "slider",
-      "icon": "/drivers/polestar-2-csv/assets/images/charging.svg",
+      "icon": "/drivers/vehicle/assets/charging.svg",
       "title": {
         "en": "Charging amp limit",
         "no": "Amperegrense ved lading",
@@ -2666,7 +2669,7 @@
     "target_polestarChargeLimit": {
       "type": "number",
       "uiComponent": "slider",
-      "icon": "/drivers/polestar-2-csv/assets/images/battery-100.svg",
+      "icon": "/drivers/vehicle/assets/battery-100.svg",
       "title": {
         "en": "Charge limit",
         "no": "Ladegrense",
