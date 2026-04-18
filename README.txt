@@ -1,20 +1,46 @@
-Hello, Polestar Owner! 🚗✨
+Hello, Polestar Owner!
 
-Welcome to the upgraded Polestar app for Homey, your gateway to a smarter driving experience. This nifty helper not only connects your sleek electric car to your smart home but now brings an array of new features to your fingertips. 🏠🔌
+The Polestar app for Homey connects your car to your smart home via the same
+cloud backend the official Polestar mobile app uses. Sign in once with your
+Polestar ID and you're set — Homey handles authentication and keeps your
+vehicle data fresh.
 
-Drive Smart, Live Smarter! ⚡️
+WHAT YOU CAN SEE
 
-Direct Connection with Homey: Using the My Vehicle device your an connect your My Polestar account to Homey. 🚀
+- State of charge, range, charging status (plugged in, charging, paused, idle)
+- Charging power, current and voltage while a session is running
+- Lifetime charging kWh, current-session kWh, total driving kWh
+- Odometer and trip meters
+- Interior temperature, climate target and minutes remaining
+- Central lock status; per-door, per-window, trunk, hood, sunroof and charge-
+  port open alarms
+- Tyre pressures (all four wheels, kPa) and tyre-pressure warning
+- Service warnings, days and distance to next service
+- Last known GPS coordinates
+- Available software update state and version
 
-Features Enhanced:
+WHAT YOU CAN CONTROL
 
-Battery Insights: Keep an eye on your Polestar's battery level – always be ready for what's next. 🔋
-Charging Status Monitoring: Enjoy that extra cup of coffee while your car charges efficiently. ☕️
-Range Estimation: Perfect for both spontaneous outings and well-planned journeys. 🌍
-Car’s Health Updates: Your Polestar isn't just a car; it's part of your life. ❤️
+- Lock and unlock the car
+- Unlock the trunk only
+- Honk horn, flash lights, or both — to find the car in a parking lot
+- Start and stop charging (overrides the scheduled timer)
+- Set the charge limit (50-100%) and, where supported, the charging amperage
+- Start parking climatization with a chosen target temperature, per-seat
+  heating (front left, front right, rear left, rear right) and steering-wheel
+  heating
+- Stop climatization
+- Open or close all side windows (where supported)
 
-Let’s Roll into the Future! 🎲
+All controls are available as tiles on the device page AND as flow actions
+with explicit arguments for flexible automations. Conditions cards let flows
+branch on lock state, charge limit, and amperage limit.
 
-Add the Polestar app to your Homey, follow the new setup instructions, and step into a world where your car and home exist in perfect harmony.
+PRIVACY AND SAFETY
 
-Thank you for choosing the Polestar app – where technology meets the road, and your smart home meets your smart ride. Safe and smart travels! 🛣️✨
+A master switch in device settings disables every write command instantly —
+useful while servicing the car or if an automation misbehaves. Optional
+features the car reports as unsupported are removed from the UI
+automatically (e.g. the amp-limit slider on Polestar 4).
+
+Enjoy the road with Polestar and Homey.

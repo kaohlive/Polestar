@@ -5,6 +5,7 @@
     "nl": "Polestar 2 (Car Stats Viewer ᴮᴱᵀᴬ)"
   },
   "class": "sensor",
+  "deprecated": true,
   "capabilities": [
     "measure_battery",
     "measure_polestarIgnitionState",

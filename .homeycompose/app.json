@@ -1,6 +1,6 @@
 {
   "id": "com.Coderax.Polestar",
-  "version": "2.8.0",
+  "version": "3.0.0",
   "compatibility": ">=12.4.5",
   "sdk": 3,
   "platforms": [
@@ -12,9 +12,9 @@
     "nl": "Polestar"
   },
   "description": {
-    "en": "Enjoy the road with Polestar and Homey – smart technology for smart drivers",
-    "no": "Nyt veien med Polestar og Homey – smart teknologi for smarte sjåfører",
-    "nl": "Geniet van de weg met Polestar en Homey – Slimme technologie voor slimme bestuurders"
+    "en": "Monitor and control your Polestar from Homey — charging, climate, locks, windows, and more.",
+    "no": "Overvåk og styr Polestar fra Homey — lading, klima, låser, vinduer og mer.",
+    "nl": "Monitor en bedien je Polestar vanuit Homey — laden, climate, sloten, ramen en meer."
   },
   "category": "internet",
   "permissions": [],
@@ -43,40 +43,22 @@
   },
   "tags": {
     "en": [
-      "polestar",
-      "pole",
-      "star",
-      "car",
-      "electric",
-      "electric car",
-      "ev",
-      "ev car",
-      "smart car"
+      "polestar", "pole", "star",
+      "car", "ev", "electric", "electric car", "ev car", "smart car", "bev",
+      "charging", "charge limit", "precondition", "climate", "preheat",
+      "lock", "unlock", "remote", "honk", "flash"
     ],
     "no": [
-      "polestar",
-      "pole",
-      "star",
-      "car",
-      "electric",
-      "electric car",
-      "ev",
-      "ev car",
-      "smart car"
+      "polestar", "pole", "star",
+      "bil", "elbil", "elektrisk", "smart bil",
+      "lading", "ladegrense", "forvarming", "klima",
+      "lås", "lås opp", "fjernstyring", "tut", "blink"
     ],
     "nl": [
-      "polestar",
-      "pole",
-      "star",
-      "auto",
-      "electrisch",
-      "electrische auto",
-      "ev",
-      "ev auto",
-      "bev",
-      "bev auto",
-      "slimme auto",
-      "batterij auto"
+      "polestar", "pole", "star",
+      "auto", "ev", "elektrisch", "electrische auto", "ev auto", "bev", "bev auto", "slimme auto", "batterij auto",
+      "laden", "laadlimiet", "voorverwarmen", "climate",
+      "vergrendelen", "ontgrendelen", "afstandsbediening", "toeteren", "knipperen"
     ]
   },
   "homeyCommunityTopicId": 95083,

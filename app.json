@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.Coderax.Polestar",
-  "version": "2.8.0",
+  "version": "3.0.0",
   "compatibility": ">=12.4.5",
   "sdk": 3,
   "platforms": [
@@ -1578,6 +1578,8 @@
         "button.charge_stop",
         "button.honk_flash",
         "button.unlock_trunk",
+        "button.windows_open",
+        "button.windows_close",
         "locked",
         "onoff.climate",
         "target_temperature",
@@ -1606,9 +1608,6 @@
         "electricCar": true
       },
       "capabilitiesOptions": {
-        "measure_power": {
-          "approximated": true
-        },
         "button.charge_start": {
           "title": {
             "en": "Start charging",
@@ -1655,6 +1654,30 @@
             "en": "Unlock only the trunk, leaving the cabin locked.",
             "no": "Lås opp kun bagasjerommet.",
             "nl": "Ontgrendel alleen de kofferbak; het interieur blijft vergrendeld."
+          }
+        },
+        "button.windows_open": {
+          "title": {
+            "en": "Open windows",
+            "no": "Åpne vinduer",
+            "nl": "Ramen openen"
+          },
+          "desc": {
+            "en": "Open all four side windows.",
+            "no": "Åpne alle fire sidevinduer.",
+            "nl": "Open alle vier zijramen."
+          }
+        },
+        "button.windows_close": {
+          "title": {
+            "en": "Close windows",
+            "no": "Lukk vinduer",
+            "nl": "Ramen sluiten"
+          },
+          "desc": {
+            "en": "Close all side windows.",
+            "no": "Lukk alle sidevinduer.",
+            "nl": "Sluit alle zijramen."
           }
         },
         "measure_pressure.front_left": {
@@ -1913,6 +1936,21 @@
               }
             }
           ]
+        },
+        {
+          "id": "windows_supported",
+          "type": "checkbox",
+          "label": {
+            "en": "Windows remote control",
+            "no": "Fjernstyring av vinduer",
+            "nl": "Ramen op afstand bedienen"
+          },
+          "value": true,
+          "hint": {
+            "en": "Leave checked unless your Polestar model responds with 'not supported' when trying Open/Close windows. Uncheck to hide the two window buttons from the device page. Auto-disabled if the backend returns UNIMPLEMENTED.",
+            "no": "La stå påskrudd med mindre bilen svarer 'ikke støttet' når du prøver Åpne/Lukk vinduer. Fjern haken for å skjule vinduskontrollene. Deaktiveres automatisk ved UNIMPLEMENTED.",
+            "nl": "Laat aangevinkt tenzij je Polestar 'niet ondersteund' meldt bij Openen/Sluiten van ramen. Uitvinken verbergt de raam-knoppen van de device-pagina. Automatisch uitgeschakeld als de backend UNIMPLEMENTED teruggeeft."
+          }
         },
         {
           "type": "group",

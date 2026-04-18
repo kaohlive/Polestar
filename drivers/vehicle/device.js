@@ -10,8 +10,9 @@ const KM_TO_MILES = 0.621371;
 
 // Map feature-key → { capabilities: [...] } for auto-remove on UNIMPLEMENTED.
 const OPTIONAL_FEATURES = {
-    amp_limit: { capabilities: ['target_polestarAmpLimit'] },
+    amp_limit:  { capabilities: ['target_polestarAmpLimit'] },
     target_soc: { capabilities: ['target_polestarChargeLimit'] },
+    windows:    { capabilities: ['button.windows_open', 'button.windows_close'] },
 };
 
 function selectClient(homey) {
@@ -280,6 +281,17 @@ class PolestarVehicle extends Device {
             await this.addCapability('button.honk_flash');
         if (!this.hasCapability('button.unlock_trunk'))
             await this.addCapability('button.unlock_trunk');
+        // Windows are optional — skipped on vehicles that don't support remote
+        // window control (e.g. Polestar 4 responds UNIMPLEMENTED). Users can
+        // also toggle this off manually via the 'Windows remote control' device setting.
+        if (!this._isFeatureUnsupported('windows')) {
+            if (!this.hasCapability('button.windows_open'))  await this.addCapability('button.windows_open');
+            if (!this.hasCapability('button.windows_close')) await this.addCapability('button.windows_close');
+        } else {
+            for (const c of ['button.windows_open', 'button.windows_close']) {
+                if (this.hasCapability(c)) { try { await this.removeCapability(c); } catch (_) {} }
+            }
+        }
 
         // Exterior + climate states (read-only now, future-setable via capabilitiesOptions).
         for (const cap of [
@@ -568,7 +580,18 @@ class PolestarVehicle extends Device {
             };
             const target = normalizeTemp(cl.requestedTempRaw);
             const current = normalizeTemp(cl.currentTempRaw);
-            if (target !== null) await this.setCapabilityValue('target_temperature', target);
+
+            // Only the ACTIVE response includes requested_temp. When idle, the tile would
+            // otherwise stay empty forever on a fresh device. Fall back to the configured
+            // default so users always see their preferred target.
+            if (target !== null) {
+                await this.setCapabilityValue('target_temperature', target);
+            } else if (this.getCapabilityValue('target_temperature') == null) {
+                const defaultTemp = Number(this.getSetting('climate_default_temp'));
+                if (Number.isFinite(defaultTemp) && defaultTemp >= 16 && defaultTemp <= 30) {
+                    await this.setCapabilityValue('target_temperature', defaultTemp);
+                }
+            }
             if (current !== null) await this.setCapabilityValue('measure_temperature', current);
 
             // Climate remaining minutes: only meaningful while ACTIVE; show null otherwise so
@@ -627,26 +650,49 @@ class PolestarVehicle extends Device {
             // If the write revealed a feature isn't supported, clean up right away
             // so the user won't see a sad slider next run.
             if (isUnimplementedError(err)) {
-                const featureKey = label.toLowerCase().includes('amplimit') || label.toLowerCase().includes('amp_limit') ? 'amp_limit'
-                    : label.toLowerCase().includes('targetsoc') || label.toLowerCase().includes('chargelimit') ? 'target_soc'
-                    : null;
+                const l = label.toLowerCase();
+                const featureKey =
+                    /amplimit|amp_limit/.test(l) ? 'amp_limit' :
+                    /targetsoc|chargelimit/.test(l) ? 'target_soc' :
+                    /windows/.test(l) ? 'windows' :
+                    null;
                 if (featureKey) await this._markFeatureUnsupported(featureKey, err.message);
             }
             throw new Error(friendlyGrpcError(err.message, label));
         }
     }
 
-    chargeStart() { return this._invokeWrite('chargeStart', () => this.polestar.chargeStart()); }
-    chargeStop()  { return this._invokeWrite('chargeStop',  () => this.polestar.chargeStop());  }
-    lockCar()     { return this._invokeWrite('lock',        () => this.polestar.lock());        }
-    unlockCar()   { return this._invokeWrite('unlock',      () => this.polestar.unlock());      }
-    unlockTrunkAction() { return this._invokeWrite('unlockTrunk', () => this.polestar.unlockTrunk()); }
+    async chargeStart() {
+        const r = await this._invokeWrite('chargeStart', () => this.polestar.chargeStart());
+        this._scheduleStateRefresh(['vehicle']);
+        return r;
+    }
+    async chargeStop() {
+        const r = await this._invokeWrite('chargeStop', () => this.polestar.chargeStop());
+        this._scheduleStateRefresh(['vehicle']);
+        return r;
+    }
+    async lockCar() {
+        const r = await this._invokeWrite('lock', () => this.polestar.lock());
+        this._scheduleStateRefresh(['exterior']);
+        return r;
+    }
+    async unlockCar() {
+        const r = await this._invokeWrite('unlock', () => this.polestar.unlock());
+        this._scheduleStateRefresh(['exterior']);
+        return r;
+    }
+    async unlockTrunkAction() {
+        const r = await this._invokeWrite('unlockTrunk', () => this.polestar.unlockTrunk());
+        this._scheduleStateRefresh(['exterior']);
+        return r;
+    }
     honkFlashAction(args) {
         const actionMap = { flash: 2, honk: 1, both: 0 };
         const code = actionMap[args && args.action] !== undefined ? actionMap[args.action] : 2;
         return this._invokeWrite('honkFlash', () => this.polestar.honkFlash({ action: code }));
     }
-    climateStartAction(args) {
+    async climateStartAction(args) {
         const parse = (v) => {
             const n = Number(v);
             return Number.isInteger(n) && n >= 1 && n <= 4 ? n : 1;
@@ -659,15 +705,47 @@ class PolestarVehicle extends Device {
             rearRightSeat:  parse(args.seat_rr),
             steeringWheel:  parse(args.wheel),
         };
-        return this._invokeWrite('climateStart', () => this.polestar.climateStart(opts));
+        const r = await this._invokeWrite('climateStart', () => this.polestar.climateStart(opts));
+        this._scheduleStateRefresh(['climate']);
+        return r;
     }
-    climateStopAction() { return this._invokeWrite('climateStop', () => this.polestar.climateStop()); }
-    windowsOpenAction() { return this._invokeWrite('windowsOpen', () => this.polestar.windowsOpen()); }
-    windowsCloseAction(){ return this._invokeWrite('windowsClose', () => this.polestar.windowsClose()); }
+    async climateStopAction() {
+        const r = await this._invokeWrite('climateStop', () => this.polestar.climateStop());
+        this._scheduleStateRefresh(['climate']);
+        return r;
+    }
+    async windowsOpenAction() {
+        const r = await this._invokeWrite('windowsOpen', () => this.polestar.windowsOpen());
+        this._scheduleStateRefresh(['exterior'], { delays: [3000, 15000] });
+        return r;
+    }
+    async windowsCloseAction() {
+        const r = await this._invokeWrite('windowsClose', () => this.polestar.windowsClose());
+        this._scheduleStateRefresh(['exterior'], { delays: [3000, 15000] });
+        return r;
+    }
 
     /** Called by the is_locked condition flow card. */
     isLocked() {
         return this.getCapabilityValue('locked') === true;
+    }
+
+    /**
+     * Schedule one or more delayed refreshes so the UI catches up with a write
+     * faster than the 60 s polling cycle. The first (~3 s) typically catches
+     * immediate state sync; the second (~10 s) catches cases where the car
+     * takes longer to propagate the new state back to C3.
+     */
+    _scheduleStateRefresh(kinds, { delays = [3000, 10000] } = {}) {
+        for (const delay of delays) {
+            this.homey.setTimeout(async () => {
+                try {
+                    if (kinds.includes('climate'))  await this.updateClimateState();
+                    if (kinds.includes('exterior')) await this.updateExteriorState();
+                    if (kinds.includes('vehicle'))  await this.updateVehicleState();
+                } catch (_) { /* already logged inside each update method */ }
+            }, delay);
+        }
     }
     _getTargetSocSettingType() {
         const raw = this.getSetting('target_soc_setting_type');
@@ -774,14 +852,25 @@ class PolestarVehicle extends Device {
         this.registerCapabilityListener('locked', async (value) => {
             const label = value ? 'lock' : 'unlock';
             await this._invokeWrite(label, () => value ? this.polestar.lock() : this.polestar.unlock());
+            this._scheduleStateRefresh(['exterior']);
         });
 
         this.registerCapabilityListener('button.honk_flash', async () => {
             await this._invokeWrite('button.honk_flash', () => this.polestar.honkFlash());
+            // No state change — honk/flash is fire-and-forget.
         });
 
         this.registerCapabilityListener('button.unlock_trunk', async () => {
             await this._invokeWrite('button.unlock_trunk', () => this.polestar.unlockTrunk());
+            this._scheduleStateRefresh(['exterior']);
+        });
+        this.registerCapabilityListener('button.windows_open', async () => {
+            await this._invokeWrite('button.windows_open', () => this.polestar.windowsOpen());
+            this._scheduleStateRefresh(['exterior'], { delays: [3000, 15000] });
+        });
+        this.registerCapabilityListener('button.windows_close', async () => {
+            await this._invokeWrite('button.windows_close', () => this.polestar.windowsClose());
+            this._scheduleStateRefresh(['exterior'], { delays: [3000, 15000] });
         });
 
         this.registerCapabilityListener('onoff.climate', async (value) => {
@@ -791,6 +880,9 @@ class PolestarVehicle extends Device {
             } else {
                 await this._invokeWrite('climateStop', () => this.polestar.climateStop());
             }
+            // Climate status (including time_remaining) updates slower than the write ack;
+            // refresh at 3 s for first sync and again at 10 s to catch the server settling.
+            this._scheduleStateRefresh(['climate']);
         });
 
         this.registerCapabilityListener('target_temperature', async (temperature) => {
@@ -888,7 +980,20 @@ class PolestarVehicle extends Device {
     }
 
     async onSettings({ oldSettings, newSettings, changedKeys }) {
-        this.homey.app.log('PolestarVehicle settings where changed', 'PolestarVehicle');
+        this.homey.app.log('PolestarVehicle settings changed', 'PolestarVehicle', 'DEBUG', changedKeys);
+
+        if (changedKeys.includes('windows_supported')) {
+            if (newSettings.windows_supported === false) {
+                await this._markFeatureUnsupported('windows', 'disabled via device setting');
+            } else {
+                // Manually re-enable: clear store flag then re-add capabilities.
+                const store = { ...(this.getStoreValue('unsupportedFeatures') || {}) };
+                delete store.windows;
+                await this.setStoreValue('unsupportedFeatures', store);
+                await this.fixCapabilities();
+                this.homey.app.log('Windows remote control re-enabled — caps restored', this.name, 'DEBUG');
+            }
+        }
     }
 
     async onRenamed(name) {

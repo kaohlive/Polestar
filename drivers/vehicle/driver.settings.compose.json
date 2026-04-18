@@ -36,6 +36,21 @@
         ]
     },
     {
+        "id": "windows_supported",
+        "type": "checkbox",
+        "label": {
+            "en": "Windows remote control",
+            "no": "Fjernstyring av vinduer",
+            "nl": "Ramen op afstand bedienen"
+        },
+        "value": true,
+        "hint": {
+            "en": "Leave checked unless your Polestar model responds with 'not supported' when trying Open/Close windows. Uncheck to hide the two window buttons from the device page. Auto-disabled if the backend returns UNIMPLEMENTED.",
+            "no": "La stå påskrudd med mindre bilen svarer 'ikke støttet' når du prøver Åpne/Lukk vinduer. Fjern haken for å skjule vinduskontrollene. Deaktiveres automatisk ved UNIMPLEMENTED.",
+            "nl": "Laat aangevinkt tenzij je Polestar 'niet ondersteund' meldt bij Openen/Sluiten van ramen. Uitvinken verbergt de raam-knoppen van de device-pagina. Automatisch uitgeschakeld als de backend UNIMPLEMENTED teruggeeft."
+        }
+    },
+    {
         "type": "group",
         "label": { "en": "Climate defaults", "no": "Klima-standarder", "nl": "Climate standaardinstellingen" },
         "children": [

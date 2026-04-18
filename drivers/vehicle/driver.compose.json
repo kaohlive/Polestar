@@ -21,6 +21,8 @@
     "button.charge_stop",
     "button.honk_flash",
     "button.unlock_trunk",
+    "button.windows_open",
+    "button.windows_close",
     "locked",
     "onoff.climate",
     "target_temperature",
@@ -49,9 +51,6 @@
     "electricCar": true
   },
   "capabilitiesOptions": {
-    "measure_power": {
-      "approximated": true
-    },
     "button.charge_start": {
       "title": { "en": "Start charging", "no": "Start lading", "nl": "Laden starten" },
       "desc": { "en": "Override the charge timer and start charging now.", "no": "Overstyr ladetidtakeren og start lading nå.", "nl": "Negeer de laadtimer en begin direct met laden." }
@@ -67,6 +66,14 @@
     "button.unlock_trunk": {
       "title": { "en": "Unlock trunk", "no": "Lås opp bagasjerom", "nl": "Kofferbak ontgrendelen" },
       "desc": { "en": "Unlock only the trunk, leaving the cabin locked.", "no": "Lås opp kun bagasjerommet.", "nl": "Ontgrendel alleen de kofferbak; het interieur blijft vergrendeld." }
+    },
+    "button.windows_open": {
+      "title": { "en": "Open windows", "no": "Åpne vinduer", "nl": "Ramen openen" },
+      "desc": { "en": "Open all four side windows.", "no": "Åpne alle fire sidevinduer.", "nl": "Open alle vier zijramen." }
+    },
+    "button.windows_close": {
+      "title": { "en": "Close windows", "no": "Lukk vinduer", "nl": "Ramen sluiten" },
+      "desc": { "en": "Close all side windows.", "no": "Lukk alle sidevinduer.", "nl": "Sluit alle zijramen." }
     },
     "measure_pressure.front_left": {
       "title": { "en": "Tyre pressure FL", "no": "Dekktrykk FV", "nl": "Bandenspanning LV" },
