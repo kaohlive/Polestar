@@ -29,6 +29,19 @@ class Vehicle extends Driver {
         this.homey.flow.getActionCard('set_target_soc').registerRunListener(actionRun('setTargetSoc'));
         this.homey.flow.getActionCard('set_amp_limit').registerRunListener(actionRun('setAmpLimit'));
 
+        this.homey.flow.getActionCard('lock_car').registerRunListener(actionRun('lockCar'));
+        this.homey.flow.getActionCard('unlock_car').registerRunListener(actionRun('unlockCar'));
+        this.homey.flow.getActionCard('unlock_trunk_action').registerRunListener(actionRun('unlockTrunkAction'));
+        this.homey.flow.getActionCard('honk_flash').registerRunListener(actionRun('honkFlashAction'));
+        this.homey.flow.getActionCard('climate_start').registerRunListener(actionRun('climateStartAction'));
+        this.homey.flow.getActionCard('climate_stop').registerRunListener(actionRun('climateStopAction'));
+        this.homey.flow.getActionCard('windows_open').registerRunListener(actionRun('windowsOpenAction'));
+        this.homey.flow.getActionCard('windows_close').registerRunListener(actionRun('windowsCloseAction'));
+        this.homey.flow.getActionCard('get_location').registerRunListener(async (args) => {
+            if (!args.device) throw new Error('No device supplied to flow card');
+            return args.device.getLocationForFlow();
+        });
+
         this.homey.flow.getConditionCard('target_soc_is').registerRunListener(async (args) => {
             if (!args.device) return false;
             const current = await args.device.getCurrentTargetSoc();
@@ -38,6 +51,9 @@ class Vehicle extends Driver {
             if (!args.device) return false;
             const current = await args.device.getCurrentAmpLimit();
             return Number.isFinite(current) ? current >= args.amperage : false;
+        });
+        this.homey.flow.getConditionCard('is_locked').registerRunListener(async (args) => {
+            return args.device ? args.device.isLocked() : false;
         });
 
         this.homey.app.log('Polestar flow cards registered', 'Polestar Driver', 'DEBUG');

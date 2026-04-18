@@ -205,6 +205,129 @@ const GetClimateResponseSchema = {
     climate: { num: 3, type: 'message', schema: ClimateDigitalTwinSchema },
 };
 
+// -- Invocation service (remote commands: lock, unlock, honk/flash, climate, windows) --
+// All requests wrap an InvocationRequest { vin } at field 1.
+
+const InvocationRequestSchema = {
+    vin: { num: 1, type: 'string' },
+};
+
+const CarLockRequestSchema = {
+    request: { num: 1, type: 'message', schema: InvocationRequestSchema },
+    lock_type: { num: 2, type: 'int32' }, // 0=LOCK, 1=LOCK_REDUCED_GUARD
+};
+
+const CarUnlockRequestSchema = {
+    request: { num: 1, type: 'message', schema: InvocationRequestSchema },
+    unlock_type: { num: 2, type: 'int32' }, // 0=full unlock, 1=trunk only
+};
+
+const HonkFlashRequestSchema = {
+    request: { num: 1, type: 'message', schema: InvocationRequestSchema },
+    honk_flash_type: { num: 2, type: 'int32' }, // 0=BOTH, 1=HONK, 2=FLASH
+};
+
+const ClimatizationStartRequestSchema = {
+    request: { num: 1, type: 'message', schema: InvocationRequestSchema },
+    start: { num: 2, type: 'bool' },
+    compartment_temperature_celsius: { num: 3, type: 'float' },
+    front_right_seat: { num: 4, type: 'int32' },
+    front_left_seat:  { num: 5, type: 'int32' },
+    rear_right_seat:  { num: 6, type: 'int32' },
+    rear_left_seat:   { num: 7, type: 'int32' },
+    steering_wheel:   { num: 8, type: 'int32' },
+};
+
+const ClimatizationStopRequestSchema = {
+    request: { num: 1, type: 'message', schema: InvocationRequestSchema },
+};
+
+const WindowControlRequestSchema = {
+    request: { num: 1, type: 'message', schema: InvocationRequestSchema },
+    windows_control: { num: 2, type: 'int32' }, // 0=UNSPEC, 1=OPEN_ALL, 2=CLOSE_ALL
+};
+
+// WindowControlType enum
+const WindowControlType = { UNSPECIFIED: 0, OPEN_ALL: 1, CLOSE_ALL: 2 };
+
+// -- OTA (software update) --
+
+const SoftwareDescriptionSchema = {
+    name: { num: 1, type: 'string' },
+    short_desc: { num: 2, type: 'string' },
+    long_desc: { num: 3, type: 'string' },
+};
+
+const ScheduleInfoSchema = {
+    scheduled_at: { num: 2, type: 'message', schema: TimestampSchema },
+};
+
+const CarSoftwareInfoSchema = {
+    software_id: { num: 1, type: 'string' },
+    description: { num: 2, type: 'message', schema: SoftwareDescriptionSchema },
+    qb_code: { num: 3, type: 'string' },
+    state: { num: 4, type: 'int32' },
+    new_sw_version: { num: 6, type: 'string' },
+    schedule_info: { num: 8, type: 'message', schema: ScheduleInfoSchema },
+    state_timestamp: { num: 10, type: 'message', schema: TimestampSchema },
+};
+
+// GetSoftwareInfo response wraps a CarSoftwareInfo at field 1.
+const GetSoftwareInfoResponseSchema = {
+    info: { num: 1, type: 'message', schema: CarSoftwareInfoSchema },
+};
+
+const SoftwareState = {
+    0: 'UNKNOWN',
+    1: 'DOWNLOAD_READY',
+    2: 'DOWNLOAD_STARTED',
+    3: 'DOWNLOAD_COMPLETED',
+    4: 'DOWNLOAD_FAILED',
+    5: 'INSTALLATION_INITIATED',
+    6: 'INSTALLATION_STARTED',
+    7: 'INSTALLATION_ABORTED',
+    8: 'INSTALLATION_FAILED',
+    9: 'INSTALLATION_COMPLETED',
+    10: 'INSTALLATION_DEFERRED',
+    11: 'INSTALLATION_FAILED_CRITICAL',
+    12: 'INSTALLATION_SCHEDULED',
+    13: 'INSTALLATION_SCHEDULE_TRIGGERED',
+    14: 'INSTALLATION_UNKNOWN',
+};
+
+// States that indicate an update is available or pending user action.
+const OTA_AVAILABLE_STATES = new Set([1, 3, 10, 12]); // ready, completed-download, deferred, scheduled
+
+const InvocationResponseSchema = {
+    id: { num: 1, type: 'string' },
+    vin: { num: 2, type: 'string' },
+    status: { num: 3, type: 'int32' },
+    message: { num: 4, type: 'string' },
+    timestamp: { num: 5, type: 'int64' },
+};
+
+const InvocationResponseEnvelopeSchema = {
+    response: { num: 1, type: 'message', schema: InvocationResponseSchema },
+};
+
+// InvocationStatus enum (0=UNKNOWN_ERROR, 1=SENT, 2=CAR_OFFLINE, 4=DELIVERED,
+// 5=DELIVERY_TIMEOUT, 6=SUCCESS, 7=RESPONSE_TIMEOUT, 8=UNKNOWN_CAR_ERROR,
+// 9=NOT_ALLOWED_PRIVACY_ENABLED, 10=NOT_ALLOWED_WRONG_USAGE_MODE,
+// 11=INVOCATION_SPECIFIC_ERROR, 12=NOT_ALLOWED_CONFLICTING_INVOCATION)
+const InvocationStatus = {
+    0: 'UNKNOWN_ERROR', 1: 'SENT', 2: 'CAR_OFFLINE',
+    4: 'DELIVERED', 5: 'DELIVERY_TIMEOUT', 6: 'SUCCESS',
+    7: 'RESPONSE_TIMEOUT', 8: 'UNKNOWN_CAR_ERROR',
+    9: 'NOT_ALLOWED_PRIVACY_ENABLED', 10: 'NOT_ALLOWED_WRONG_USAGE_MODE',
+    11: 'INVOCATION_SPECIFIC_ERROR', 12: 'NOT_ALLOWED_CONFLICTING_INVOCATION',
+};
+
+// HonkFlashAction: 0=HONK_AND_FLASH, 1=HONK, 2=FLASH
+const HonkFlashAction = { HONK_AND_FLASH: 0, HONK: 1, FLASH: 2 };
+
+// HeatingIntensity: 0=UNSPECIFIED, 1=OFF, 2=LEVEL1, 3=LEVEL2, 4=LEVEL3
+const HeatingIntensity = { UNSPECIFIED: 0, OFF: 1, LEVEL1: 2, LEVEL2: 3, LEVEL3: 4 };
+
 module.exports = {
     TimestampSchema,
     VehicleRequestSchema,
@@ -227,4 +350,20 @@ module.exports = {
     LockStatus,
     ClimatizationRunningStatus,
     ClimatizationRequestType,
+    InvocationRequestSchema,
+    CarLockRequestSchema,
+    CarUnlockRequestSchema,
+    HonkFlashRequestSchema,
+    ClimatizationStartRequestSchema,
+    ClimatizationStopRequestSchema,
+    InvocationResponseEnvelopeSchema,
+    InvocationStatus,
+    HonkFlashAction,
+    HeatingIntensity,
+    WindowControlRequestSchema,
+    WindowControlType,
+    GetSoftwareInfoResponseSchema,
+    CarSoftwareInfoSchema,
+    SoftwareState,
+    OTA_AVAILABLE_STATES,
 };

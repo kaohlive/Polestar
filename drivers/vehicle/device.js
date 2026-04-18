@@ -160,6 +160,51 @@ class PolestarVehicle extends Device {
     async _runSlowCycle() {
         await this.updateHealthState();
         await this.refreshAmpLimit();
+        await this.updateLocationState();
+        await this.updateOtaState();
+    }
+
+    async updateOtaState() {
+        if (!this.polestar || typeof this.polestar.getOtaStatus !== 'function') return;
+        try {
+            const ota = await this.polestar.getOtaStatus();
+            if (!ota) return;
+            await this.setCapabilityValue('alarm_polestarOtaAvailable', !!ota.updateAvailable);
+            // "UNKNOWN" (state=0) really means "no pending update info returned" — show a
+            // friendlier label so the tile doesn't imply the sensor is broken.
+            const stateText = (!ota.state && !ota.newVersion) ? 'No pending update' : (ota.stateLabel || 'UNKNOWN');
+            await this.setCapabilityValue('measure_polestarOtaState', stateText);
+            await this.setCapabilityValue('measure_polestarOtaVersion', ota.newVersion || '');
+        } catch (err) {
+            if (err.message === 'Not logged in') { await this.attemptReLogin(); return; }
+            if (isUnimplementedError(err)) return;
+            this.homey.app.log('Failed to retrieve OTA state', this.name, 'DEBUG', err.message);
+        }
+    }
+
+    async updateLocationState() {
+        if (!this.polestar || typeof this.polestar.getLocation !== 'function') return;
+        try {
+            const loc = await this.polestar.getLocation();
+            if (!loc || !Number.isFinite(loc.latitude) || !Number.isFinite(loc.longitude)) return;
+            this._lastLocation = loc;
+            const str = `${loc.latitude.toFixed(5)}, ${loc.longitude.toFixed(5)}`;
+            await this.setCapabilityValue('measure_polestarLocation', str);
+        } catch (err) {
+            if (err.message === 'Not logged in') { await this.attemptReLogin(); return; }
+            this.homey.app.log('Failed to retrieve location', this.name, 'DEBUG', err.message);
+        }
+    }
+
+    /** Called by the get_location flow action; returns lat/lng tokens. */
+    async getLocationForFlow() {
+        await this.updateLocationState();
+        const loc = this._lastLocation || {};
+        return {
+            latitude: Number.isFinite(loc.latitude) ? loc.latitude : 0,
+            longitude: Number.isFinite(loc.longitude) ? loc.longitude : 0,
+            location: this.getCapabilityValue('measure_polestarLocation') || '',
+        };
     }
 
     async fixEnergy()
@@ -231,6 +276,10 @@ class PolestarVehicle extends Device {
             await this.addCapability('button.charge_start');
         if (!this.hasCapability('button.charge_stop'))
             await this.addCapability('button.charge_stop');
+        if (!this.hasCapability('button.honk_flash'))
+            await this.addCapability('button.honk_flash');
+        if (!this.hasCapability('button.unlock_trunk'))
+            await this.addCapability('button.unlock_trunk');
 
         // Exterior + climate states (read-only now, future-setable via capabilitiesOptions).
         for (const cap of [
@@ -248,22 +297,14 @@ class PolestarVehicle extends Device {
             'alarm_contact.hood',
             'alarm_contact.sunroof',
             'alarm_contact.tank_lid',
+            'measure_polestarLocation',
+            'alarm_polestarOtaAvailable',
+            'measure_polestarOtaState',
+            'measure_polestarOtaVersion',
         ]) {
             if (!this.hasCapability(cap)) await this.addCapability(cap);
         }
 
-        // Migrate legacy custom tyre capabilities → standard measure_pressure with sub-IDs.
-        for (const legacy of [
-            'measure_polestarTyrePressureFL',
-            'measure_polestarTyrePressureFR',
-            'measure_polestarTyrePressureRL',
-            'measure_polestarTyrePressureRR',
-        ]) {
-            if (this.hasCapability(legacy)) {
-                try { await this.removeCapability(legacy); }
-                catch (err) { this.homey.app.log(`Failed to remove legacy cap ${legacy}`, this.name, 'WARNING', err); }
-            }
-        }
         for (const sub of ['front_left', 'front_right', 'rear_left', 'rear_right']) {
             const id = `measure_pressure.${sub}`;
             if (!this.hasCapability(id)) await this.addCapability(id);
@@ -597,6 +638,37 @@ class PolestarVehicle extends Device {
 
     chargeStart() { return this._invokeWrite('chargeStart', () => this.polestar.chargeStart()); }
     chargeStop()  { return this._invokeWrite('chargeStop',  () => this.polestar.chargeStop());  }
+    lockCar()     { return this._invokeWrite('lock',        () => this.polestar.lock());        }
+    unlockCar()   { return this._invokeWrite('unlock',      () => this.polestar.unlock());      }
+    unlockTrunkAction() { return this._invokeWrite('unlockTrunk', () => this.polestar.unlockTrunk()); }
+    honkFlashAction(args) {
+        const actionMap = { flash: 2, honk: 1, both: 0 };
+        const code = actionMap[args && args.action] !== undefined ? actionMap[args.action] : 2;
+        return this._invokeWrite('honkFlash', () => this.polestar.honkFlash({ action: code }));
+    }
+    climateStartAction(args) {
+        const parse = (v) => {
+            const n = Number(v);
+            return Number.isInteger(n) && n >= 1 && n <= 4 ? n : 1;
+        };
+        const opts = {
+            temperature: Number(args.temp),
+            frontLeftSeat:  parse(args.seat_fl),
+            frontRightSeat: parse(args.seat_fr),
+            rearLeftSeat:   parse(args.seat_rl),
+            rearRightSeat:  parse(args.seat_rr),
+            steeringWheel:  parse(args.wheel),
+        };
+        return this._invokeWrite('climateStart', () => this.polestar.climateStart(opts));
+    }
+    climateStopAction() { return this._invokeWrite('climateStop', () => this.polestar.climateStop()); }
+    windowsOpenAction() { return this._invokeWrite('windowsOpen', () => this.polestar.windowsOpen()); }
+    windowsCloseAction(){ return this._invokeWrite('windowsClose', () => this.polestar.windowsClose()); }
+
+    /** Called by the is_locked condition flow card. */
+    isLocked() {
+        return this.getCapabilityValue('locked') === true;
+    }
     _getTargetSocSettingType() {
         const raw = this.getSetting('target_soc_setting_type');
         const n = raw === undefined || raw === null ? 1 : Number(raw);
@@ -698,6 +770,56 @@ class PolestarVehicle extends Device {
         this.registerCapabilityListener('button.charge_stop', async () => {
             await this._invokeWrite('button.charge_stop', () => this.polestar.chargeStop());
         });
+
+        this.registerCapabilityListener('locked', async (value) => {
+            const label = value ? 'lock' : 'unlock';
+            await this._invokeWrite(label, () => value ? this.polestar.lock() : this.polestar.unlock());
+        });
+
+        this.registerCapabilityListener('button.honk_flash', async () => {
+            await this._invokeWrite('button.honk_flash', () => this.polestar.honkFlash());
+        });
+
+        this.registerCapabilityListener('button.unlock_trunk', async () => {
+            await this._invokeWrite('button.unlock_trunk', () => this.polestar.unlockTrunk());
+        });
+
+        this.registerCapabilityListener('onoff.climate', async (value) => {
+            if (value) {
+                const opts = this._getClimateStartOptions();
+                await this._invokeWrite('climateStart', () => this.polestar.climateStart(opts));
+            } else {
+                await this._invokeWrite('climateStop', () => this.polestar.climateStop());
+            }
+        });
+
+        this.registerCapabilityListener('target_temperature', async (temperature) => {
+            // Target temperature alone doesn't start climate — it just updates the stored
+            // default so the next climateStart uses the new value. If climate is already
+            // ACTIVE, the user can toggle onoff.climate to restart with the new target.
+            await this.setSettings({ climate_default_temp: Number(temperature) });
+        });
+    }
+
+    /** Read climate defaults from device settings and build the climateStart args. */
+    _getClimateStartOptions() {
+        const parseLevel = (raw) => {
+            const n = Number(raw);
+            return Number.isInteger(n) && n >= 1 && n <= 4 ? n : 1; // default OFF
+        };
+        const tileTarget = this.getCapabilityValue('target_temperature');
+        const settingTemp = this.getSetting('climate_default_temp');
+        const temperature = Number.isFinite(tileTarget) && tileTarget >= 16 && tileTarget <= 30
+            ? tileTarget
+            : (Number.isFinite(Number(settingTemp)) ? Number(settingTemp) : 21);
+        return {
+            temperature,
+            frontLeftSeat:  parseLevel(this.getSetting('climate_seat_front_left')),
+            frontRightSeat: parseLevel(this.getSetting('climate_seat_front_right')),
+            rearLeftSeat:   parseLevel(this.getSetting('climate_seat_rear_left')),
+            rearRightSeat:  parseLevel(this.getSetting('climate_seat_rear_right')),
+            steeringWheel:  parseLevel(this.getSetting('climate_steering_wheel')),
+        };
     }
 
     /**

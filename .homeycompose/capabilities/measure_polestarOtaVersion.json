@@ -1,0 +1,12 @@
+{
+    "type": "string",
+    "uiComponent": "sensor",
+    "title": {
+        "en": "New software version",
+        "no": "Ny programvareversjon",
+        "nl": "Nieuwe softwareversie"
+    },
+    "getable": true,
+    "setable": false,
+    "insights": false
+}

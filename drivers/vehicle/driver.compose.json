@@ -19,11 +19,17 @@
     "target_polestarAmpLimit",
     "button.charge_start",
     "button.charge_stop",
+    "button.honk_flash",
+    "button.unlock_trunk",
     "locked",
     "onoff.climate",
     "target_temperature",
     "measure_temperature",
     "measure_polestarClimateRemaining",
+    "measure_polestarLocation",
+    "alarm_polestarOtaAvailable",
+    "measure_polestarOtaState",
+    "measure_polestarOtaVersion",
     "alarm_contact.door_front_left",
     "alarm_contact.door_front_right",
     "alarm_contact.door_rear_left",
@@ -54,6 +60,14 @@
       "title": { "en": "Stop charging", "no": "Stopp lading", "nl": "Laden stoppen" },
       "desc": { "en": "Cancel the charge-now override.", "no": "Avbryt lad-nå-overstyringen.", "nl": "Heft de lad-nu-override op." }
     },
+    "button.honk_flash": {
+      "title": { "en": "Honk and flash", "no": "Tut og blink", "nl": "Toeter en knipper" },
+      "desc": { "en": "Find the car — honk horn and flash lights.", "no": "Finn bilen — tut og blink med lysene.", "nl": "Vind de auto — toeteren en lichten knipperen." }
+    },
+    "button.unlock_trunk": {
+      "title": { "en": "Unlock trunk", "no": "Lås opp bagasjerom", "nl": "Kofferbak ontgrendelen" },
+      "desc": { "en": "Unlock only the trunk, leaving the cabin locked.", "no": "Lås opp kun bagasjerommet.", "nl": "Ontgrendel alleen de kofferbak; het interieur blijft vergrendeld." }
+    },
     "measure_pressure.front_left": {
       "title": { "en": "Tyre pressure FL", "no": "Dekktrykk FV", "nl": "Bandenspanning LV" },
       "units": { "en": "kPa" },
@@ -79,29 +93,26 @@
       "insights": true
     },
     "locked": {
-      "setable": false,
       "title": { "en": "Locked", "no": "Låst", "nl": "Vergrendeld" },
-      "desc": { "en": "Central-lock status. Read-only until lock/unlock control is added.",
-                "no": "Status for sentrallås. Skrivebeskyttet inntil lås/lås-opp-kontroll er lagt til.",
-                "nl": "Centrale-vergrendelingsstatus. Alleen-lezen totdat vergrendel/ontgrendel-bediening is toegevoegd." }
+      "desc": { "en": "Central-lock state. Toggle to lock/unlock the car.",
+                "no": "Status for sentrallås. Trykk for å låse / låse opp bilen.",
+                "nl": "Centrale-vergrendelingsstatus. Schakel om de auto te vergrendelen of ontgrendelen." }
     },
     "onoff.climate": {
-      "setable": false,
       "title": { "en": "Climate", "no": "Klima", "nl": "Klimaat" },
-      "desc": { "en": "Parking climatization running state. Read-only until climate start/stop is added.",
-                "no": "Status for klimaanlegg. Skrivebeskyttet inntil klima start/stopp er lagt til.",
-                "nl": "Status van parkeer-klimaatregeling. Alleen-lezen totdat climate start/stop is toegevoegd." }
+      "desc": { "en": "Start or stop parking climatization. Uses the heating settings from device settings.",
+                "no": "Start eller stopp klimaanlegg. Bruker oppvarmingsinnstillinger fra enhetsinnstillinger.",
+                "nl": "Start of stop de parkeer-klimaatregeling. Gebruikt de verwarmingsinstellingen uit de device-settings." }
     },
     "target_temperature": {
-      "setable": false,
       "min": 16,
       "max": 30,
       "step": 0.5,
       "decimals": 1,
       "title": { "en": "Climate target", "no": "Klima-mål", "nl": "Klimaatdoel" },
-      "desc": { "en": "Target temperature from the last climate request. Editable once climate start is added.",
-                "no": "Måltemperatur fra siste klimabestilling. Redigerbar når klimastart legges til.",
-                "nl": "Doeltemperatuur van het laatste climate-verzoek. Bewerkbaar zodra climate-start is toegevoegd." }
+      "desc": { "en": "Desired climatization temperature. Used as default when starting climate from the toggle.",
+                "no": "Ønsket klimatemperatur. Brukes som standard ved start via klima-bryteren.",
+                "nl": "Gewenste klimaattemperatuur. Wordt als default gebruikt bij het aanzetten via de climate-toggle." }
     },
     "measure_temperature": {
       "title": { "en": "Interior temperature", "no": "Innetemperatur", "nl": "Binnentemperatuur" }

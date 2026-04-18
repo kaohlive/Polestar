@@ -73,8 +73,12 @@ async function main() {
             () => client.getLatestClimate({ debug }));
         await step('[9/10] TargetSocService/GetTargetSoc (chronos read)…',
             async () => ({ target_level_pct: await client.getTargetSoc({ debug }) }));
-        await step('[10/10] AmpLimitService/GetAmpLimit (chronos read)…',
+        await step('[10/11] AmpLimitService/GetAmpLimit (chronos read)…',
             async () => ({ amperage_limit: await client.getAmpLimit({ debug }) }));
+        await step('[11/12] DtlInternetService/GetLastKnownLocation (unary)…',
+            () => client.getLastKnownLocation({ debug }));
+        await step('[12/12] OtaDiscoveryService/GetSoftwareInfo (server-stream, first frame)…',
+            () => client.getOtaSoftwareInfo({ debug }));
     } finally {
         client.close();
     }

@@ -1,0 +1,13 @@
+{
+    "type": "string",
+    "uiComponent": "sensor",
+    "icon": "/drivers/polestar-2-csv/assets/images/update.svg",
+    "title": {
+        "en": "OTA state",
+        "no": "OTA-status",
+        "nl": "OTA-status"
+    },
+    "getable": true,
+    "setable": false,
+    "insights": false
+}

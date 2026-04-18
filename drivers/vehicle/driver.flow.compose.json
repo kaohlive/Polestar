@@ -59,6 +59,14 @@
     ],
     "conditions": [
         {
+            "id": "is_locked",
+            "title": {
+                "en": "Car !{{is|is not}} locked",
+                "no": "Bil !{{er|er ikke}} låst",
+                "nl": "Auto !{{is|is niet}} vergrendeld"
+            }
+        },
+        {
             "id": "target_soc_is",
             "title": {
                 "en": "Charge limit !{{is|is not}} at least",
@@ -147,6 +155,132 @@
             },
             "args": [
                 { "type": "number", "name": "level", "min": 50, "max": 100, "step": 1, "placeholder": { "en": "%", "no": "%", "nl": "%" } }
+            ]
+        },
+        {
+            "id": "lock_car",
+            "title":          { "en": "Lock car",        "no": "Lås bil",            "nl": "Auto vergrendelen" },
+            "titleFormatted": { "en": "Lock car",        "no": "Lås bil",            "nl": "Auto vergrendelen" },
+            "hint": { "en": "Activate the central lock.",
+                      "no": "Aktiver sentrallås.",
+                      "nl": "Activeert de centrale vergrendeling." }
+        },
+        {
+            "id": "unlock_car",
+            "title":          { "en": "Unlock car",      "no": "Lås opp bil",        "nl": "Auto ontgrendelen" },
+            "titleFormatted": { "en": "Unlock car",      "no": "Lås opp bil",        "nl": "Auto ontgrendelen" },
+            "hint": { "en": "Unlock all doors.",
+                      "no": "Lås opp alle dører.",
+                      "nl": "Ontgrendelt alle deuren." }
+        },
+        {
+            "id": "unlock_trunk_action",
+            "title":          { "en": "Unlock trunk",    "no": "Lås opp bagasjerom", "nl": "Kofferbak ontgrendelen" },
+            "titleFormatted": { "en": "Unlock trunk",    "no": "Lås opp bagasjerom", "nl": "Kofferbak ontgrendelen" },
+            "hint": { "en": "Unlock only the trunk; the cabin stays locked.",
+                      "no": "Lås opp kun bagasjerommet; kupeen forblir låst.",
+                      "nl": "Alleen de kofferbak ontgrendelen, interieur blijft vergrendeld." }
+        },
+        {
+            "id": "honk_flash",
+            "title": { "en": "Honk and flash", "no": "Tut og blink", "nl": "Toeter en knipper" },
+            "titleFormatted": {
+                "en": "[[action]]",
+                "no": "[[action]]",
+                "nl": "[[action]]"
+            },
+            "hint": { "en": "Find-my-car: flash the lights, honk the horn, or both.",
+                      "no": "Finn bilen: blink med lys, tut i hornet, eller begge.",
+                      "nl": "Vind-mijn-auto: knipper met lichten, toeter, of beide." },
+            "args": [
+                {
+                    "type": "dropdown",
+                    "name": "action",
+                    "values": [
+                        { "id": "flash", "label": { "en": "Flash lights only",  "no": "Kun blink",     "nl": "Alleen knipperen" } },
+                        { "id": "honk",  "label": { "en": "Honk only",          "no": "Kun tut",       "nl": "Alleen toeteren" } },
+                        { "id": "both",  "label": { "en": "Honk and flash",     "no": "Tut og blink",  "nl": "Toeteren en knipperen" } }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "climate_start",
+            "title": { "en": "Start climate", "no": "Start klima", "nl": "Climate starten" },
+            "titleFormatted": {
+                "en": "Start climate to [[temp]]°C, seats FL [[seat_fl]] FR [[seat_fr]] RL [[seat_rl]] RR [[seat_rr]], steering [[wheel]]",
+                "no": "Start klima til [[temp]]°C, seter FV [[seat_fl]] FH [[seat_fr]] BV [[seat_rl]] BH [[seat_rr]], ratt [[wheel]]",
+                "nl": "Climate starten op [[temp]]°C, zittingen LV [[seat_fl]] RV [[seat_fr]] LA [[seat_rl]] RA [[seat_rr]], stuur [[wheel]]"
+            },
+            "hint": { "en": "Start parking climatization with explicit temperature, per-seat heating and steering-wheel heating. Bypasses the device-settings defaults.",
+                      "no": "Start klima med eksplisitt temperatur, setevarme og rattvarme. Overstyrer standard fra enhetsinnstillinger.",
+                      "nl": "Start climatiseren met expliciete temperatuur, stoelverwarming per plek en stuurverwarming. Overschrijft defaults uit device-settings." },
+            "args": [
+                { "type": "number",   "name": "temp",     "min": 16, "max": 30, "step": 0.5, "placeholder": { "en": "°C", "no": "°C", "nl": "°C" } },
+                { "type": "dropdown", "name": "seat_fl",  "values": [
+                    { "id": "1", "label": { "en": "Seat FL off",  "no": "Sete FV av", "nl": "Stoel LV uit" } },
+                    { "id": "2", "label": { "en": "Seat FL L1",   "no": "Sete FV N1", "nl": "Stoel LV N1"  } },
+                    { "id": "3", "label": { "en": "Seat FL L2",   "no": "Sete FV N2", "nl": "Stoel LV N2"  } },
+                    { "id": "4", "label": { "en": "Seat FL L3",   "no": "Sete FV N3", "nl": "Stoel LV N3"  } }
+                ]},
+                { "type": "dropdown", "name": "seat_fr",  "values": [
+                    { "id": "1", "label": { "en": "Seat FR off",  "no": "Sete FH av", "nl": "Stoel RV uit" } },
+                    { "id": "2", "label": { "en": "Seat FR L1",   "no": "Sete FH N1", "nl": "Stoel RV N1"  } },
+                    { "id": "3", "label": { "en": "Seat FR L2",   "no": "Sete FH N2", "nl": "Stoel RV N2"  } },
+                    { "id": "4", "label": { "en": "Seat FR L3",   "no": "Sete FH N3", "nl": "Stoel RV N3"  } }
+                ]},
+                { "type": "dropdown", "name": "seat_rl",  "values": [
+                    { "id": "1", "label": { "en": "Seat RL off",  "no": "Sete BV av", "nl": "Stoel LA uit" } },
+                    { "id": "2", "label": { "en": "Seat RL L1",   "no": "Sete BV N1", "nl": "Stoel LA N1"  } },
+                    { "id": "3", "label": { "en": "Seat RL L2",   "no": "Sete BV N2", "nl": "Stoel LA N2"  } },
+                    { "id": "4", "label": { "en": "Seat RL L3",   "no": "Sete BV N3", "nl": "Stoel LA N3"  } }
+                ]},
+                { "type": "dropdown", "name": "seat_rr",  "values": [
+                    { "id": "1", "label": { "en": "Seat RR off",  "no": "Sete BH av", "nl": "Stoel RA uit" } },
+                    { "id": "2", "label": { "en": "Seat RR L1",   "no": "Sete BH N1", "nl": "Stoel RA N1"  } },
+                    { "id": "3", "label": { "en": "Seat RR L2",   "no": "Sete BH N2", "nl": "Stoel RA N2"  } },
+                    { "id": "4", "label": { "en": "Seat RR L3",   "no": "Sete BH N3", "nl": "Stoel RA N3"  } }
+                ]},
+                { "type": "dropdown", "name": "wheel",    "values": [
+                    { "id": "1", "label": { "en": "Steering off", "no": "Ratt av",    "nl": "Stuur uit" } },
+                    { "id": "2", "label": { "en": "Steering L1",  "no": "Ratt N1",    "nl": "Stuur N1"  } },
+                    { "id": "3", "label": { "en": "Steering L2",  "no": "Ratt N2",    "nl": "Stuur N2"  } },
+                    { "id": "4", "label": { "en": "Steering L3",  "no": "Ratt N3",    "nl": "Stuur N3"  } }
+                ]}
+            ]
+        },
+        {
+            "id": "climate_stop",
+            "title":          { "en": "Stop climate", "no": "Stopp klima", "nl": "Climate stoppen" },
+            "titleFormatted": { "en": "Stop climate", "no": "Stopp klima", "nl": "Climate stoppen" },
+            "hint": { "en": "Stop any running parking climatization session.",
+                      "no": "Stopp pågående klimasesjon.",
+                      "nl": "Stop een lopende climate-sessie." }
+        },
+        {
+            "id": "windows_open",
+            "title":          { "en": "Open all windows",  "no": "Åpne alle vinduer",  "nl": "Alle ramen openen" },
+            "titleFormatted": { "en": "Open all windows",  "no": "Åpne alle vinduer",  "nl": "Alle ramen openen" },
+            "hint": { "en": "Open all four side windows — e.g. to vent a hot cabin.",
+                      "no": "Åpne alle fire sidevinduer.",
+                      "nl": "Open alle vier zijramen — bv. om een hete cabine te luchten." }
+        },
+        {
+            "id": "windows_close",
+            "title":          { "en": "Close all windows", "no": "Lukk alle vinduer", "nl": "Alle ramen sluiten" },
+            "titleFormatted": { "en": "Close all windows", "no": "Lukk alle vinduer", "nl": "Alle ramen sluiten" }
+        },
+        {
+            "id": "get_location",
+            "title":          { "en": "Get location", "no": "Hent plassering", "nl": "Locatie ophalen" },
+            "titleFormatted": { "en": "Get location", "no": "Hent plassering", "nl": "Locatie ophalen" },
+            "hint": { "en": "Fetches the last known position and exposes latitude, longitude, and a formatted location string as tokens for subsequent flow cards (e.g. push notifications with a map link).",
+                      "no": "Henter siste kjente posisjon og eksponerer breddegrad, lengdegrad og en formatert tekststreng som tokens.",
+                      "nl": "Haalt de laatst bekende positie op en levert breedtegraad, lengtegraad en een geformatteerde tekststring als tokens voor volgende flow-cards (bv. push met kaart-link)." },
+            "tokens": [
+                { "name": "latitude",  "type": "number", "title": { "en": "Latitude",  "no": "Breddegrad", "nl": "Breedtegraad" } },
+                { "name": "longitude", "type": "number", "title": { "en": "Longitude", "no": "Lengdegrad", "nl": "Lengtegraad" } },
+                { "name": "location",  "type": "string", "title": { "en": "Location",  "no": "Plassering", "nl": "Locatie" } }
             ]
         },
         {

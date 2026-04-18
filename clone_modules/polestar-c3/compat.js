@@ -200,6 +200,44 @@ class PolestarCompat {
     getAmpLimit() { return this._client.getAmpLimit(); }
     setAmpLimit(amperage) { return this._client.setAmpLimit(amperage); }
 
+    lock() { return this._client.lock(); }
+    unlock() { return this._client.unlock(); }
+    unlockTrunk() { return this._client.unlockTrunk(); }
+    honkFlash(opts) { return this._client.honkFlash(opts); }
+    climateStart(opts) { return this._client.climateStart(opts); }
+    climateStop() { return this._client.climateStop(); }
+    windowsOpen() { return this._client.windowsOpen(); }
+    windowsClose() { return this._client.windowsClose(); }
+
+    async getOtaStatus() {
+        const info = await this._client.getOtaSoftwareInfo();
+        if (!info) return null;
+        return {
+            updateAvailable: !!info.update_available,
+            stateLabel: info.state_label || 'UNKNOWN',
+            state: typeof info.state === 'number' ? info.state : 0,
+            newVersion: info.new_sw_version || null,
+            softwareId: info.software_id || null,
+            name: (info.description && info.description.name) || null,
+            shortDesc: (info.description && info.description.short_desc) || null,
+            scheduledAt: info.schedule_info && info.schedule_info.scheduled_at
+                ? Number(info.schedule_info.scheduled_at.seconds || 0)
+                : null,
+        };
+    }
+
+    async getLocation({ parked = false } = {}) {
+        const loc = parked
+            ? await this._client.getLastParkedLocation()
+            : await this._client.getLastKnownLocation();
+        if (!loc) return null;
+        return {
+            latitude: Number(loc.latitude),
+            longitude: Number(loc.longitude),
+            timestamp: typeof loc.timestamp === 'bigint' ? Number(loc.timestamp) : (loc.timestamp || null),
+        };
+    }
+
     getAccessToken() { return this._client._auth.accessToken; }
     getVehicleVin() { return this._client._vin; }
 }

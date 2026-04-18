@@ -12,6 +12,21 @@ const {
     GetHealthResponseSchema,
     GetExteriorResponseSchema,
     GetClimateResponseSchema,
+    InvocationRequestSchema,
+    CarLockRequestSchema,
+    CarUnlockRequestSchema,
+    HonkFlashRequestSchema,
+    ClimatizationStartRequestSchema,
+    ClimatizationStopRequestSchema,
+    InvocationResponseEnvelopeSchema,
+    InvocationStatus,
+    HonkFlashAction,
+    HeatingIntensity,
+    WindowControlRequestSchema,
+    WindowControlType,
+    GetSoftwareInfoResponseSchema,
+    SoftwareState,
+    OTA_AVAILABLE_STATES,
     ChargingStatus,
     ChargerConnectionStatus,
     ChargingType,
@@ -31,6 +46,9 @@ const SVC_CLIMATE = '/services.vehiclestates.parkingclimatization.ParkingClimati
 const SVC_CHARGE_NOW = '/chronos.services.v1.ChargeNowService';
 const SVC_TARGET_SOC = '/chronos.services.v1.TargetSocService';
 const SVC_AMP_LIMIT = '/chronos.services.v1.AmpLimitService';
+const SVC_INVOCATION = '/invocation.InvocationService';
+const SVC_LOCATION = '/dtlinternet.DtlInternetService';
+const SVC_OTA_DISCOVERY = '/ota_mobcache.OtaDiscoveryService';
 
 // ChargeTargetLevelSettingType enum
 const CHARGE_TARGET_DAILY = 1;
@@ -182,6 +200,184 @@ class PolestarC3 {
             c.request_type_label = ClimatizationRequestType[c.request_type] || null;
         }
         return decoded;
+    }
+
+    // --- Invocation write helpers (lock, unlock, honk/flash, climate) ---
+
+    _parseInvocationResponse(respBytes) {
+        const env = codec.decode(InvocationResponseEnvelopeSchema, respBytes);
+        const r = env.response || {};
+        const statusLabel = InvocationStatus[r.status] || null;
+        return {
+            id: r.id || null,
+            vin: r.vin || null,
+            status: typeof r.status === 'number' ? r.status : null,
+            statusLabel,
+            message: r.message || null,
+            timestamp: typeof r.timestamp === 'bigint' ? Number(r.timestamp) : (r.timestamp || null),
+            ok: r.status === 1 || r.status === 4 || r.status === 6, // SENT / DELIVERED / SUCCESS
+        };
+    }
+
+    async _invocationCall(method, requestBytes, { debug = false } = {}) {
+        // Invocation methods are server-streaming; we take the first delivered
+        // response (often SENT or DELIVERED — the car processes the command
+        // regardless of whether we hang around for the final SUCCESS).
+        const respBytes = await this._call(`${SVC_INVOCATION}/${method}`, requestBytes, { debug, streaming: true });
+        const parsed = this._parseInvocationResponse(respBytes);
+        if (!parsed.ok) {
+            throw new Error(`Invocation ${method} failed: status=${parsed.status} (${parsed.statusLabel}) ${parsed.message || ''}`.trim());
+        }
+        return parsed;
+    }
+
+    async lock({ debug = false } = {}) {
+        const req = codec.encode(CarLockRequestSchema, {
+            request: codec.encode(InvocationRequestSchema, { vin: this._vin }),
+            lock_type: 0, // LOCK
+        });
+        return this._invocationCall('Lock', req, { debug });
+    }
+
+    async unlock({ debug = false } = {}) {
+        const req = codec.encode(CarUnlockRequestSchema, {
+            request: codec.encode(InvocationRequestSchema, { vin: this._vin }),
+            unlock_type: 0, // full unlock
+        });
+        return this._invocationCall('Unlock', req, { debug });
+    }
+
+    async unlockTrunk({ debug = false } = {}) {
+        const req = codec.encode(CarUnlockRequestSchema, {
+            request: codec.encode(InvocationRequestSchema, { vin: this._vin }),
+            unlock_type: 1, // trunk only
+        });
+        return this._invocationCall('Unlock', req, { debug });
+    }
+
+    async honkFlash({ action = HonkFlashAction.FLASH, debug = false } = {}) {
+        const req = codec.encode(HonkFlashRequestSchema, {
+            request: codec.encode(InvocationRequestSchema, { vin: this._vin }),
+            honk_flash_type: action,
+        });
+        return this._invocationCall('HonkFlash', req, { debug });
+    }
+
+    async climateStart(options = {}) {
+        const {
+            temperature = 21,
+            frontLeftSeat = HeatingIntensity.UNSPECIFIED,
+            frontRightSeat = HeatingIntensity.UNSPECIFIED,
+            rearLeftSeat = HeatingIntensity.UNSPECIFIED,
+            rearRightSeat = HeatingIntensity.UNSPECIFIED,
+            steeringWheel = HeatingIntensity.UNSPECIFIED,
+            debug = false,
+        } = options;
+        const req = codec.encode(ClimatizationStartRequestSchema, {
+            request: codec.encode(InvocationRequestSchema, { vin: this._vin }),
+            start: true,
+            compartment_temperature_celsius: Number(temperature),
+            front_left_seat: frontLeftSeat,
+            front_right_seat: frontRightSeat,
+            rear_left_seat: rearLeftSeat,
+            rear_right_seat: rearRightSeat,
+            steering_wheel: steeringWheel,
+        });
+        return this._invocationCall('ClimatizationStart', req, { debug });
+    }
+
+    async climateStop({ debug = false } = {}) {
+        const req = codec.encode(ClimatizationStopRequestSchema, {
+            request: codec.encode(InvocationRequestSchema, { vin: this._vin }),
+        });
+        return this._invocationCall('ClimatizationStop', req, { debug });
+    }
+
+    async windowsOpen({ debug = false } = {}) {
+        const req = codec.encode(WindowControlRequestSchema, {
+            request: codec.encode(InvocationRequestSchema, { vin: this._vin }),
+            windows_control: WindowControlType.OPEN_ALL,
+        });
+        return this._invocationCall('WindowControl', req, { debug });
+    }
+
+    async windowsClose({ debug = false } = {}) {
+        const req = codec.encode(WindowControlRequestSchema, {
+            request: codec.encode(InvocationRequestSchema, { vin: this._vin }),
+            windows_control: WindowControlType.CLOSE_ALL,
+        });
+        return this._invocationCall('WindowControl', req, { debug });
+    }
+
+    async getOtaSoftwareInfo({ debug = false } = {}) {
+        const req = codec.encode(
+            { vin: { num: 1, type: 'string' }, locale: { num: 2, type: 'string' } },
+            { vin: this._vin, locale: 'en' },
+        );
+        const respBytes = await this._call(`${SVC_OTA_DISCOVERY}/GetSoftwareInfo`, req, { debug, streaming: true });
+        const decoded = codec.decode(GetSoftwareInfoResponseSchema, respBytes);
+        if (!decoded.info) return null;
+        const info = decoded.info;
+        info.state_label = SoftwareState[info.state] || null;
+        info.update_available = OTA_AVAILABLE_STATES.has(info.state);
+        return info;
+    }
+
+    async getLastKnownLocation({ debug = false } = {}) {
+        // Location service uses VIN at field 1 (not VehicleRequest at field 1/2).
+        const req = codec.encode({ vin: { num: 1, type: 'string' } }, { vin: this._vin });
+        const respBytes = await this._call(`${SVC_LOCATION}/GetLastKnownLocation`, req, { debug });
+        return this._parseLocationResponse(respBytes);
+    }
+
+    async getLastParkedLocation({ debug = false } = {}) {
+        const req = codec.encode({ vin: { num: 1, type: 'string' } }, { vin: this._vin });
+        const respBytes = await this._call(`${SVC_LOCATION}/GetLastParkedLocation`, req, { debug });
+        return this._parseLocationResponse(respBytes);
+    }
+
+    /**
+     * Location responses come in three shapes depending on backend version:
+     *   A) outer[5] = nested-location-bytes          (most common on C3)
+     *   B) outer[2] = nested-location-bytes
+     *   C) outer[2]=longitude_float, outer[3]=latitude_float, outer[4]=timestamp
+     * Inner "compact" layout: [1]=longitude, [2]=latitude, [3]=timestamp.
+     */
+    _parseLocationResponse(respBytes) {
+        const raw = codec.decodeRaw(respBytes);
+        // Variant A/B: nested compact location at field 5 or 2
+        for (const key of ['field5(wt=2)', 'field2(wt=2)']) {
+            const nested = raw[key];
+            if (Buffer.isBuffer(nested)) {
+                const parsed = this._parseCompactLocation(nested);
+                if (parsed) return parsed;
+            }
+        }
+        // Variant C: flat fields
+        const lng = raw['field2(wt=5)'] ?? raw['field2(wt=1)'];
+        const lat = raw['field3(wt=5)'] ?? raw['field3(wt=1)'];
+        if (typeof lng === 'number' && typeof lat === 'number') {
+            const ts = raw['field4(wt=0)'];
+            return { longitude: lng, latitude: lat, timestamp: typeof ts === 'number' ? ts : null };
+        }
+        return null;
+    }
+
+    _parseCompactLocation(bytes) {
+        const raw = codec.decodeRaw(bytes);
+        const lng = raw['field1(wt=5)'] ?? raw['field1(wt=1)'];
+        const lat = raw['field2(wt=5)'] ?? raw['field2(wt=1)'];
+        if (typeof lng !== 'number' || typeof lat !== 'number') return null;
+        let ts = null;
+        const tsField = raw['field3(wt=2)'] ?? raw['field3(wt=0)'];
+        if (Buffer.isBuffer(tsField)) {
+            const tsRaw = codec.decodeRaw(tsField);
+            const seconds = tsRaw['field1(wt=0)'];
+            ts = typeof seconds === 'number' ? seconds : null;
+        } else if (typeof tsField === 'number') {
+            ts = tsField;
+        }
+        return { longitude: lng, latitude: lat, timestamp: ts };
     }
 
     // --- Chronos write helpers ---

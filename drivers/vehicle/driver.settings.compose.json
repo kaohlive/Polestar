@@ -34,5 +34,77 @@
             { "id": "3", "label": { "en": "Custom",          "no": "Egendefinert",      "nl": "Aangepast" } },
             { "id": "0", "label": { "en": "Unspecified",     "no": "Uspesifisert",      "nl": "Niet gespecificeerd" } }
         ]
+    },
+    {
+        "type": "group",
+        "label": { "en": "Climate defaults", "no": "Klima-standarder", "nl": "Climate standaardinstellingen" },
+        "children": [
+            {
+                "id": "climate_default_temp",
+                "type": "number",
+                "label": { "en": "Default temperature", "no": "Standard temperatur", "nl": "Standaard temperatuur" },
+                "value": 21, "min": 16, "max": 30, "step": 0.5, "units": { "en": "°C" },
+                "hint": {
+                    "en": "Used when climate is started via the toggle, button, or onoff capability. The separate 'Climate target' tile overrides this for the next start.",
+                    "no": "Brukes når klima startes via bryter, knapp eller onoff. 'Klima-mål'-flisen overstyrer dette ved neste start.",
+                    "nl": "Gebruikt wanneer climate via de toggle, knop of onoff-capability wordt gestart. De 'Klimaatdoel'-tile overschrijft dit voor de eerstvolgende start."
+                }
+            },
+            {
+                "id": "climate_seat_front_left", "type": "dropdown",
+                "label": { "en": "Front left seat heating", "no": "Setevarme forran venstre", "nl": "Zitverwarming linksvoor" },
+                "value": "1",
+                "values": [
+                    { "id": "1", "label": { "en": "Off" } },
+                    { "id": "2", "label": { "en": "Level 1" } },
+                    { "id": "3", "label": { "en": "Level 2" } },
+                    { "id": "4", "label": { "en": "Level 3" } }
+                ]
+            },
+            {
+                "id": "climate_seat_front_right", "type": "dropdown",
+                "label": { "en": "Front right seat heating", "no": "Setevarme forran høyre", "nl": "Zitverwarming rechtsvoor" },
+                "value": "1",
+                "values": [
+                    { "id": "1", "label": { "en": "Off" } },
+                    { "id": "2", "label": { "en": "Level 1" } },
+                    { "id": "3", "label": { "en": "Level 2" } },
+                    { "id": "4", "label": { "en": "Level 3" } }
+                ]
+            },
+            {
+                "id": "climate_seat_rear_left", "type": "dropdown",
+                "label": { "en": "Rear left seat heating", "no": "Setevarme bak venstre", "nl": "Zitverwarming linksachter" },
+                "value": "1",
+                "values": [
+                    { "id": "1", "label": { "en": "Off" } },
+                    { "id": "2", "label": { "en": "Level 1" } },
+                    { "id": "3", "label": { "en": "Level 2" } },
+                    { "id": "4", "label": { "en": "Level 3" } }
+                ]
+            },
+            {
+                "id": "climate_seat_rear_right", "type": "dropdown",
+                "label": { "en": "Rear right seat heating", "no": "Setevarme bak høyre", "nl": "Zitverwarming rechtsachter" },
+                "value": "1",
+                "values": [
+                    { "id": "1", "label": { "en": "Off" } },
+                    { "id": "2", "label": { "en": "Level 1" } },
+                    { "id": "3", "label": { "en": "Level 2" } },
+                    { "id": "4", "label": { "en": "Level 3" } }
+                ]
+            },
+            {
+                "id": "climate_steering_wheel", "type": "dropdown",
+                "label": { "en": "Steering wheel heating", "no": "Rattvarme", "nl": "Stuurwielverwarming" },
+                "value": "1",
+                "values": [
+                    { "id": "1", "label": { "en": "Off" } },
+                    { "id": "2", "label": { "en": "Level 1" } },
+                    { "id": "3", "label": { "en": "Level 2" } },
+                    { "id": "4", "label": { "en": "Level 3" } }
+                ]
+            }
+        ]
     }
 ]

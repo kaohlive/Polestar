@@ -498,6 +498,21 @@
     ],
     "conditions": [
       {
+        "id": "is_locked",
+        "title": {
+          "en": "Car !{{is|is not}} locked",
+          "no": "Bil !{{er|er ikke}} låst",
+          "nl": "Auto !{{is|is niet}} vergrendeld"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
         "id": "target_soc_is",
         "title": {
           "en": "Charge limit !{{is|is not}} at least",
@@ -647,6 +662,487 @@
               "no": "%",
               "nl": "%"
             }
+          }
+        ]
+      },
+      {
+        "id": "lock_car",
+        "title": {
+          "en": "Lock car",
+          "no": "Lås bil",
+          "nl": "Auto vergrendelen"
+        },
+        "titleFormatted": {
+          "en": "Lock car",
+          "no": "Lås bil",
+          "nl": "Auto vergrendelen"
+        },
+        "hint": {
+          "en": "Activate the central lock.",
+          "no": "Aktiver sentrallås.",
+          "nl": "Activeert de centrale vergrendeling."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "unlock_car",
+        "title": {
+          "en": "Unlock car",
+          "no": "Lås opp bil",
+          "nl": "Auto ontgrendelen"
+        },
+        "titleFormatted": {
+          "en": "Unlock car",
+          "no": "Lås opp bil",
+          "nl": "Auto ontgrendelen"
+        },
+        "hint": {
+          "en": "Unlock all doors.",
+          "no": "Lås opp alle dører.",
+          "nl": "Ontgrendelt alle deuren."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "unlock_trunk_action",
+        "title": {
+          "en": "Unlock trunk",
+          "no": "Lås opp bagasjerom",
+          "nl": "Kofferbak ontgrendelen"
+        },
+        "titleFormatted": {
+          "en": "Unlock trunk",
+          "no": "Lås opp bagasjerom",
+          "nl": "Kofferbak ontgrendelen"
+        },
+        "hint": {
+          "en": "Unlock only the trunk; the cabin stays locked.",
+          "no": "Lås opp kun bagasjerommet; kupeen forblir låst.",
+          "nl": "Alleen de kofferbak ontgrendelen, interieur blijft vergrendeld."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "honk_flash",
+        "title": {
+          "en": "Honk and flash",
+          "no": "Tut og blink",
+          "nl": "Toeter en knipper"
+        },
+        "titleFormatted": {
+          "en": "[[action]]",
+          "no": "[[action]]",
+          "nl": "[[action]]"
+        },
+        "hint": {
+          "en": "Find-my-car: flash the lights, honk the horn, or both.",
+          "no": "Finn bilen: blink med lys, tut i hornet, eller begge.",
+          "nl": "Vind-mijn-auto: knipper met lichten, toeter, of beide."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "type": "dropdown",
+            "name": "action",
+            "values": [
+              {
+                "id": "flash",
+                "label": {
+                  "en": "Flash lights only",
+                  "no": "Kun blink",
+                  "nl": "Alleen knipperen"
+                }
+              },
+              {
+                "id": "honk",
+                "label": {
+                  "en": "Honk only",
+                  "no": "Kun tut",
+                  "nl": "Alleen toeteren"
+                }
+              },
+              {
+                "id": "both",
+                "label": {
+                  "en": "Honk and flash",
+                  "no": "Tut og blink",
+                  "nl": "Toeteren en knipperen"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "climate_start",
+        "title": {
+          "en": "Start climate",
+          "no": "Start klima",
+          "nl": "Climate starten"
+        },
+        "titleFormatted": {
+          "en": "Start climate to [[temp]]°C, seats FL [[seat_fl]] FR [[seat_fr]] RL [[seat_rl]] RR [[seat_rr]], steering [[wheel]]",
+          "no": "Start klima til [[temp]]°C, seter FV [[seat_fl]] FH [[seat_fr]] BV [[seat_rl]] BH [[seat_rr]], ratt [[wheel]]",
+          "nl": "Climate starten op [[temp]]°C, zittingen LV [[seat_fl]] RV [[seat_fr]] LA [[seat_rl]] RA [[seat_rr]], stuur [[wheel]]"
+        },
+        "hint": {
+          "en": "Start parking climatization with explicit temperature, per-seat heating and steering-wheel heating. Bypasses the device-settings defaults.",
+          "no": "Start klima med eksplisitt temperatur, setevarme og rattvarme. Overstyrer standard fra enhetsinnstillinger.",
+          "nl": "Start climatiseren met expliciete temperatuur, stoelverwarming per plek en stuurverwarming. Overschrijft defaults uit device-settings."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "type": "number",
+            "name": "temp",
+            "min": 16,
+            "max": 30,
+            "step": 0.5,
+            "placeholder": {
+              "en": "°C",
+              "no": "°C",
+              "nl": "°C"
+            }
+          },
+          {
+            "type": "dropdown",
+            "name": "seat_fl",
+            "values": [
+              {
+                "id": "1",
+                "label": {
+                  "en": "Seat FL off",
+                  "no": "Sete FV av",
+                  "nl": "Stoel LV uit"
+                }
+              },
+              {
+                "id": "2",
+                "label": {
+                  "en": "Seat FL L1",
+                  "no": "Sete FV N1",
+                  "nl": "Stoel LV N1"
+                }
+              },
+              {
+                "id": "3",
+                "label": {
+                  "en": "Seat FL L2",
+                  "no": "Sete FV N2",
+                  "nl": "Stoel LV N2"
+                }
+              },
+              {
+                "id": "4",
+                "label": {
+                  "en": "Seat FL L3",
+                  "no": "Sete FV N3",
+                  "nl": "Stoel LV N3"
+                }
+              }
+            ]
+          },
+          {
+            "type": "dropdown",
+            "name": "seat_fr",
+            "values": [
+              {
+                "id": "1",
+                "label": {
+                  "en": "Seat FR off",
+                  "no": "Sete FH av",
+                  "nl": "Stoel RV uit"
+                }
+              },
+              {
+                "id": "2",
+                "label": {
+                  "en": "Seat FR L1",
+                  "no": "Sete FH N1",
+                  "nl": "Stoel RV N1"
+                }
+              },
+              {
+                "id": "3",
+                "label": {
+                  "en": "Seat FR L2",
+                  "no": "Sete FH N2",
+                  "nl": "Stoel RV N2"
+                }
+              },
+              {
+                "id": "4",
+                "label": {
+                  "en": "Seat FR L3",
+                  "no": "Sete FH N3",
+                  "nl": "Stoel RV N3"
+                }
+              }
+            ]
+          },
+          {
+            "type": "dropdown",
+            "name": "seat_rl",
+            "values": [
+              {
+                "id": "1",
+                "label": {
+                  "en": "Seat RL off",
+                  "no": "Sete BV av",
+                  "nl": "Stoel LA uit"
+                }
+              },
+              {
+                "id": "2",
+                "label": {
+                  "en": "Seat RL L1",
+                  "no": "Sete BV N1",
+                  "nl": "Stoel LA N1"
+                }
+              },
+              {
+                "id": "3",
+                "label": {
+                  "en": "Seat RL L2",
+                  "no": "Sete BV N2",
+                  "nl": "Stoel LA N2"
+                }
+              },
+              {
+                "id": "4",
+                "label": {
+                  "en": "Seat RL L3",
+                  "no": "Sete BV N3",
+                  "nl": "Stoel LA N3"
+                }
+              }
+            ]
+          },
+          {
+            "type": "dropdown",
+            "name": "seat_rr",
+            "values": [
+              {
+                "id": "1",
+                "label": {
+                  "en": "Seat RR off",
+                  "no": "Sete BH av",
+                  "nl": "Stoel RA uit"
+                }
+              },
+              {
+                "id": "2",
+                "label": {
+                  "en": "Seat RR L1",
+                  "no": "Sete BH N1",
+                  "nl": "Stoel RA N1"
+                }
+              },
+              {
+                "id": "3",
+                "label": {
+                  "en": "Seat RR L2",
+                  "no": "Sete BH N2",
+                  "nl": "Stoel RA N2"
+                }
+              },
+              {
+                "id": "4",
+                "label": {
+                  "en": "Seat RR L3",
+                  "no": "Sete BH N3",
+                  "nl": "Stoel RA N3"
+                }
+              }
+            ]
+          },
+          {
+            "type": "dropdown",
+            "name": "wheel",
+            "values": [
+              {
+                "id": "1",
+                "label": {
+                  "en": "Steering off",
+                  "no": "Ratt av",
+                  "nl": "Stuur uit"
+                }
+              },
+              {
+                "id": "2",
+                "label": {
+                  "en": "Steering L1",
+                  "no": "Ratt N1",
+                  "nl": "Stuur N1"
+                }
+              },
+              {
+                "id": "3",
+                "label": {
+                  "en": "Steering L2",
+                  "no": "Ratt N2",
+                  "nl": "Stuur N2"
+                }
+              },
+              {
+                "id": "4",
+                "label": {
+                  "en": "Steering L3",
+                  "no": "Ratt N3",
+                  "nl": "Stuur N3"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "climate_stop",
+        "title": {
+          "en": "Stop climate",
+          "no": "Stopp klima",
+          "nl": "Climate stoppen"
+        },
+        "titleFormatted": {
+          "en": "Stop climate",
+          "no": "Stopp klima",
+          "nl": "Climate stoppen"
+        },
+        "hint": {
+          "en": "Stop any running parking climatization session.",
+          "no": "Stopp pågående klimasesjon.",
+          "nl": "Stop een lopende climate-sessie."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "windows_open",
+        "title": {
+          "en": "Open all windows",
+          "no": "Åpne alle vinduer",
+          "nl": "Alle ramen openen"
+        },
+        "titleFormatted": {
+          "en": "Open all windows",
+          "no": "Åpne alle vinduer",
+          "nl": "Alle ramen openen"
+        },
+        "hint": {
+          "en": "Open all four side windows — e.g. to vent a hot cabin.",
+          "no": "Åpne alle fire sidevinduer.",
+          "nl": "Open alle vier zijramen — bv. om een hete cabine te luchten."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "windows_close",
+        "title": {
+          "en": "Close all windows",
+          "no": "Lukk alle vinduer",
+          "nl": "Alle ramen sluiten"
+        },
+        "titleFormatted": {
+          "en": "Close all windows",
+          "no": "Lukk alle vinduer",
+          "nl": "Alle ramen sluiten"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "get_location",
+        "title": {
+          "en": "Get location",
+          "no": "Hent plassering",
+          "nl": "Locatie ophalen"
+        },
+        "titleFormatted": {
+          "en": "Get location",
+          "no": "Hent plassering",
+          "nl": "Locatie ophalen"
+        },
+        "hint": {
+          "en": "Fetches the last known position and exposes latitude, longitude, and a formatted location string as tokens for subsequent flow cards (e.g. push notifications with a map link).",
+          "no": "Henter siste kjente posisjon og eksponerer breddegrad, lengdegrad og en formatert tekststreng som tokens.",
+          "nl": "Haalt de laatst bekende positie op en levert breedtegraad, lengtegraad en een geformatteerde tekststring als tokens voor volgende flow-cards (bv. push met kaart-link)."
+        },
+        "tokens": [
+          {
+            "name": "latitude",
+            "type": "number",
+            "title": {
+              "en": "Latitude",
+              "no": "Breddegrad",
+              "nl": "Breedtegraad"
+            }
+          },
+          {
+            "name": "longitude",
+            "type": "number",
+            "title": {
+              "en": "Longitude",
+              "no": "Lengdegrad",
+              "nl": "Lengtegraad"
+            }
+          },
+          {
+            "name": "location",
+            "type": "string",
+            "title": {
+              "en": "Location",
+              "no": "Plassering",
+              "nl": "Locatie"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
           }
         ]
       },
@@ -1080,11 +1576,17 @@
         "target_polestarAmpLimit",
         "button.charge_start",
         "button.charge_stop",
+        "button.honk_flash",
+        "button.unlock_trunk",
         "locked",
         "onoff.climate",
         "target_temperature",
         "measure_temperature",
         "measure_polestarClimateRemaining",
+        "measure_polestarLocation",
+        "alarm_polestarOtaAvailable",
+        "measure_polestarOtaState",
+        "measure_polestarOtaVersion",
         "alarm_contact.door_front_left",
         "alarm_contact.door_front_right",
         "alarm_contact.door_rear_left",
@@ -1129,6 +1631,30 @@
             "en": "Cancel the charge-now override.",
             "no": "Avbryt lad-nå-overstyringen.",
             "nl": "Heft de lad-nu-override op."
+          }
+        },
+        "button.honk_flash": {
+          "title": {
+            "en": "Honk and flash",
+            "no": "Tut og blink",
+            "nl": "Toeter en knipper"
+          },
+          "desc": {
+            "en": "Find the car — honk horn and flash lights.",
+            "no": "Finn bilen — tut og blink med lysene.",
+            "nl": "Vind de auto — toeteren en lichten knipperen."
+          }
+        },
+        "button.unlock_trunk": {
+          "title": {
+            "en": "Unlock trunk",
+            "no": "Lås opp bagasjerom",
+            "nl": "Kofferbak ontgrendelen"
+          },
+          "desc": {
+            "en": "Unlock only the trunk, leaving the cabin locked.",
+            "no": "Lås opp kun bagasjerommet.",
+            "nl": "Ontgrendel alleen de kofferbak; het interieur blijft vergrendeld."
           }
         },
         "measure_pressure.front_left": {
@@ -1180,33 +1706,30 @@
           "insights": true
         },
         "locked": {
-          "setable": false,
           "title": {
             "en": "Locked",
             "no": "Låst",
             "nl": "Vergrendeld"
           },
           "desc": {
-            "en": "Central-lock status. Read-only until lock/unlock control is added.",
-            "no": "Status for sentrallås. Skrivebeskyttet inntil lås/lås-opp-kontroll er lagt til.",
-            "nl": "Centrale-vergrendelingsstatus. Alleen-lezen totdat vergrendel/ontgrendel-bediening is toegevoegd."
+            "en": "Central-lock state. Toggle to lock/unlock the car.",
+            "no": "Status for sentrallås. Trykk for å låse / låse opp bilen.",
+            "nl": "Centrale-vergrendelingsstatus. Schakel om de auto te vergrendelen of ontgrendelen."
           }
         },
         "onoff.climate": {
-          "setable": false,
           "title": {
             "en": "Climate",
             "no": "Klima",
             "nl": "Klimaat"
           },
           "desc": {
-            "en": "Parking climatization running state. Read-only until climate start/stop is added.",
-            "no": "Status for klimaanlegg. Skrivebeskyttet inntil klima start/stopp er lagt til.",
-            "nl": "Status van parkeer-klimaatregeling. Alleen-lezen totdat climate start/stop is toegevoegd."
+            "en": "Start or stop parking climatization. Uses the heating settings from device settings.",
+            "no": "Start eller stopp klimaanlegg. Bruker oppvarmingsinnstillinger fra enhetsinnstillinger.",
+            "nl": "Start of stop de parkeer-klimaatregeling. Gebruikt de verwarmingsinstellingen uit de device-settings."
           }
         },
         "target_temperature": {
-          "setable": false,
           "min": 16,
           "max": 30,
           "step": 0.5,
@@ -1217,9 +1740,9 @@
             "nl": "Klimaatdoel"
           },
           "desc": {
-            "en": "Target temperature from the last climate request. Editable once climate start is added.",
-            "no": "Måltemperatur fra siste klimabestilling. Redigerbar når klimastart legges til.",
-            "nl": "Doeltemperatuur van het laatste climate-verzoek. Bewerkbaar zodra climate-start is toegevoegd."
+            "en": "Desired climatization temperature. Used as default when starting climate from the toggle.",
+            "no": "Ønsket klimatemperatur. Brukes som standard ved start via klima-bryteren.",
+            "nl": "Gewenste klimaattemperatuur. Wordt als default gebruikt bij het aanzetten via de climate-toggle."
           }
         },
         "measure_temperature": {
@@ -1390,6 +1913,217 @@
               }
             }
           ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Climate defaults",
+            "no": "Klima-standarder",
+            "nl": "Climate standaardinstellingen"
+          },
+          "children": [
+            {
+              "id": "climate_default_temp",
+              "type": "number",
+              "label": {
+                "en": "Default temperature",
+                "no": "Standard temperatur",
+                "nl": "Standaard temperatuur"
+              },
+              "value": 21,
+              "min": 16,
+              "max": 30,
+              "step": 0.5,
+              "units": {
+                "en": "°C"
+              },
+              "hint": {
+                "en": "Used when climate is started via the toggle, button, or onoff capability. The separate 'Climate target' tile overrides this for the next start.",
+                "no": "Brukes når klima startes via bryter, knapp eller onoff. 'Klima-mål'-flisen overstyrer dette ved neste start.",
+                "nl": "Gebruikt wanneer climate via de toggle, knop of onoff-capability wordt gestart. De 'Klimaatdoel'-tile overschrijft dit voor de eerstvolgende start."
+              }
+            },
+            {
+              "id": "climate_seat_front_left",
+              "type": "dropdown",
+              "label": {
+                "en": "Front left seat heating",
+                "no": "Setevarme forran venstre",
+                "nl": "Zitverwarming linksvoor"
+              },
+              "value": "1",
+              "values": [
+                {
+                  "id": "1",
+                  "label": {
+                    "en": "Off"
+                  }
+                },
+                {
+                  "id": "2",
+                  "label": {
+                    "en": "Level 1"
+                  }
+                },
+                {
+                  "id": "3",
+                  "label": {
+                    "en": "Level 2"
+                  }
+                },
+                {
+                  "id": "4",
+                  "label": {
+                    "en": "Level 3"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "climate_seat_front_right",
+              "type": "dropdown",
+              "label": {
+                "en": "Front right seat heating",
+                "no": "Setevarme forran høyre",
+                "nl": "Zitverwarming rechtsvoor"
+              },
+              "value": "1",
+              "values": [
+                {
+                  "id": "1",
+                  "label": {
+                    "en": "Off"
+                  }
+                },
+                {
+                  "id": "2",
+                  "label": {
+                    "en": "Level 1"
+                  }
+                },
+                {
+                  "id": "3",
+                  "label": {
+                    "en": "Level 2"
+                  }
+                },
+                {
+                  "id": "4",
+                  "label": {
+                    "en": "Level 3"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "climate_seat_rear_left",
+              "type": "dropdown",
+              "label": {
+                "en": "Rear left seat heating",
+                "no": "Setevarme bak venstre",
+                "nl": "Zitverwarming linksachter"
+              },
+              "value": "1",
+              "values": [
+                {
+                  "id": "1",
+                  "label": {
+                    "en": "Off"
+                  }
+                },
+                {
+                  "id": "2",
+                  "label": {
+                    "en": "Level 1"
+                  }
+                },
+                {
+                  "id": "3",
+                  "label": {
+                    "en": "Level 2"
+                  }
+                },
+                {
+                  "id": "4",
+                  "label": {
+                    "en": "Level 3"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "climate_seat_rear_right",
+              "type": "dropdown",
+              "label": {
+                "en": "Rear right seat heating",
+                "no": "Setevarme bak høyre",
+                "nl": "Zitverwarming rechtsachter"
+              },
+              "value": "1",
+              "values": [
+                {
+                  "id": "1",
+                  "label": {
+                    "en": "Off"
+                  }
+                },
+                {
+                  "id": "2",
+                  "label": {
+                    "en": "Level 1"
+                  }
+                },
+                {
+                  "id": "3",
+                  "label": {
+                    "en": "Level 2"
+                  }
+                },
+                {
+                  "id": "4",
+                  "label": {
+                    "en": "Level 3"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "climate_steering_wheel",
+              "type": "dropdown",
+              "label": {
+                "en": "Steering wheel heating",
+                "no": "Rattvarme",
+                "nl": "Stuurwielverwarming"
+              },
+              "value": "1",
+              "values": [
+                {
+                  "id": "1",
+                  "label": {
+                    "en": "Off"
+                  }
+                },
+                {
+                  "id": "2",
+                  "label": {
+                    "en": "Level 1"
+                  }
+                },
+                {
+                  "id": "3",
+                  "label": {
+                    "en": "Level 2"
+                  }
+                },
+                {
+                  "id": "4",
+                  "label": {
+                    "en": "Level 3"
+                  }
+                }
+              ]
+            }
+          ]
         }
       ]
     }
@@ -1424,6 +2158,18 @@
     }
   },
   "capabilities": {
+    "alarm_polestarOtaAvailable": {
+      "type": "boolean",
+      "uiComponent": "sensor",
+      "title": {
+        "en": "Software update available",
+        "no": "Programvareoppdatering tilgjengelig",
+        "nl": "Software-update beschikbaar"
+      },
+      "getable": true,
+      "setable": false,
+      "insights": true
+    },
     "alarm_polestarTyrePressure": {
       "type": "boolean",
       "uiComponent": "sensor",
@@ -1630,6 +2376,31 @@
         "en": "KM"
       }
     },
+    "measure_polestarOtaState": {
+      "type": "string",
+      "uiComponent": "sensor",
+      "icon": "/drivers/polestar-2-csv/assets/images/update.svg",
+      "title": {
+        "en": "OTA state",
+        "no": "OTA-status",
+        "nl": "OTA-status"
+      },
+      "getable": true,
+      "setable": false,
+      "insights": false
+    },
+    "measure_polestarOtaVersion": {
+      "type": "string",
+      "uiComponent": "sensor",
+      "title": {
+        "en": "New software version",
+        "no": "Ny programvareversjon",
+        "nl": "Nieuwe softwareversie"
+      },
+      "getable": true,
+      "setable": false,
+      "insights": false
+    },
     "measure_polestarPower": {
       "id": "measure_polestarPower",
       "type": "number",
@@ -1703,66 +2474,6 @@
       "getable": true,
       "setable": false,
       "insights": true
-    },
-    "measure_polestarTyrePressureFL": {
-      "_deprecated": "Replaced by measure_pressure.front_left. Kept only so existing devices can migrate cleanly via removeCapability. Remove this file in a future release once migration window closes.",
-      "type": "number",
-      "uiComponent": "sensor",
-      "title": {
-        "en": "Tyre pressure FL (legacy)",
-        "no": "Dekktrykk FV (legacy)",
-        "nl": "Bandenspanning LV (legacy)"
-      },
-      "units": "kPa",
-      "decimals": 0,
-      "getable": true,
-      "setable": false,
-      "insights": false
-    },
-    "measure_polestarTyrePressureFR": {
-      "_deprecated": "Replaced by measure_pressure.front_right. Kept only so existing devices can migrate cleanly via removeCapability. Remove this file in a future release once migration window closes.",
-      "type": "number",
-      "uiComponent": "sensor",
-      "title": {
-        "en": "Tyre pressure FR (legacy)",
-        "no": "Dekktrykk FH (legacy)",
-        "nl": "Bandenspanning RV (legacy)"
-      },
-      "units": "kPa",
-      "decimals": 0,
-      "getable": true,
-      "setable": false,
-      "insights": false
-    },
-    "measure_polestarTyrePressureRL": {
-      "_deprecated": "Replaced by measure_pressure.rear_left. Kept only so existing devices can migrate cleanly via removeCapability. Remove this file in a future release once migration window closes.",
-      "type": "number",
-      "uiComponent": "sensor",
-      "title": {
-        "en": "Tyre pressure RL (legacy)",
-        "no": "Dekktrykk BV (legacy)",
-        "nl": "Bandenspanning LA (legacy)"
-      },
-      "units": "kPa",
-      "decimals": 0,
-      "getable": true,
-      "setable": false,
-      "insights": false
-    },
-    "measure_polestarTyrePressureRR": {
-      "_deprecated": "Replaced by measure_pressure.rear_right. Kept only so existing devices can migrate cleanly via removeCapability. Remove this file in a future release once migration window closes.",
-      "type": "number",
-      "uiComponent": "sensor",
-      "title": {
-        "en": "Tyre pressure RR (legacy)",
-        "no": "Dekktrykk BH (legacy)",
-        "nl": "Bandenspanning RA (legacy)"
-      },
-      "units": "kPa",
-      "decimals": 0,
-      "getable": true,
-      "setable": false,
-      "insights": false
     },
     "measure_polestarUpdated": {
       "type": "string",
