@@ -1,7 +1,7 @@
 {
     "type": "number",
     "uiComponent": "slider",
-    "icon": "/drivers/polestar-2-csv/assets/images/charging.svg",
+    "icon": "/drivers/vehicle/assets/charging.svg",
     "title": {
         "en": "Charging amp limit",
         "no": "Amperegrense ved lading",

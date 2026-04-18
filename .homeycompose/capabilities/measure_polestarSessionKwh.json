@@ -1,7 +1,7 @@
 {
     "type": "number",
     "uiComponent": "sensor",
-    "icon": "/drivers/polestar-2-csv/assets/images/charging.svg",
+    "icon": "/drivers/vehicle/assets/charging.svg",
     "title": {
         "en": "Session charge",
         "no": "Øktens lading",

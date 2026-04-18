@@ -1,6 +1,7 @@
 {
     "type": "boolean",
     "uiComponent": "sensor",
+    "icon": "/drivers/vehicle/assets/tire-pressure.svg",
     "title": {
         "en": "Tyre pressure warning",
         "no": "Dekktrykk-varsel",

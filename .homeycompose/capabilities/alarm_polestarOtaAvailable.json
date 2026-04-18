@@ -1,6 +1,7 @@
 {
     "type": "boolean",
     "uiComponent": "sensor",
+    "icon": "/drivers/vehicle/assets/update.svg",
     "title": {
         "en": "Software update available",
         "no": "Programvareoppdatering tilgjengelig",

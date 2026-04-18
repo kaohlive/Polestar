@@ -1,7 +1,7 @@
 {
     "type": "number",
     "uiComponent": "sensor",
-    "icon": "/drivers/polestar-2-csv/assets/images/update.svg",
+    "icon": "/drivers/vehicle/assets/update.svg",
     "title": {
         "en": "Climate time remaining",
         "no": "Klima-tid igjen",

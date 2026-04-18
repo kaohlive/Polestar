@@ -1,7 +1,7 @@
 {
     "type": "number",
     "uiComponent": "sensor",
-    "icon": "/drivers/polestar-2-csv/assets/images/hvbattery.svg",
+    "icon": "/drivers/vehicle/assets/hvbattery.svg",
     "title": {
         "en": "Driving energy (total)",
         "no": "Kjøreenergi (totalt)",

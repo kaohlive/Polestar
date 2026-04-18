@@ -151,5 +151,8 @@
   },
   "2.7.8": {
     "en": "Rounding and stability improvements"
+  },
+  "3.0.0": {
+    "en": "Migrate vehicle driver to Polestar C3 gRPC backend"
   }
 }
