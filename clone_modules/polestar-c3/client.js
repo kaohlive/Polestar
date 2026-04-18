@@ -10,16 +10,24 @@ const {
     GetBatteryResponseSchema,
     GetOdometerResponseSchema,
     GetHealthResponseSchema,
+    GetExteriorResponseSchema,
+    GetClimateResponseSchema,
     ChargingStatus,
     ChargerConnectionStatus,
     ChargingType,
     ServiceWarning,
     TyrePressureWarning,
+    OpenStatus,
+    LockStatus,
+    ClimatizationRunningStatus,
+    ClimatizationRequestType,
 } = require('./messages');
 
 const SVC_BATTERY = '/services.vehiclestates.battery.BatteryService';
 const SVC_ODOMETER = '/services.vehiclestates.odometer.OdometerService';
 const SVC_HEALTH = '/services.vehiclestates.health.HealthService';
+const SVC_EXTERIOR = '/services.vehiclestates.exterior.ExteriorService';
+const SVC_CLIMATE = '/services.vehiclestates.parkingclimatization.ParkingClimatizationService';
 const SVC_CHARGE_NOW = '/chronos.services.v1.ChargeNowService';
 const SVC_TARGET_SOC = '/chronos.services.v1.TargetSocService';
 const SVC_AMP_LIMIT = '/chronos.services.v1.AmpLimitService';
@@ -143,6 +151,35 @@ class PolestarC3 {
                 const key = `${side}_tyre_pressure_warning`;
                 decoded.health[`${key}_label`] = TyrePressureWarning[decoded.health[key]] || null;
             }
+        }
+        return decoded;
+    }
+
+    async getLatestExterior({ debug = false } = {}) {
+        const req = this._vehicleRequestBytes();
+        const respBytes = await this._call(`${SVC_EXTERIOR}/GetLatestExterior`, req, { debug });
+        const decoded = codec.decode(GetExteriorResponseSchema, respBytes);
+        if (decoded.exterior) {
+            const e = decoded.exterior;
+            e.central_lock_label = LockStatus[e.central_lock] || null;
+            e.tailgate_lock_label = LockStatus[e.tailgate_lock] || null;
+            for (const key of ['door_front_left', 'door_front_right', 'door_rear_left', 'door_rear_right',
+                               'window_front_left', 'window_front_right', 'window_rear_left', 'window_rear_right',
+                               'hood', 'tailgate', 'tank_lid', 'sunroof']) {
+                e[`${key}_label`] = OpenStatus[e[key]] || null;
+            }
+        }
+        return decoded;
+    }
+
+    async getLatestClimate({ debug = false } = {}) {
+        const req = this._vehicleRequestBytes();
+        const respBytes = await this._call(`${SVC_CLIMATE}/GetLatestParkingClimatization`, req, { debug });
+        const decoded = codec.decode(GetClimateResponseSchema, respBytes);
+        if (decoded.climate) {
+            const c = decoded.climate;
+            c.running_status_label = ClimatizationRunningStatus[c.running_status] || null;
+            c.request_type_label = ClimatizationRequestType[c.request_type] || null;
         }
         return decoded;
     }

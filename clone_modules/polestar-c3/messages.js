@@ -133,6 +133,78 @@ const TyrePressureWarning = {
     4: 'HIGH_PRESSURE',
 };
 
+// -- Exterior (DigitalTwin flat-field format) --
+// Polestar 4 uses the flat-field variant: each closure has a single int at
+// its own field number. 0=UNSPEC, 1=OPEN/UNLOCKED, 2=CLOSED/LOCKED, 3=AJAR.
+
+const OpenStatus = {
+    0: 'UNSPECIFIED',
+    1: 'OPEN',
+    2: 'CLOSED',
+    3: 'AJAR',
+};
+
+const LockStatus = {
+    0: 'UNSPECIFIED',
+    1: 'UNLOCKED',
+    2: 'LOCKED',
+};
+
+const ExteriorDigitalTwinSchema = {
+    central_lock: { num: 2, type: 'int32' },
+    door_front_left:  { num: 3, type: 'int32' },
+    door_front_right: { num: 4, type: 'int32' },
+    door_rear_left:   { num: 5, type: 'int32' },
+    door_rear_right:  { num: 6, type: 'int32' },
+    window_front_left:  { num: 7, type: 'int32' },
+    window_front_right: { num: 8, type: 'int32' },
+    window_rear_left:   { num: 9, type: 'int32' },
+    window_rear_right:  { num: 10, type: 'int32' },
+    hood: { num: 11, type: 'int32' },
+    tailgate: { num: 12, type: 'int32' },
+    tank_lid: { num: 13, type: 'int32' },
+    sunroof: { num: 14, type: 'int32' },
+    tailgate_lock: { num: 16, type: 'int32' },
+};
+
+const GetExteriorResponseSchema = {
+    id: { num: 1, type: 'string' },
+    vin: { num: 2, type: 'string' },
+    exterior: { num: 3, type: 'message', schema: ExteriorDigitalTwinSchema },
+};
+
+// -- Climate / parking climatization (DigitalTwin flat-field format) --
+
+const ClimatizationRunningStatus = {
+    0: 'UNDEFINED',
+    1: 'ACTIVE',           // DT code 1 == Active
+    2: 'IDLE',             // DT code 2 == Idle
+    3: 'START_ATTEMPT',    // DT code 3 == StartAttempt
+};
+
+const ClimatizationRequestType = {
+    0: 'UNDEFINED',
+    1: 'NOW_FROM_HMI',
+    2: 'NOW_FROM_REMOTE',
+    3: 'TIMER',
+    4: 'NO_REQUEST',
+};
+
+const ClimateDigitalTwinSchema = {
+    running_status:    { num: 2, type: 'int32' },   // DT-mapped enum
+    time_remaining:    { num: 3, type: 'int32' },   // minutes (max ~30 for parking climatization)
+    ventilation_only:  { num: 6, type: 'int32' },   // truthy = VENTILATION_ONLY action
+    current_temp:      { num: 7, type: 'float' },   // °C (wire FIXED32, decoded as float)
+    requested_temp:    { num: 8, type: 'float' },   // target °C (wire FIXED32)
+    request_type:      { num: 15, type: 'int32' },
+};
+
+const GetClimateResponseSchema = {
+    id: { num: 1, type: 'string' },
+    vin: { num: 2, type: 'string' },
+    climate: { num: 3, type: 'message', schema: ClimateDigitalTwinSchema },
+};
+
 module.exports = {
     TimestampSchema,
     VehicleRequestSchema,
@@ -142,9 +214,17 @@ module.exports = {
     GetOdometerResponseSchema,
     HealthSchema,
     GetHealthResponseSchema,
+    ExteriorDigitalTwinSchema,
+    GetExteriorResponseSchema,
+    ClimateDigitalTwinSchema,
+    GetClimateResponseSchema,
     ChargingStatus,
     ChargerConnectionStatus,
     ChargingType,
     ServiceWarning,
     TyrePressureWarning,
+    OpenStatus,
+    LockStatus,
+    ClimatizationRunningStatus,
+    ClimatizationRequestType,
 };

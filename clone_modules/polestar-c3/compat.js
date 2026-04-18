@@ -144,6 +144,53 @@ class PolestarCompat {
         };
     }
 
+    async getExterior() {
+        const resp = await this._client.getLatestExterior();
+        const e = resp.exterior;
+        if (!e) return null;
+        const isOpen = (v) => v === 1 || v === 3; // OPEN or AJAR
+        return {
+            isLocked: e.central_lock_label === 'LOCKED',
+            lockStatusLabel: e.central_lock_label,
+            doors: {
+                frontLeftOpen:  isOpen(e.door_front_left),
+                frontRightOpen: isOpen(e.door_front_right),
+                rearLeftOpen:   isOpen(e.door_rear_left),
+                rearRightOpen:  isOpen(e.door_rear_right),
+            },
+            windows: {
+                frontLeftOpen:  isOpen(e.window_front_left),
+                frontRightOpen: isOpen(e.window_front_right),
+                rearLeftOpen:   isOpen(e.window_rear_left),
+                rearRightOpen:  isOpen(e.window_rear_right),
+                anyOpen: [e.window_front_left, e.window_front_right, e.window_rear_left, e.window_rear_right].some(isOpen),
+            },
+            hoodOpen: isOpen(e.hood),
+            tailgateOpen: isOpen(e.tailgate),
+            tankLidOpen: isOpen(e.tank_lid),
+            sunroofOpen: isOpen(e.sunroof),
+            anyDoorOpen: [e.door_front_left, e.door_front_right, e.door_rear_left, e.door_rear_right].some(isOpen),
+        };
+    }
+
+    async getClimate() {
+        const resp = await this._client.getLatestClimate();
+        const c = resp.climate;
+        if (!c) return null;
+        const active = c.running_status_label === 'ACTIVE';
+        // Temperatures are raw ints; Polestar typically uses tenths-of-celsius,
+        // but we don't divide here — device.js decides based on plausibility.
+        return {
+            isActive: active,
+            runningStatusLabel: c.running_status_label,
+            requestTypeLabel: c.request_type_label,
+            timeRemainingMinutes: c.time_remaining || 0,
+            ventilationOnly: !!c.ventilation_only,
+            currentTempRaw: c.current_temp,
+            requestedTempRaw: c.requested_temp,
+        };
+    }
+
     // --- Write commands (C3-only; legacy client does not implement these) ---
 
     chargeStart() { return this._client.chargeStart(); }

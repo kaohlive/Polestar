@@ -232,6 +232,26 @@ class PolestarVehicle extends Device {
         if (!this.hasCapability('button.charge_stop'))
             await this.addCapability('button.charge_stop');
 
+        // Exterior + climate states (read-only now, future-setable via capabilitiesOptions).
+        for (const cap of [
+            'locked',
+            'onoff.climate',
+            'target_temperature',
+            'measure_temperature',
+            'measure_polestarClimateRemaining',
+            'alarm_contact.door_front_left',
+            'alarm_contact.door_front_right',
+            'alarm_contact.door_rear_left',
+            'alarm_contact.door_rear_right',
+            'alarm_contact.window_any',
+            'alarm_contact.tailgate',
+            'alarm_contact.hood',
+            'alarm_contact.sunroof',
+            'alarm_contact.tank_lid',
+        ]) {
+            if (!this.hasCapability(cap)) await this.addCapability(cap);
+        }
+
         // Migrate legacy custom tyre capabilities → standard measure_pressure with sub-IDs.
         for (const legacy of [
             'measure_polestarTyrePressureFL',
@@ -457,8 +477,77 @@ class PolestarVehicle extends Device {
         // server-streaming frame (cheap) and catches changes the user makes in the Polestar
         // app / in-car menu within the 60 s window instead of the 15-min slow cycle.
         await this.refreshChargeLimit();
+        await this.updateExteriorState();
+        await this.updateClimateState();
 
         this.homey.api.realtime('updatevehicle');
+    }
+
+    async updateExteriorState() {
+        if (!this.polestar || typeof this.polestar.getExterior !== 'function') return;
+        try {
+            const ext = await this.polestar.getExterior();
+            if (!ext) return;
+            this.homey.app.log('Exterior:', this.name, 'DEBUG', ext);
+
+            if (typeof ext.isLocked === 'boolean') {
+                await this.setCapabilityValue('locked', ext.isLocked);
+            }
+            await this.setCapabilityValue('alarm_contact.door_front_left',  !!ext.doors.frontLeftOpen);
+            await this.setCapabilityValue('alarm_contact.door_front_right', !!ext.doors.frontRightOpen);
+            await this.setCapabilityValue('alarm_contact.door_rear_left',   !!ext.doors.rearLeftOpen);
+            await this.setCapabilityValue('alarm_contact.door_rear_right',  !!ext.doors.rearRightOpen);
+            await this.setCapabilityValue('alarm_contact.window_any', !!ext.windows.anyOpen);
+            await this.setCapabilityValue('alarm_contact.tailgate',   !!ext.tailgateOpen);
+            await this.setCapabilityValue('alarm_contact.hood',       !!ext.hoodOpen);
+            await this.setCapabilityValue('alarm_contact.sunroof',    !!ext.sunroofOpen);
+            await this.setCapabilityValue('alarm_contact.tank_lid',   !!ext.tankLidOpen);
+        } catch (err) {
+            if (err.message === 'Not logged in') {
+                await this.attemptReLogin();
+                return;
+            }
+            this.homey.app.log('Failed to retrieve exterior state', this.name, 'ERROR', err);
+        }
+    }
+
+    async updateClimateState() {
+        if (!this.polestar || typeof this.polestar.getClimate !== 'function') return;
+        try {
+            const cl = await this.polestar.getClimate();
+            if (!cl) return;
+            this.homey.app.log('Climate:', this.name, 'DEBUG', cl);
+
+            await this.setCapabilityValue('onoff.climate', !!cl.isActive);
+            // Polestar often encodes temps in tenths of °C. Heuristic: if the raw number
+            // is clearly out of human range (<45 assumed to be whole °C, otherwise /10).
+            const normalizeTemp = (raw) => {
+                if (!Number.isFinite(raw) || raw <= 0) return null;
+                return raw <= 45 ? raw : raw / 10;
+            };
+            const target = normalizeTemp(cl.requestedTempRaw);
+            const current = normalizeTemp(cl.currentTempRaw);
+            if (target !== null) await this.setCapabilityValue('target_temperature', target);
+            if (current !== null) await this.setCapabilityValue('measure_temperature', current);
+
+            // Climate remaining minutes: only meaningful while ACTIVE; show null otherwise so
+            // the tile reads "—" rather than claiming 30 min forever when idle.
+            if (cl.isActive && Number.isFinite(cl.timeRemainingMinutes) && cl.timeRemainingMinutes > 0) {
+                await this.setCapabilityValue('measure_polestarClimateRemaining', cl.timeRemainingMinutes);
+            } else {
+                await this.setCapabilityValue('measure_polestarClimateRemaining', null);
+            }
+        } catch (err) {
+            if (err.message === 'Not logged in') {
+                await this.attemptReLogin();
+                return;
+            }
+            if (isUnimplementedError(err)) {
+                // Some models might not support parking climatization — silent handle.
+                return;
+            }
+            this.homey.app.log('Failed to retrieve climate state', this.name, 'ERROR', err);
+        }
     }
 
     /**

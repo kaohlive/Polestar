@@ -61,15 +61,19 @@ async function main() {
     };
 
     try {
-        await step('[4/8] BatteryService/GetLatestBattery (unary)…',
+        await step('[4/10] BatteryService/GetLatestBattery (unary)…',
             () => client.getLatestBattery({ debug }));
-        await step('[5/8] OdometerService/GetOdometer (server-stream, first frame)…',
+        await step('[5/10] OdometerService/GetOdometer (server-stream, first frame)…',
             () => client.getLatestOdometer({ debug }));
-        await step('[6/8] HealthService/GetHealth (server-stream, first frame)…',
+        await step('[6/10] HealthService/GetHealth (server-stream, first frame)…',
             () => client.getLatestHealth({ debug }));
-        await step('[7/8] TargetSocService/GetTargetSoc (chronos read)…',
+        await step('[7/10] ExteriorService/GetLatestExterior (unary)…',
+            () => client.getLatestExterior({ debug }));
+        await step('[8/10] ParkingClimatizationService/GetLatestParkingClimatization (unary)…',
+            () => client.getLatestClimate({ debug }));
+        await step('[9/10] TargetSocService/GetTargetSoc (chronos read)…',
             async () => ({ target_level_pct: await client.getTargetSoc({ debug }) }));
-        await step('[8/8] AmpLimitService/GetAmpLimit (chronos read)…',
+        await step('[10/10] AmpLimitService/GetAmpLimit (chronos read)…',
             async () => ({ amperage_limit: await client.getAmpLimit({ debug }) }));
     } finally {
         client.close();

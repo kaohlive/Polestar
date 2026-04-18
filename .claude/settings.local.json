@@ -1,9 +1,35 @@
 {
   "permissions": {
     "allow": [
-      "Bash(node -e:*)"
+      "Bash(node -e:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl -sSL https://raw.githubusercontent.com/kildahldev/unofficial-polestar-api/main/src/polestar_api/models/battery.py)",
+      "Bash(curl -sSL https://raw.githubusercontent.com/kildahldev/unofficial-polestar-api/main/src/polestar_api/models/common.py)",
+      "Bash(curl -sSL https://raw.githubusercontent.com/kildahldev/unofficial-polestar-api/main/src/polestar_api/codec.py)",
+      "Bash(curl -sSL https://raw.githubusercontent.com/kildahldev/unofficial-polestar-api/main/src/polestar_api/wire.py)",
+      "Bash(curl -sSL https://raw.githubusercontent.com/kildahldev/unofficial-polestar-api/main/src/polestar_api/connection.py)",
+      "Bash(curl -sSL https://raw.githubusercontent.com/kildahldev/unofficial-polestar-api/main/src/polestar_api/discovery.py)",
+      "Bash(curl -sSL https://raw.githubusercontent.com/kildahldev/unofficial-polestar-api/main/src/polestar_api/auth.py)",
+      "Bash(curl -sSL https://raw.githubusercontent.com/kildahldev/unofficial-polestar-api/main/src/polestar_api/models/odometer.py)",
+      "Bash(curl -sSL https://raw.githubusercontent.com/kildahldev/unofficial-polestar-api/main/src/polestar_api/models/health.py)",
+      "Bash(curl -sSL https://raw.githubusercontent.com/kildahldev/unofficial-polestar-api/main/src/polestar_api/services/odometer.py)",
+      "Bash(curl -sSL https://raw.githubusercontent.com/kildahldev/unofficial-polestar-api/main/src/polestar_api/services/health.py)",
+      "Bash(node --check drivers/vehicle/device.js)",
+      "Bash(node --check drivers/vehicle/driver.js)",
+      "Bash(curl -sSL https://raw.githubusercontent.com/kildahldev/unofficial-polestar-api/main/src/polestar_api/services/charging.py)",
+      "Bash(curl -sSL https://raw.githubusercontent.com/kildahldev/unofficial-polestar-api/main/src/polestar_api/services/target_soc.py)",
+      "Bash(curl -sSL https://raw.githubusercontent.com/kildahldev/unofficial-polestar-api/main/src/polestar_api/services/amp_limit.py)",
+      "Bash(curl -sSL https://raw.githubusercontent.com/kildahldev/unofficial-polestar-api/main/src/polestar_api/models/charging.py)",
+      "Bash(curl -sSL https://raw.githubusercontent.com/kildahldev/unofficial-polestar-api/main/src/polestar_api/services/chronos.py)",
+      "Bash(curl -sSL https://raw.githubusercontent.com/kildahldev/unofficial-polestar-api/main/src/polestar_api/services/charge_now.py)",
+      "Bash(curl -sSL https://raw.githubusercontent.com/kildahldev/unofficial-polestar-api/main/src/polestar_api/vehicle.py)",
+      "Bash(node --check clone_modules/polestar-c3/client.js)"
     ],
     "deny": [],
-    "ask": []
+    "ask": [],
+    "additionalDirectories": [
+      "c:\\source\\repos\\Polestar\\clone_modules"
+    ]
   }
 }
