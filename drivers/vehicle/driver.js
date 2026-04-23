@@ -34,6 +34,7 @@ class Vehicle extends Driver {
         this.homey.flow.getActionCard('unlock_trunk_action').registerRunListener(actionRun('unlockTrunkAction'));
         this.homey.flow.getActionCard('honk_flash').registerRunListener(actionRun('honkFlashAction'));
         this.homey.flow.getActionCard('climate_start').registerRunListener(actionRun('climateStartAction'));
+        this.homey.flow.getActionCard('climate_start_simple').registerRunListener(actionRun('climateStartSimpleAction'));
         this.homey.flow.getActionCard('climate_stop').registerRunListener(actionRun('climateStopAction'));
         this.homey.flow.getActionCard('windows_open').registerRunListener(actionRun('windowsOpenAction'));
         this.homey.flow.getActionCard('windows_close').registerRunListener(actionRun('windowsCloseAction'));

@@ -183,11 +183,11 @@
         },
         {
             "id": "honk_flash",
-            "title": { "en": "Honk and flash", "no": "Tut og blink", "nl": "Toeter en knipper" },
+            "title": { "en": "Find my car", "no": "Finn bilen", "nl": "Vind mijn auto" },
             "titleFormatted": {
-                "en": "[[action]]",
-                "no": "[[action]]",
-                "nl": "[[action]]"
+                "en": "Find my car — [[action]]",
+                "no": "Finn bilen — [[action]]",
+                "nl": "Vind mijn auto — [[action]]"
             },
             "hint": { "en": "Find-my-car: flash the lights, honk the horn, or both.",
                       "no": "Finn bilen: blink med lys, tut i hornet, eller begge.",
@@ -203,6 +203,14 @@
                     ]
                 }
             ]
+        },
+        {
+            "id": "climate_start_simple",
+            "title":          { "en": "Start climate (defaults)", "no": "Start klima (standard)", "nl": "Climate starten (standaard)" },
+            "titleFormatted": { "en": "Start climate (defaults)", "no": "Start klima (standard)", "nl": "Climate starten (standaard)" },
+            "hint": { "en": "Start parking climatization using the temperature and seat/steering defaults from device settings. Same behaviour as tapping the climate button in the Polestar app.",
+                      "no": "Start klima med standard temperatur og sete/ratt-instillinger fra enhetsinnstillinger.",
+                      "nl": "Start parkeer-climatisering met de standaard temperatuur en stoel/stuurwiel-instellingen uit device-settings." }
         },
         {
             "id": "climate_start",

@@ -160,5 +160,8 @@
   },
   "3.0.2": {
     "en": "Fix 'Device Not Found' errors when unpairing or restarting the app while a poll was in flight"
+  },
+  "3.0.3": {
+    "en": "Completed charge sessions now report 'Plugged in' instead of 'Paused'. Improved Find-my-car flow-card title. Added a 'Start climate (defaults)' flow action that mirrors the Polestar app's one-tap climate button."
   }
 }

@@ -489,8 +489,15 @@ class PolestarVehicle extends Device {
                     this.setCapabilityValue('ev_charging_state', isConnected ? 'plugged_in' : 'plugged_out');
                     this.setCapabilityValue('measure_vehicleChargeTimeRemaining', null);
                 break;
-                case 'CHARGING_STATUS_SCHEDULED':
                 case 'CHARGING_STATUS_DONE':
+                    // Target SoC reached — connector still in, no power flowing, no
+                    // resume queued. Homey's "plugged_in_paused" implies a deliberate
+                    // pause, which misrepresents a completed session.
+                    this.setCapabilityValue('measure_vehicleChargeState', false);
+                    this.setCapabilityValue('ev_charging_state', 'plugged_in');
+                    this.setCapabilityValue('measure_vehicleChargeTimeRemaining', null);
+                break;
+                case 'CHARGING_STATUS_SCHEDULED':
                 case 'CHARGING_STATUS_SMART_CHARGING':
                 case 'CHARGING_STATUS_SMART_CHARGING_PAUSED':
                     this.setCapabilityValue('measure_vehicleChargeState', false);
@@ -711,6 +718,13 @@ class PolestarVehicle extends Device {
             rearRightSeat:  parse(args.seat_rr),
             steeringWheel:  parse(args.wheel),
         };
+        const r = await this._invokeWrite('climateStart', () => this.polestar.climateStart(opts));
+        this._scheduleStateRefresh(['climate']);
+        return r;
+    }
+    /** Start climate using the defaults from device settings — mirrors the tile toggle. */
+    async climateStartSimpleAction() {
+        const opts = this._getClimateStartOptions();
         const r = await this._invokeWrite('climateStart', () => this.polestar.climateStart(opts));
         this._scheduleStateRefresh(['climate']);
         return r;
