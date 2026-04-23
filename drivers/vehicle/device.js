@@ -166,6 +166,7 @@ class PolestarVehicle extends Device {
     }
 
     async updateOtaState() {
+        if (this._destroyed) return;
         if (!this.polestar || typeof this.polestar.getOtaStatus !== 'function') return;
         try {
             const ota = await this.polestar.getOtaStatus();
@@ -184,6 +185,7 @@ class PolestarVehicle extends Device {
     }
 
     async updateLocationState() {
+        if (this._destroyed) return;
         if (!this.polestar || typeof this.polestar.getLocation !== 'function') return;
         try {
             const loc = await this.polestar.getLocation();
@@ -324,6 +326,7 @@ class PolestarVehicle extends Device {
     }
 
     async updateHealthState(){
+        if (this._destroyed) return;
         this.homey.app.log('Retrieve vehicle health', 'PolestarVehicle', 'DEBUG');
         try {
             var healthInfo = await this.polestar.getHealthData();
@@ -366,6 +369,7 @@ class PolestarVehicle extends Device {
     }
 
     async updateVehicleState() {
+        if (this._destroyed) return;
         this.homey.app.log('Retrieve device details', 'PolestarVehicle', 'DEBUG');
         try {
             var odometer = await this.polestar.getOdometer();
@@ -537,6 +541,7 @@ class PolestarVehicle extends Device {
     }
 
     async updateExteriorState() {
+        if (this._destroyed) return;
         if (!this.polestar || typeof this.polestar.getExterior !== 'function') return;
         try {
             const ext = await this.polestar.getExterior();
@@ -565,6 +570,7 @@ class PolestarVehicle extends Device {
     }
 
     async updateClimateState() {
+        if (this._destroyed) return;
         if (!this.polestar || typeof this.polestar.getClimate !== 'function') return;
         try {
             const cl = await this.polestar.getClimate();
@@ -739,6 +745,7 @@ class PolestarVehicle extends Device {
     _scheduleStateRefresh(kinds, { delays = [3000, 10000] } = {}) {
         for (const delay of delays) {
             this.homey.setTimeout(async () => {
+                if (this._destroyed) return;
                 try {
                     if (kinds.includes('climate'))  await this.updateClimateState();
                     if (kinds.includes('exterior')) await this.updateExteriorState();
@@ -1002,6 +1009,22 @@ class PolestarVehicle extends Device {
 
     async onDeleted() {
         this.homey.app.log('PolestarVehicle has been deleted', 'PolestarVehicle');
+        this._cleanup();
+    }
+
+    async onUninit() {
+        this._cleanup();
+    }
+
+    /** Stop all timers and close the gRPC session so stale polls can't hit a
+     *  device that's already been removed or is re-initialising. */
+    _cleanup() {
+        this._destroyed = true;
+        if (this._timerTimers) { try { this.homey.clearInterval(this._timerTimers); } catch (_) {} this._timerTimers = null; }
+        if (this._timerHealth) { try { this.homey.clearInterval(this._timerHealth); } catch (_) {} this._timerHealth = null; }
+        if (this.polestar && typeof this.polestar.close === 'function') {
+            try { this.polestar.close(); } catch (_) {}
+        }
     }
 
 }

@@ -157,5 +157,8 @@
   },
   "3.0.1": {
     "en": "Polish on icons etc"
+  },
+  "3.0.2": {
+    "en": "Fix 'Device Not Found' errors when unpairing or restarting the app while a poll was in flight"
   }
 }
