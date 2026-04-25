@@ -163,5 +163,8 @@
   },
   "3.0.3": {
     "en": "Completed charge sessions now report 'Plugged in' instead of 'Paused'. Improved Find-my-car flow-card title. Added a 'Start climate (defaults)' flow action that mirrors the Polestar app's one-tap climate button."
+  },
+  "3.0.4": {
+    "en": "Fix crash in the legacy Car Stats Viewer driver when a driving point arrived without altitude or state-of-charge data. Trip-ended flow now reports 'Unavailable' for missing fields instead of failing."
   }
 }
