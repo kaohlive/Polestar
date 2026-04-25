@@ -182,30 +182,31 @@ class Vehicle extends Driver {
 
         session.setHandler('testlogin', async (data) => {
             this.homey.app.log('Test login and provide feedback, username length: ' + data.username.length + ' password length: ' + data.password.length, 'Polestar Driver');
-            //Store the provided credentials, but hash and salt it first
             this.homey.settings.set('user_email', data.username);
             HomeyCrypt.crypt(data.password, data.username).then(cryptedpass => {
-                //this.homey.app.log(JSON.stringify(cryptedpass));
                 this.homey.settings.set('user_password', cryptedpass);
             })
-            this.homey.app.log('Password encrypted, credentials stored. Clear existing tokens.', 'Polestar Driver');
-            //Now we have the encrypted password stored we can start testing the info
-            var polestar = Polestar(data.username, data.password, this.homey);
-            //this.homey.app.log('Credential test password:', 'Polestar Driver', 'DEBUG', data.password);
+            this.homey.app.log('Password encrypted, credentials stored.', 'Polestar Driver');
+
+            const polestar = Polestar(data.username, data.password, this.homey);
             try {
                 await polestar.login();
-                this.homey.app.log('Credential test ok:', 'Polestar Driver', 'DEBUG', vehicles);
             } catch (err) {
                 this.homey.app.log('Credential test failed:', 'Polestar Driver', 'ERROR', err);
-                return false;
+                return { ok: false, reason: 'login_failed' };
             }
+            let vehicles;
             try {
-                var vehicles = await polestar.getVehicles();
-                return true;
+                vehicles = await polestar.getVehicles();
             } catch (err) {
                 this.homey.app.log('Retrieve vehicles failed:', 'Polestar Driver', 'ERROR', err);
-                return false;
+                return { ok: false, reason: 'login_failed' };
             }
+            this.homey.app.log('Credential test ok, vehicle count:', 'Polestar Driver', 'DEBUG', (vehicles || []).length);
+            if (!vehicles || vehicles.length === 0) {
+                return { ok: false, reason: 'no_vehicles' };
+            }
+            return { ok: true };
         });
     }
 

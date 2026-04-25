@@ -16,13 +16,20 @@ class Polestar extends Homey.App {
 			no: 'Polestar App har blitt initialisert'
 		}));
 
+		// Don't ever log credentials or tokens in plaintext. For sensitive keys we
+		// log the string length so we can still verify the user entered something.
+		const SENSITIVE_KEYS = new Set(['user_email', 'user_password', 'polestar_token']);
 		this.homey.settings.on('set', (key) => {
 			if (key === 'debugLog') return;
+			const value = this.homey.settings.get(key);
+			const display = SENSITIVE_KEYS.has(key)
+				? (typeof value === 'string' && value.length > 0 ? `[${value.length} chars]` : '[empty]')
+				: value;
 			this.log(this.homey.__({
 				nl: 'Setting bijgewerkt:',
 				en: 'Setting updated:',
 				no: 'Innstilling oppdatert:'
-			}), 'Polestar App', 'DEBUG', `${key}: ${key == 'polestar_token' ? '********' : this.homey.settings.get(key)}`);
+			}), 'Polestar App', 'DEBUG', `${key}: ${display}`);
 		});
 
 		try {

@@ -39,17 +39,23 @@
 				'username': usernameElement.val(),
 				'password': passwordElement.val()
 			}).then(async function(result) {
-				//console.log('Testcomplete result: ' + result);
-				if (result) {
-                    await Homey.emit('discover_vehicles').then(function(result) {
-                        if (result) {
-                            Homey.hideLoadingOverlay();
-                            Homey.nextView();
-                        }
-                    })
+				// Backwards compat: older driver returned a plain boolean.
+				const ok = result === true || (result && result.ok === true);
+				const reason = result && result.reason;
+				if (ok) {
+					await Homey.emit('discover_vehicles').then(function(result) {
+						if (result) {
+							Homey.hideLoadingOverlay();
+							Homey.nextView();
+						}
+					});
+					return;
+				}
+				Homey.hideLoadingOverlay();
+				if (reason === 'no_vehicles') {
+					Homey.alert("Login succeeded but no vehicles were returned for this account. Are you signed in with the right Polestar ID? Try again in a minute — Polestar's backend can briefly return an empty list.");
 				} else {
-					Homey.hideLoadingOverlay();
-					Homey.alert("Login validation failed, check your credentials or try again.");
+					Homey.alert("Login validation failed — check your e-mail address and password and try again.");
 				}
 			});
 		});
