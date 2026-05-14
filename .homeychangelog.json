@@ -166,5 +166,8 @@
   },
   "3.0.4": {
     "en": "Fix crash in the legacy Car Stats Viewer driver when a driving point arrived without altitude or state-of-charge data. Trip-ended flow now reports 'Unavailable' for missing fields instead of failing."
+  },
+  "3.0.5": {
+    "en": "Fix pairing crash on Homey OS versions where network interfaces aren't named wlan0/eth0/eth1. The password-encryption salt now falls back to any available network MAC."
   }
 }
