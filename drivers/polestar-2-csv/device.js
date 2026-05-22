@@ -1,6 +1,7 @@
 'use strict';
 
 const { Device } = require('homey');
+const path = require('path');
 const moment = require('moment');
 const axios = require('axios');
 const geolib = require('geolib');
@@ -30,17 +31,20 @@ class PolestarBetaDevice extends Device {
         this.previousLat = null;
         this.previousLon = null;
         this.threshold = 10; // Threshold in meters for distance updates
-        /*if (this.settings.tripSummaryEnabled) {
-            this.tripSummaryImage = await this.homey.images.createImage();
-            this.tripInfoImage = await this.homey.images.createImage();
-            this.tripScoreImage = await this.homey.images.createImage();
-            const lastTripString = this.homey.__({ "en": "Last trip", "no": "Din siste tur" });
-            const lastTripInfoString = this.homey.__({ "en": "Last trip info", "no": "Tur-informasjon" });
-            const lastTripScoreString = this.homey.__({ "en": "Trip score", "no": "Kjørescore" });
-            await this.setCameraImage('polestarTrip', lastTripString, this.tripSummaryImage);
-            await this.setCameraImage('polestarTripInfo', lastTripInfoString, this.tripInfoImage);
-            await this.setCameraImage('polestarTripScore', lastTripScoreString, this.tripScoreImage);
-        }*/
+        // Image-generation backend is deprecated, but the tripEnded flow card
+        // still declares lastTrip/tripInfo/tripScore as image tokens. Removing
+        // those tokens would break user flows that reference them. Instead we
+        // provide three lightweight images pointing at the driver brand asset
+        // so the trigger payload stays schema-valid and existing flows keep
+        // working (notifications just show the Polestar artwork instead of a
+        // per-trip render).
+        const placeholderPath = path.join(__dirname, 'assets', 'images', 'large.png');
+        this.tripSummaryImage = await this.homey.images.createImage();
+        this.tripSummaryImage.setPath(placeholderPath);
+        this.tripInfoImage = await this.homey.images.createImage();
+        this.tripInfoImage.setPath(placeholderPath);
+        this.tripScoreImage = await this.homey.images.createImage();
+        this.tripScoreImage.setPath(placeholderPath);
         this.webhook = null;
         this.apiUrl = 'https://homey.crdx.us';
 
@@ -250,13 +254,10 @@ class PolestarBetaDevice extends Device {
                             altStart: fmt(first.alt, 0, ' m'),
                             altEnd:   fmt(last.alt, 0, ' m'),
                         };
-                        /* Image-generation backend deprecated; trip-summary/info/score
-                           images are no longer produced. Keeping the trigger payload
-                           text-only. */
                         await this.driver._tripEndedFlow.trigger(this, {
-                            //lastTrip: this.tripSummaryImage,
-                            //tripInfo: this.tripInfoImage,
-                            //tripScore: this.tripScoreImage,
+                            lastTrip: this.tripSummaryImage,
+                            tripInfo: this.tripInfoImage,
+                            tripScore: this.tripScoreImage,
                             tripFrom: tripData.tripFrom || this.homey.__({ "en": "Unavailable", "no": "Utilgjengelig" }),
                             tripTo: tripData.tripTo || this.homey.__({ "en": "Unavailable", "no": "Utilgjengelig" }),
                             totalDistance: tripData.totalDistance || this.homey.__({ "en": "Unavailable", "no": "Utilgjengelig" }),

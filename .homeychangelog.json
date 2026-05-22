@@ -181,5 +181,8 @@
   },
   "3.2.2": {
     "en": "Fix crash on the legacy Car Stats Viewer driver when finishing a trip without a webhook slug (the deprecated trip-summary image code tried to base64-encode null)."
+  },
+  "3.2.3": {
+    "en": "Restore the lastTrip / tripInfo / tripScore image tokens on the legacy Car Stats Viewer's trip-ended flow card so existing flows keep firing. Tokens now serve a static driver image since the per-trip render backend is gone."
   }
 }
