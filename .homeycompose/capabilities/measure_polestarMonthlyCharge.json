@@ -4,8 +4,18 @@
     "icon": "/drivers/vehicle/assets/charging.svg",
     "title": {
         "en": "Charged home this month",
+        "nl": "Deze maand thuis geladen",
+        "de": "Diesen Monat zu Hause geladen",
+        "fr": "Recharge maison ce mois-ci",
+        "it": "Caricato a casa questo mese",
+        "sv": "Laddat hemma denna månad",
         "no": "Ladet hjemme denne mnd",
-        "nl": "Deze maand thuis geladen"
+        "es": "Cargado en casa este mes",
+        "da": "Opladet hjemme denne måned",
+        "ru": "Заряжено дома в этом месяце",
+        "pl": "Naładowano w domu w tym miesiącu",
+        "ko": "이번 달 자택 충전량",
+        "ja": "今月の自宅充電"
     },
     "getable": true,
     "setable": false,

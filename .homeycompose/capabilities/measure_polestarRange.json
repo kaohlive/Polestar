@@ -4,8 +4,18 @@
     "icon": "/drivers/polestar-2-csv/assets/images/range.svg",
     "title": {
         "en": "Range",
+        "nl": "Bereik",
+        "de": "Reichweite",
+        "fr": "Autonomie",
+        "it": "Autonomia",
+        "sv": "Räckvidd",
         "no": "Rekkevidde",
-        "nl": "Bereik"
+        "es": "Autonomía",
+        "da": "Rækkevidde",
+        "ru": "Запас хода",
+        "pl": "Zasięg",
+        "ko": "주행 가능 거리",
+        "ja": "走行可能距離"
     },
     "getable": true,
     "setable": false,

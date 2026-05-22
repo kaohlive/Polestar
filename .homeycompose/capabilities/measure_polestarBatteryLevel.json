@@ -4,8 +4,18 @@
   "icon": "/drivers/polestar-2-csv/assets/images/hvbattery.svg",
   "title": {
     "en": "Battery level",
+    "nl": "Batterij niveau",
+    "de": "Batteriestand",
+    "fr": "Niveau de batterie",
+    "it": "Livello batteria",
+    "sv": "Batterinivå",
     "no": "Batterinivå",
-    "nl": "Batterij niveau"
+    "es": "Nivel de batería",
+    "da": "Batteriniveau",
+    "ru": "Уровень батареи",
+    "pl": "Poziom baterii",
+    "ko": "배터리 잔량",
+    "ja": "バッテリー残量"
   },
   "units": "kWh",
   "decimals": 2,

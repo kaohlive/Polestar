@@ -169,5 +169,14 @@
   },
   "3.0.5": {
     "en": "Fix pairing crash on Homey OS versions where network interfaces aren't named wlan0/eth0/eth1. The password-encryption salt now falls back to any available network MAC."
+  },
+  "3.1.0": {
+    "en": "Pairing bug fix"
+  },
+  "3.2.0": {
+    "en": "Added translations for 10 additional languages (de, fr, it, sv, es, da, ru, pl, ko, ja). The app now ships with all 13 languages Homey supports. AI-generated — please report any awkward phrasing."
+  },
+  "3.2.1": {
+    "en": "Dashboard widget polish: charging block now follows the same orange-label / white-value pattern as charge and range. Power is the primary number, with current and time remaining as a subtitle."
   }
 }

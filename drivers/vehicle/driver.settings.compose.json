@@ -4,14 +4,34 @@
         "type": "checkbox",
         "label": {
             "en": "Allow remote commands",
+            "nl": "Afstandscommando's toestaan",
+            "de": "Fernsteuerung erlauben",
+            "fr": "Autoriser les commandes à distance",
+            "it": "Consenti comandi remoti",
+            "sv": "Tillåt fjärrkommandon",
             "no": "Tillat fjernkommandoer",
-            "nl": "Afstandscommando's toestaan"
+            "es": "Permitir comandos remotos",
+            "da": "Tillad fjernkommandoer",
+            "ru": "Разрешить удалённые команды",
+            "pl": "Zezwól na polecenia zdalne",
+            "ko": "원격 명령 허용",
+            "ja": "リモート操作を許可"
         },
         "value": true,
         "hint": {
             "en": "Master switch for write flows: start/stop charging, charge limit, amp limit, and (later) locks, windows, climate. Disable to make every write flow fail instantly.",
+            "nl": "Hoofdschakelaar voor schrijfflows. Zet uit om alle schrijfflows direct te laten falen.",
+            "de": "Hauptschalter für Schreibflows. Deaktivieren, damit alle Schreibflows sofort fehlschlagen.",
+            "fr": "Interrupteur général pour les flux d'écriture. Désactivez pour que toutes les commandes d'écriture échouent immédiatement.",
+            "it": "Interruttore generale per i flussi di scrittura. Disabilita per far fallire immediatamente ogni flusso di scrittura.",
+            "sv": "Huvudbrytare för skrivflöden. Stäng av för att alla skrivflöden ska misslyckas direkt.",
             "no": "Hovedbryter for skriveflyter. Slå av for å få alle skriveflyter til å feile umiddelbart.",
-            "nl": "Hoofdschakelaar voor schrijfflows. Zet uit om alle schrijfflows direct te laten falen."
+            "es": "Interruptor maestro para los flujos de escritura. Desactívelo para que todos los flujos de escritura fallen al instante.",
+            "da": "Hovedafbryder for skriveflows. Slå fra for at få alle skriveflows til at fejle med det samme.",
+            "ru": "Главный выключатель для команд записи. Отключите, чтобы все команды записи мгновенно завершались с ошибкой.",
+            "pl": "Główny przełącznik dla poleceń zapisu. Wyłącz, aby wszystkie polecenia zapisu od razu kończyły się błędem.",
+            "ko": "쓰기 플로우의 마스터 스위치입니다. 꺼두면 모든 쓰기 플로우가 즉시 실패합니다.",
+            "ja": "書き込みフローのマスタースイッチ。オフにすると、すべての書き込みフローは即座に失敗します。"
         }
     },
     {
@@ -19,20 +39,96 @@
         "type": "dropdown",
         "label": {
             "en": "Charge limit slot",
+            "nl": "Laadlimiet-slot",
+            "de": "Ladelimit-Slot",
+            "fr": "Emplacement limite de charge",
+            "it": "Slot limite di carica",
+            "sv": "Laddningsgräns-fack",
             "no": "Ladegrense-slot",
-            "nl": "Laadlimiet-slot"
+            "es": "Ranura de límite de carga",
+            "da": "Opladegrænse-slot",
+            "ru": "Слот лимита зарядки",
+            "pl": "Slot limitu ładowania",
+            "ko": "충전 한도 슬롯",
+            "ja": "充電上限スロット"
         },
         "value": "1",
         "hint": {
             "en": "Which charge-limit slot the car should use when Homey writes a new value. Some Polestar models silently ignore writes to the wrong slot. Try 'Custom' if changes don't appear in the Polestar app.",
+            "nl": "Welk slot voor de laadlimiet de auto gebruikt als Homey een nieuwe waarde schrijft. Sommige Polestar-modellen negeren writes naar het verkeerde slot stil. Probeer 'Aangepast' als wijzigingen niet in de Polestar-app verschijnen.",
+            "de": "Welcher Ladelimit-Slot vom Auto verwendet wird, wenn Homey einen neuen Wert schreibt. Manche Polestar-Modelle ignorieren Schreibvorgänge in den falschen Slot stillschweigend. Versuchen Sie 'Benutzerdefiniert', wenn Änderungen nicht in der Polestar-App erscheinen.",
+            "fr": "Quel emplacement de limite de charge la voiture utilise lorsque Homey écrit une nouvelle valeur. Certains modèles Polestar ignorent silencieusement les écritures vers le mauvais emplacement. Essayez « Personnalisé » si les changements n'apparaissent pas dans l'app Polestar.",
+            "it": "Quale slot di limite di carica usa l'auto quando Homey scrive un nuovo valore. Alcuni modelli Polestar ignorano silenziosamente le scritture sullo slot sbagliato. Prova 'Personalizzato' se le modifiche non appaiono nell'app Polestar.",
+            "sv": "Vilket laddningsgräns-fack bilen använder när Homey skriver ett nytt värde. Vissa Polestar-modeller ignorerar tyst skrivningar till fel fack. Prova 'Anpassad' om ändringar inte syns i Polestar-appen.",
             "no": "Hvilket ladegrenseslot bilen bruker når Homey skriver en ny verdi. Prøv 'Egendefinert' om endringer ikke vises i Polestar-appen.",
-            "nl": "Welk slot voor de laadlimiet de auto gebruikt als Homey een nieuwe waarde schrijft. Sommige Polestar-modellen negeren writes naar het verkeerde slot stil. Probeer 'Aangepast' als wijzigingen niet in de Polestar-app verschijnen."
+            "es": "Qué ranura de límite de carga usa el coche cuando Homey escribe un nuevo valor. Algunos modelos Polestar ignoran silenciosamente las escrituras en la ranura equivocada. Prueba 'Personalizado' si los cambios no aparecen en la app de Polestar.",
+            "da": "Hvilket opladegrænse-slot bilen bruger, når Homey skriver en ny værdi. Nogle Polestar-modeller ignorerer tavst skrivninger til forkert slot. Prøv 'Brugerdefineret', hvis ændringer ikke vises i Polestar-appen.",
+            "ru": "Какой слот лимита зарядки используется машиной при записи нового значения. Некоторые модели Polestar молча игнорируют запись в неверный слот. Попробуйте «Пользовательский», если изменения не видны в приложении Polestar.",
+            "pl": "Którego slotu limitu ładowania używa auto, gdy Homey zapisuje nową wartość. Niektóre modele Polestar po cichu ignorują zapisy do złego slotu. Spróbuj 'Niestandardowy', jeśli zmiany nie pojawiają się w aplikacji Polestar.",
+            "ko": "Homey가 새 값을 쓸 때 차량이 사용할 충전 한도 슬롯. 일부 폴스타 모델은 잘못된 슬롯의 쓰기를 조용히 무시합니다. Polestar 앱에 변경이 보이지 않으면 '사용자 지정'을 시도하세요.",
+            "ja": "Homeyが新しい値を書き込む際に車両が使用する充電上限スロット。一部のPolestar車種は誤ったスロットへの書き込みを黙って無視します。Polestarアプリで変更が反映されない場合は「カスタム」を試してください。"
         },
         "values": [
-            { "id": "1", "label": { "en": "Daily (default)", "no": "Daglig (standard)", "nl": "Dagelijks (standaard)" } },
-            { "id": "2", "label": { "en": "Long trip",       "no": "Lang tur",          "nl": "Lange rit" } },
-            { "id": "3", "label": { "en": "Custom",          "no": "Egendefinert",      "nl": "Aangepast" } },
-            { "id": "0", "label": { "en": "Unspecified",     "no": "Uspesifisert",      "nl": "Niet gespecificeerd" } }
+            { "id": "1", "label": {
+                "en": "Daily (default)",
+                "nl": "Dagelijks (standaard)",
+                "de": "Täglich (Standard)",
+                "fr": "Quotidien (par défaut)",
+                "it": "Giornaliero (predefinito)",
+                "sv": "Dagligt (standard)",
+                "no": "Daglig (standard)",
+                "es": "Diario (predeterminado)",
+                "da": "Daglig (standard)",
+                "ru": "Ежедневно (по умолч.)",
+                "pl": "Codzienny (domyślny)",
+                "ko": "일상 (기본값)",
+                "ja": "日常（既定）"
+            } },
+            { "id": "2", "label": {
+                "en": "Long trip",
+                "nl": "Lange rit",
+                "de": "Lange Fahrt",
+                "fr": "Long trajet",
+                "it": "Viaggio lungo",
+                "sv": "Lång resa",
+                "no": "Lang tur",
+                "es": "Viaje largo",
+                "da": "Lang tur",
+                "ru": "Длинная поездка",
+                "pl": "Długa podróż",
+                "ko": "장거리 여행",
+                "ja": "長距離"
+            } },
+            { "id": "3", "label": {
+                "en": "Custom",
+                "nl": "Aangepast",
+                "de": "Benutzerdefiniert",
+                "fr": "Personnalisé",
+                "it": "Personalizzato",
+                "sv": "Anpassad",
+                "no": "Egendefinert",
+                "es": "Personalizado",
+                "da": "Brugerdefineret",
+                "ru": "Пользовательский",
+                "pl": "Niestandardowy",
+                "ko": "사용자 지정",
+                "ja": "カスタム"
+            } },
+            { "id": "0", "label": {
+                "en": "Unspecified",
+                "nl": "Niet gespecificeerd",
+                "de": "Nicht angegeben",
+                "fr": "Non spécifié",
+                "it": "Non specificato",
+                "sv": "Ej angivet",
+                "no": "Uspesifisert",
+                "es": "Sin especificar",
+                "da": "Uspecificeret",
+                "ru": "Не указано",
+                "pl": "Nieokreślony",
+                "ko": "지정되지 않음",
+                "ja": "未指定"
+            } }
         ]
     },
     {
@@ -40,84 +136,212 @@
         "type": "checkbox",
         "label": {
             "en": "Windows remote control",
+            "nl": "Ramen op afstand bedienen",
+            "de": "Fenster-Fernsteuerung",
+            "fr": "Vitres à distance",
+            "it": "Controllo finestrini remoto",
+            "sv": "Fönster-fjärrstyrning",
             "no": "Fjernstyring av vinduer",
-            "nl": "Ramen op afstand bedienen"
+            "es": "Control remoto de ventanas",
+            "da": "Fjernstyring af vinduer",
+            "ru": "Дистанционное управление окнами",
+            "pl": "Zdalne sterowanie szybami",
+            "ko": "창문 원격 제어",
+            "ja": "ウィンドウのリモート操作"
         },
         "value": true,
         "hint": {
             "en": "Leave checked unless your Polestar model responds with 'not supported' when trying Open/Close windows. Uncheck to hide the two window buttons from the device page. Auto-disabled if the backend returns UNIMPLEMENTED.",
+            "nl": "Laat aangevinkt tenzij je Polestar 'niet ondersteund' meldt bij Openen/Sluiten van ramen. Uitvinken verbergt de raam-knoppen van de device-pagina. Automatisch uitgeschakeld als de backend UNIMPLEMENTED teruggeeft.",
+            "de": "Aktiviert lassen, außer Ihr Polestar meldet 'nicht unterstützt' beim Öffnen/Schließen. Deaktivieren blendet die Fenster-Buttons aus. Bei UNIMPLEMENTED automatisch deaktiviert.",
+            "fr": "Laissez coché sauf si votre Polestar renvoie 'non supporté' lors de l'ouverture/fermeture des vitres. Décocher masque les boutons. Désactivé automatiquement si le backend renvoie UNIMPLEMENTED.",
+            "it": "Lascia attivata a meno che il tuo modello Polestar non risponda 'non supportato' all'apertura/chiusura finestrini. Disattiva per nascondere i pulsanti. Auto-disabilitata su UNIMPLEMENTED.",
+            "sv": "Lämna kryssad om inte din Polestar svarar 'stöds inte' vid öppna/stäng fönster. Avkryssa för att dölja fönsterknapparna. Auto-inaktiveras om backend svarar UNIMPLEMENTED.",
             "no": "La stå påskrudd med mindre bilen svarer 'ikke støttet' når du prøver Åpne/Lukk vinduer. Fjern haken for å skjule vinduskontrollene. Deaktiveres automatisk ved UNIMPLEMENTED.",
-            "nl": "Laat aangevinkt tenzij je Polestar 'niet ondersteund' meldt bij Openen/Sluiten van ramen. Uitvinken verbergt de raam-knoppen van de device-pagina. Automatisch uitgeschakeld als de backend UNIMPLEMENTED teruggeeft."
+            "es": "Deja marcado a menos que tu Polestar responda 'no soportado' al abrir/cerrar ventanas. Desmarca para ocultar los botones. Se desactiva automáticamente si el backend devuelve UNIMPLEMENTED.",
+            "da": "Lad være markeret medmindre din Polestar svarer 'ikke understøttet' ved åbn/luk vinduer. Fjern fluebenet for at skjule vinduesknapperne. Slås automatisk fra ved UNIMPLEMENTED.",
+            "ru": "Оставьте включённым, если ваша Polestar не сообщает 'не поддерживается' при открытии/закрытии окон. Снятие галочки скрывает кнопки. Автоматически отключается при UNIMPLEMENTED.",
+            "pl": "Zostaw zaznaczone, chyba że Polestar zwraca 'nieobsługiwane' przy otwarciu/zamknięciu szyb. Odznaczenie ukrywa przyciski. Auto-wyłączane przy UNIMPLEMENTED.",
+            "ko": "차량이 창문 열기/닫기 시 '미지원'을 반환하지 않는 한 체크 상태로 둡니다. 해제하면 창문 버튼이 숨겨집니다. 백엔드가 UNIMPLEMENTED를 반환하면 자동으로 비활성화됩니다.",
+            "ja": "ウィンドウの開閉時に車両が「未対応」と返さない限りオンのままにします。オフにすると窓ボタンが非表示になります。バックエンドがUNIMPLEMENTEDを返した場合は自動的に無効になります。"
         }
     },
     {
         "type": "group",
-        "label": { "en": "Climate defaults", "no": "Klima-standarder", "nl": "Climate standaardinstellingen" },
+        "label": {
+            "en": "Climate defaults",
+            "nl": "Climate standaardinstellingen",
+            "de": "Klima-Standardwerte",
+            "fr": "Réglages climatisation par défaut",
+            "it": "Predefiniti clima",
+            "sv": "Klimat-standardvärden",
+            "no": "Klima-standarder",
+            "es": "Valores climatización por defecto",
+            "da": "Klima-standardværdier",
+            "ru": "Климат — значения по умолчанию",
+            "pl": "Klimat — wartości domyślne",
+            "ko": "공조 기본값",
+            "ja": "空調の既定値"
+        },
         "children": [
             {
                 "id": "climate_default_temp",
                 "type": "number",
-                "label": { "en": "Default temperature", "no": "Standard temperatur", "nl": "Standaard temperatuur" },
+                "label": {
+                    "en": "Default temperature",
+                    "nl": "Standaard temperatuur",
+                    "de": "Standardtemperatur",
+                    "fr": "Température par défaut",
+                    "it": "Temperatura predefinita",
+                    "sv": "Standardtemperatur",
+                    "no": "Standard temperatur",
+                    "es": "Temperatura por defecto",
+                    "da": "Standardtemperatur",
+                    "ru": "Температура по умолчанию",
+                    "pl": "Domyślna temperatura",
+                    "ko": "기본 온도",
+                    "ja": "既定温度"
+                },
                 "value": 21, "min": 16, "max": 30, "step": 0.5, "units": { "en": "°C" },
                 "hint": {
                     "en": "Used when climate is started via the toggle, button, or onoff capability. The separate 'Climate target' tile overrides this for the next start.",
+                    "nl": "Gebruikt wanneer climate via de toggle, knop of onoff-capability wordt gestart. De 'Klimaatdoel'-tile overschrijft dit voor de eerstvolgende start.",
+                    "de": "Wird verwendet, wenn die Klimatisierung über Toggle, Button oder onoff gestartet wird. Die separate 'Klima-Soll'-Kachel überschreibt dies für den nächsten Start.",
+                    "fr": "Utilisé au démarrage via toggle, bouton ou capability onoff. La tuile 'Cible climatisation' la remplace pour le prochain démarrage.",
+                    "it": "Usato all'avvio del clima da toggle, pulsante o capability onoff. Il tile 'Obiettivo clima' lo sostituisce per il prossimo avvio.",
+                    "sv": "Används när klimat startas via toggle, knapp eller onoff. 'Klimatmål'-rutan åsidosätter detta för nästa start.",
                     "no": "Brukes når klima startes via bryter, knapp eller onoff. 'Klima-mål'-flisen overstyrer dette ved neste start.",
-                    "nl": "Gebruikt wanneer climate via de toggle, knop of onoff-capability wordt gestart. De 'Klimaatdoel'-tile overschrijft dit voor de eerstvolgende start."
+                    "es": "Se usa al iniciar climatización vía toggle, botón u onoff. La tarjeta 'Objetivo climatización' lo sustituye en el siguiente arranque.",
+                    "da": "Bruges når klima startes via toggle, knap eller onoff. 'Klima-mål'-flisen tilsidesætter dette ved næste start.",
+                    "ru": "Используется при запуске климата через переключатель, кнопку или onoff. Плитка 'Цель климата' заменяет это значение для следующего запуска.",
+                    "pl": "Używane przy starcie klimatu z toggle, przycisku lub onoff. Kafelek 'Cel klimatu' nadpisuje to przy następnym uruchomieniu.",
+                    "ko": "토글, 버튼 또는 onoff로 공조를 시작할 때 사용됩니다. '공조 목표' 타일은 다음 시작 시 이 값을 덮어씁니다.",
+                    "ja": "トグル、ボタン、onoffで空調を開始する際に使用します。「空調の目標」タイルが次回起動時にこの値を上書きします。"
                 }
             },
             {
                 "id": "climate_seat_front_left", "type": "dropdown",
-                "label": { "en": "Front left seat heating", "no": "Setevarme forran venstre", "nl": "Zitverwarming linksvoor" },
+                "label": {
+                    "en": "Front left seat heating",
+                    "nl": "Zitverwarming linksvoor",
+                    "de": "Sitzheizung vorne links",
+                    "fr": "Chauffage siège AVG",
+                    "it": "Riscaldamento sedile AS",
+                    "sv": "Sätesvärme fram vänster",
+                    "no": "Setevarme forran venstre",
+                    "es": "Calefacción asiento DI",
+                    "da": "Sædevarme forrest venstre",
+                    "ru": "Подогрев перед. лев. сиденья",
+                    "pl": "Podgrzewanie fotela PL",
+                    "ko": "운전석 시트 난방",
+                    "ja": "前左シート暖房"
+                },
                 "value": "1",
                 "values": [
-                    { "id": "1", "label": { "en": "Off" } },
-                    { "id": "2", "label": { "en": "Level 1" } },
-                    { "id": "3", "label": { "en": "Level 2" } },
-                    { "id": "4", "label": { "en": "Level 3" } }
+                    { "id": "1", "label": { "en": "Off", "nl": "Uit", "de": "Aus", "fr": "Désactivé", "it": "Off", "sv": "Av", "no": "Av", "es": "Off", "da": "Fra", "ru": "Выкл", "pl": "Wył", "ko": "끔", "ja": "オフ" } },
+                    { "id": "2", "label": { "en": "Level 1", "nl": "Niveau 1", "de": "Stufe 1", "fr": "Niveau 1", "it": "Livello 1", "sv": "Nivå 1", "no": "Nivå 1", "es": "Nivel 1", "da": "Niveau 1", "ru": "Уровень 1", "pl": "Poziom 1", "ko": "1단", "ja": "レベル1" } },
+                    { "id": "3", "label": { "en": "Level 2", "nl": "Niveau 2", "de": "Stufe 2", "fr": "Niveau 2", "it": "Livello 2", "sv": "Nivå 2", "no": "Nivå 2", "es": "Nivel 2", "da": "Niveau 2", "ru": "Уровень 2", "pl": "Poziom 2", "ko": "2단", "ja": "レベル2" } },
+                    { "id": "4", "label": { "en": "Level 3", "nl": "Niveau 3", "de": "Stufe 3", "fr": "Niveau 3", "it": "Livello 3", "sv": "Nivå 3", "no": "Nivå 3", "es": "Nivel 3", "da": "Niveau 3", "ru": "Уровень 3", "pl": "Poziom 3", "ko": "3단", "ja": "レベル3" } }
                 ]
             },
             {
                 "id": "climate_seat_front_right", "type": "dropdown",
-                "label": { "en": "Front right seat heating", "no": "Setevarme forran høyre", "nl": "Zitverwarming rechtsvoor" },
+                "label": {
+                    "en": "Front right seat heating",
+                    "nl": "Zitverwarming rechtsvoor",
+                    "de": "Sitzheizung vorne rechts",
+                    "fr": "Chauffage siège AVD",
+                    "it": "Riscaldamento sedile AD",
+                    "sv": "Sätesvärme fram höger",
+                    "no": "Setevarme forran høyre",
+                    "es": "Calefacción asiento DD",
+                    "da": "Sædevarme forrest højre",
+                    "ru": "Подогрев перед. прав. сиденья",
+                    "pl": "Podgrzewanie fotela PP",
+                    "ko": "조수석 시트 난방",
+                    "ja": "前右シート暖房"
+                },
                 "value": "1",
                 "values": [
-                    { "id": "1", "label": { "en": "Off" } },
-                    { "id": "2", "label": { "en": "Level 1" } },
-                    { "id": "3", "label": { "en": "Level 2" } },
-                    { "id": "4", "label": { "en": "Level 3" } }
+                    { "id": "1", "label": { "en": "Off", "nl": "Uit", "de": "Aus", "fr": "Désactivé", "it": "Off", "sv": "Av", "no": "Av", "es": "Off", "da": "Fra", "ru": "Выкл", "pl": "Wył", "ko": "끔", "ja": "オフ" } },
+                    { "id": "2", "label": { "en": "Level 1", "nl": "Niveau 1", "de": "Stufe 1", "fr": "Niveau 1", "it": "Livello 1", "sv": "Nivå 1", "no": "Nivå 1", "es": "Nivel 1", "da": "Niveau 1", "ru": "Уровень 1", "pl": "Poziom 1", "ko": "1단", "ja": "レベル1" } },
+                    { "id": "3", "label": { "en": "Level 2", "nl": "Niveau 2", "de": "Stufe 2", "fr": "Niveau 2", "it": "Livello 2", "sv": "Nivå 2", "no": "Nivå 2", "es": "Nivel 2", "da": "Niveau 2", "ru": "Уровень 2", "pl": "Poziom 2", "ko": "2단", "ja": "レベル2" } },
+                    { "id": "4", "label": { "en": "Level 3", "nl": "Niveau 3", "de": "Stufe 3", "fr": "Niveau 3", "it": "Livello 3", "sv": "Nivå 3", "no": "Nivå 3", "es": "Nivel 3", "da": "Niveau 3", "ru": "Уровень 3", "pl": "Poziom 3", "ko": "3단", "ja": "レベル3" } }
                 ]
             },
             {
                 "id": "climate_seat_rear_left", "type": "dropdown",
-                "label": { "en": "Rear left seat heating", "no": "Setevarme bak venstre", "nl": "Zitverwarming linksachter" },
+                "label": {
+                    "en": "Rear left seat heating",
+                    "nl": "Zitverwarming linksachter",
+                    "de": "Sitzheizung hinten links",
+                    "fr": "Chauffage siège ARG",
+                    "it": "Riscaldamento sedile PS",
+                    "sv": "Sätesvärme bak vänster",
+                    "no": "Setevarme bak venstre",
+                    "es": "Calefacción asiento TI",
+                    "da": "Sædevarme bag venstre",
+                    "ru": "Подогрев задн. лев. сиденья",
+                    "pl": "Podgrzewanie fotela TL",
+                    "ko": "뒤 좌측 시트 난방",
+                    "ja": "後左シート暖房"
+                },
                 "value": "1",
                 "values": [
-                    { "id": "1", "label": { "en": "Off" } },
-                    { "id": "2", "label": { "en": "Level 1" } },
-                    { "id": "3", "label": { "en": "Level 2" } },
-                    { "id": "4", "label": { "en": "Level 3" } }
+                    { "id": "1", "label": { "en": "Off", "nl": "Uit", "de": "Aus", "fr": "Désactivé", "it": "Off", "sv": "Av", "no": "Av", "es": "Off", "da": "Fra", "ru": "Выкл", "pl": "Wył", "ko": "끔", "ja": "オフ" } },
+                    { "id": "2", "label": { "en": "Level 1", "nl": "Niveau 1", "de": "Stufe 1", "fr": "Niveau 1", "it": "Livello 1", "sv": "Nivå 1", "no": "Nivå 1", "es": "Nivel 1", "da": "Niveau 1", "ru": "Уровень 1", "pl": "Poziom 1", "ko": "1단", "ja": "レベル1" } },
+                    { "id": "3", "label": { "en": "Level 2", "nl": "Niveau 2", "de": "Stufe 2", "fr": "Niveau 2", "it": "Livello 2", "sv": "Nivå 2", "no": "Nivå 2", "es": "Nivel 2", "da": "Niveau 2", "ru": "Уровень 2", "pl": "Poziom 2", "ko": "2단", "ja": "レベル2" } },
+                    { "id": "4", "label": { "en": "Level 3", "nl": "Niveau 3", "de": "Stufe 3", "fr": "Niveau 3", "it": "Livello 3", "sv": "Nivå 3", "no": "Nivå 3", "es": "Nivel 3", "da": "Niveau 3", "ru": "Уровень 3", "pl": "Poziom 3", "ko": "3단", "ja": "レベル3" } }
                 ]
             },
             {
                 "id": "climate_seat_rear_right", "type": "dropdown",
-                "label": { "en": "Rear right seat heating", "no": "Setevarme bak høyre", "nl": "Zitverwarming rechtsachter" },
+                "label": {
+                    "en": "Rear right seat heating",
+                    "nl": "Zitverwarming rechtsachter",
+                    "de": "Sitzheizung hinten rechts",
+                    "fr": "Chauffage siège ARD",
+                    "it": "Riscaldamento sedile PD",
+                    "sv": "Sätesvärme bak höger",
+                    "no": "Setevarme bak høyre",
+                    "es": "Calefacción asiento TD",
+                    "da": "Sædevarme bag højre",
+                    "ru": "Подогрев задн. прав. сиденья",
+                    "pl": "Podgrzewanie fotela TP",
+                    "ko": "뒤 우측 시트 난방",
+                    "ja": "後右シート暖房"
+                },
                 "value": "1",
                 "values": [
-                    { "id": "1", "label": { "en": "Off" } },
-                    { "id": "2", "label": { "en": "Level 1" } },
-                    { "id": "3", "label": { "en": "Level 2" } },
-                    { "id": "4", "label": { "en": "Level 3" } }
+                    { "id": "1", "label": { "en": "Off", "nl": "Uit", "de": "Aus", "fr": "Désactivé", "it": "Off", "sv": "Av", "no": "Av", "es": "Off", "da": "Fra", "ru": "Выкл", "pl": "Wył", "ko": "끔", "ja": "オフ" } },
+                    { "id": "2", "label": { "en": "Level 1", "nl": "Niveau 1", "de": "Stufe 1", "fr": "Niveau 1", "it": "Livello 1", "sv": "Nivå 1", "no": "Nivå 1", "es": "Nivel 1", "da": "Niveau 1", "ru": "Уровень 1", "pl": "Poziom 1", "ko": "1단", "ja": "レベル1" } },
+                    { "id": "3", "label": { "en": "Level 2", "nl": "Niveau 2", "de": "Stufe 2", "fr": "Niveau 2", "it": "Livello 2", "sv": "Nivå 2", "no": "Nivå 2", "es": "Nivel 2", "da": "Niveau 2", "ru": "Уровень 2", "pl": "Poziom 2", "ko": "2단", "ja": "レベル2" } },
+                    { "id": "4", "label": { "en": "Level 3", "nl": "Niveau 3", "de": "Stufe 3", "fr": "Niveau 3", "it": "Livello 3", "sv": "Nivå 3", "no": "Nivå 3", "es": "Nivel 3", "da": "Niveau 3", "ru": "Уровень 3", "pl": "Poziom 3", "ko": "3단", "ja": "レベル3" } }
                 ]
             },
             {
                 "id": "climate_steering_wheel", "type": "dropdown",
-                "label": { "en": "Steering wheel heating", "no": "Rattvarme", "nl": "Stuurwielverwarming" },
+                "label": {
+                    "en": "Steering wheel heating",
+                    "nl": "Stuurwielverwarming",
+                    "de": "Lenkradheizung",
+                    "fr": "Chauffage volant",
+                    "it": "Riscaldamento volante",
+                    "sv": "Rattvärme",
+                    "no": "Rattvarme",
+                    "es": "Calefacción del volante",
+                    "da": "Ratvarme",
+                    "ru": "Подогрев руля",
+                    "pl": "Podgrzewanie kierownicy",
+                    "ko": "스티어링 휠 난방",
+                    "ja": "ステアリング暖房"
+                },
                 "value": "1",
                 "values": [
-                    { "id": "1", "label": { "en": "Off" } },
-                    { "id": "2", "label": { "en": "Level 1" } },
-                    { "id": "3", "label": { "en": "Level 2" } },
-                    { "id": "4", "label": { "en": "Level 3" } }
+                    { "id": "1", "label": { "en": "Off", "nl": "Uit", "de": "Aus", "fr": "Désactivé", "it": "Off", "sv": "Av", "no": "Av", "es": "Off", "da": "Fra", "ru": "Выкл", "pl": "Wył", "ko": "끔", "ja": "オフ" } },
+                    { "id": "2", "label": { "en": "Level 1", "nl": "Niveau 1", "de": "Stufe 1", "fr": "Niveau 1", "it": "Livello 1", "sv": "Nivå 1", "no": "Nivå 1", "es": "Nivel 1", "da": "Niveau 1", "ru": "Уровень 1", "pl": "Poziom 1", "ko": "1단", "ja": "レベル1" } },
+                    { "id": "3", "label": { "en": "Level 2", "nl": "Niveau 2", "de": "Stufe 2", "fr": "Niveau 2", "it": "Livello 2", "sv": "Nivå 2", "no": "Nivå 2", "es": "Nivel 2", "da": "Niveau 2", "ru": "Уровень 2", "pl": "Poziom 2", "ko": "2단", "ja": "レベル2" } },
+                    { "id": "4", "label": { "en": "Level 3", "nl": "Niveau 3", "de": "Stufe 3", "fr": "Niveau 3", "it": "Livello 3", "sv": "Nivå 3", "no": "Nivå 3", "es": "Nivel 3", "da": "Niveau 3", "ru": "Уровень 3", "pl": "Poziom 3", "ko": "3단", "ja": "レベル3" } }
                 ]
             }
         ]

@@ -4,8 +4,18 @@
   "icon": "/drivers/polestar-2-csv/assets/images/ignition.svg",
   "title": {
     "en": "Ignition",
+    "nl": "Ontsteking",
+    "de": "Zündung",
+    "fr": "Allumage",
+    "it": "Accensione",
+    "sv": "Tändning",
     "no": "Tenning",
-    "nl": "Ontsteking"
+    "es": "Encendido",
+    "da": "Tænding",
+    "ru": "Зажигание",
+    "pl": "Zapłon",
+    "ko": "점화",
+    "ja": "点火"
   },
   "getable": true,
   "setable": false,

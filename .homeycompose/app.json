@@ -1,6 +1,6 @@
 {
   "id": "com.Coderax.Polestar",
-  "version": "3.0.5",
+  "version": "3.2.1",
   "compatibility": ">=12.4.5",
   "sdk": 3,
   "platforms": [
@@ -8,13 +8,33 @@
   ],
   "name": {
     "en": "Polestar",
+    "nl": "Polestar",
+    "de": "Polestar",
+    "fr": "Polestar",
+    "it": "Polestar",
+    "sv": "Polestar",
     "no": "Polestar",
-    "nl": "Polestar"
+    "es": "Polestar",
+    "da": "Polestar",
+    "ru": "Polestar",
+    "pl": "Polestar",
+    "ko": "Polestar",
+    "ja": "Polestar"
   },
   "description": {
     "en": "Monitor and control your Polestar from Homey — charging, climate, locks, windows, and more.",
+    "nl": "Monitor en bedien je Polestar vanuit Homey — laden, climate, sloten, ramen en meer.",
+    "de": "Überwache und steuere deinen Polestar von Homey aus — Laden, Klima, Schlösser, Fenster und mehr.",
+    "fr": "Surveillez et contrôlez votre Polestar depuis Homey — charge, climatisation, verrouillage, vitres et plus encore.",
+    "it": "Monitora e controlla la tua Polestar da Homey — ricarica, clima, blocchi, finestrini e altro.",
+    "sv": "Övervaka och styr din Polestar från Homey — laddning, klimat, lås, fönster och mer.",
     "no": "Overvåk og styr Polestar fra Homey — lading, klima, låser, vinduer og mer.",
-    "nl": "Monitor en bedien je Polestar vanuit Homey — laden, climate, sloten, ramen en meer."
+    "es": "Supervisa y controla tu Polestar desde Homey — carga, climatización, cierre, ventanas y más.",
+    "da": "Overvåg og styr din Polestar fra Homey — opladning, klima, låse, vinduer og meget mere.",
+    "ru": "Управляйте Polestar из Homey — зарядка, климат, замки, окна и многое другое.",
+    "pl": "Monitoruj i steruj swoim Polestarem z Homey — ładowanie, klimat, zamki, okna i więcej.",
+    "ko": "Homey에서 폴스타를 모니터링하고 제어하세요 — 충전, 공조, 잠금, 창문 등.",
+    "ja": "HomeyからPolestarを監視・操作 — 充電、空調、ロック、ウィンドウなど。"
   },
   "category": "internet",
   "permissions": [],
@@ -43,67 +63,69 @@
   },
   "tags": {
     "en": [
-      "polestar",
-      "pole",
-      "star",
-      "car",
-      "ev",
-      "electric",
-      "electric car",
-      "ev car",
-      "smart car",
-      "bev",
-      "charging",
-      "charge limit",
-      "precondition",
-      "climate",
-      "preheat",
-      "lock",
-      "unlock",
-      "remote",
-      "honk",
-      "flash"
-    ],
-    "no": [
-      "polestar",
-      "pole",
-      "star",
-      "bil",
-      "elbil",
-      "elektrisk",
-      "smart bil",
-      "lading",
-      "ladegrense",
-      "forvarming",
-      "klima",
-      "lås",
-      "lås opp",
-      "fjernstyring",
-      "tut",
-      "blink"
+      "polestar", "pole", "star", "car", "ev", "electric", "electric car", "ev car", "smart car",
+      "bev", "charging", "charge limit", "precondition", "climate", "preheat",
+      "lock", "unlock", "remote", "honk", "flash"
     ],
     "nl": [
-      "polestar",
-      "pole",
-      "star",
-      "auto",
-      "ev",
-      "elektrisch",
-      "electrische auto",
-      "ev auto",
-      "bev",
-      "bev auto",
-      "slimme auto",
-      "batterij auto",
-      "laden",
-      "laadlimiet",
-      "voorverwarmen",
-      "climate",
-      "vergrendelen",
-      "ontgrendelen",
-      "afstandsbediening",
-      "toeteren",
-      "knipperen"
+      "polestar", "pole", "star", "auto", "ev", "elektrisch", "elektrische auto", "ev auto", "bev",
+      "bev auto", "slimme auto", "batterij auto", "laden", "laadlimiet", "voorverwarmen",
+      "climate", "vergrendelen", "ontgrendelen", "afstandsbediening", "toeteren", "knipperen"
+    ],
+    "de": [
+      "polestar", "pole", "star", "auto", "ev", "elektroauto", "elektrisch", "smart car", "bev",
+      "laden", "ladelimit", "vorklimatisierung", "klima", "vorheizen",
+      "sperren", "entsperren", "fernsteuerung", "hupen", "blinken"
+    ],
+    "fr": [
+      "polestar", "pole", "star", "voiture", "ve", "véhicule électrique", "voiture électrique", "bev",
+      "recharge", "limite de charge", "préconditionnement", "climatisation", "préchauffage",
+      "verrouiller", "déverrouiller", "télécommande", "klaxon", "feux"
+    ],
+    "it": [
+      "polestar", "pole", "star", "auto", "ev", "auto elettrica", "veicolo elettrico", "bev",
+      "ricarica", "limite di carica", "preriscaldamento", "clima",
+      "blocca", "sblocca", "telecomando", "clacson", "lampeggio"
+    ],
+    "sv": [
+      "polestar", "pole", "star", "bil", "elbil", "elektrisk", "smart bil", "bev",
+      "laddning", "laddgräns", "förvärmning", "klimat",
+      "lås", "lås upp", "fjärrkontroll", "tuta", "blink"
+    ],
+    "no": [
+      "polestar", "pole", "star", "bil", "elbil", "elektrisk", "smart bil",
+      "lading", "ladegrense", "forvarming", "klima",
+      "lås", "lås opp", "fjernstyring", "tut", "blink"
+    ],
+    "es": [
+      "polestar", "pole", "star", "coche", "ev", "vehículo eléctrico", "coche eléctrico", "bev",
+      "carga", "límite de carga", "preacondicionamiento", "climatización", "precalentamiento",
+      "bloquear", "desbloquear", "control remoto", "claxon", "luces"
+    ],
+    "da": [
+      "polestar", "pole", "star", "bil", "elbil", "elektrisk", "smart bil", "bev",
+      "opladning", "opladegrænse", "forvarmning", "klima",
+      "lås", "lås op", "fjernbetjening", "dyt", "blink"
+    ],
+    "ru": [
+      "polestar", "pole", "star", "автомобиль", "электромобиль", "ev", "электрический", "bev",
+      "зарядка", "лимит зарядки", "преднагрев", "климат",
+      "блокировка", "разблокировка", "пульт", "сигнал", "мигание"
+    ],
+    "pl": [
+      "polestar", "pole", "star", "samochód", "ev", "elektryczny", "samochód elektryczny", "bev",
+      "ładowanie", "limit ładowania", "preklimatyzacja", "klimat",
+      "zablokuj", "odblokuj", "pilot", "klakson", "miganie"
+    ],
+    "ko": [
+      "polestar", "pole", "star", "자동차", "ev", "전기차", "스마트카", "bev",
+      "충전", "충전 한도", "예열", "공조",
+      "잠금", "잠금 해제", "원격", "경적", "라이트"
+    ],
+    "ja": [
+      "polestar", "pole", "star", "車", "ev", "電気自動車", "スマートカー", "bev",
+      "充電", "充電上限", "プリコンディショニング", "空調",
+      "ロック", "アンロック", "リモート", "クラクション", "ライト点滅"
     ]
   },
   "homeyCommunityTopicId": 95083,

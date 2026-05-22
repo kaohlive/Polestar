@@ -4,8 +4,18 @@
     "icon": "/drivers/vehicle/assets/update.svg",
     "title": {
         "en": "Software update available",
+        "nl": "Software-update beschikbaar",
+        "de": "Software-Update verfügbar",
+        "fr": "Mise à jour logicielle disponible",
+        "it": "Aggiornamento software disponibile",
+        "sv": "Programuppdatering tillgänglig",
         "no": "Programvareoppdatering tilgjengelig",
-        "nl": "Software-update beschikbaar"
+        "es": "Actualización de software disponible",
+        "da": "Softwareopdatering tilgængelig",
+        "ru": "Доступно обновление ПО",
+        "pl": "Dostępna aktualizacja oprogramowania",
+        "ko": "소프트웨어 업데이트 가능",
+        "ja": "ソフトウェア更新あり"
     },
     "getable": true,
     "setable": false,

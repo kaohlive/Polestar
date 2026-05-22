@@ -4,12 +4,33 @@
   "icon": "/drivers/polestar-2-csv/assets/images/speedometer.svg",
   "title": {
     "en": "Speed",
+    "nl": "Snelheid",
+    "de": "Geschwindigkeit",
+    "fr": "Vitesse",
+    "it": "Velocità",
+    "sv": "Hastighet",
     "no": "Fart",
-    "nl": "Snelheid"
+    "es": "Velocidad",
+    "da": "Hastighed",
+    "ru": "Скорость",
+    "pl": "Prędkość",
+    "ko": "속도",
+    "ja": "速度"
   },
   "units": {
     "en": "km/h",
-    "no": "km/t"
+    "nl": "km/u",
+    "de": "km/h",
+    "fr": "km/h",
+    "it": "km/h",
+    "sv": "km/h",
+    "no": "km/t",
+    "es": "km/h",
+    "da": "km/t",
+    "ru": "км/ч",
+    "pl": "km/h",
+    "ko": "km/h",
+    "ja": "km/h"
   },
   "getable": true,
   "setable": false,

@@ -2,8 +2,18 @@
   "type": "boolean",
   "title": {
     "en": "Charging",
+    "nl": "Laden",
+    "de": "Lädt",
+    "fr": "Charge en cours",
+    "it": "In carica",
+    "sv": "Laddar",
     "no": "Lader",
-    "nl": "Laden"
+    "es": "Cargando",
+    "da": "Oplader",
+    "ru": "Зарядка",
+    "pl": "Ładowanie",
+    "ko": "충전 중",
+    "ja": "充電中"
   },
   "getable": true,
   "setable": false,

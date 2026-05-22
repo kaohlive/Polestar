@@ -2,8 +2,18 @@
   "type": "number",
   "title": {
     "en": "Days till service",
+    "nl": "Dagen tot service",
+    "de": "Tage bis zum Service",
+    "fr": "Jours avant entretien",
+    "it": "Giorni al tagliando",
+    "sv": "Dagar till service",
     "no": "Dager til service",
-    "nl": "Dagen tot service"
+    "es": "Días hasta el servicio",
+    "da": "Dage til service",
+    "ru": "Дней до ТО",
+    "pl": "Dni do serwisu",
+    "ko": "점검까지 남은 일수",
+    "ja": "点検まで日数"
   },
   "getable": true,
   "setable": false,

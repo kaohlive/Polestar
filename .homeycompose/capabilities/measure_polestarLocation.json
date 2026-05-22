@@ -4,8 +4,18 @@
   "icon": "/drivers/vehicle/assets/location.svg",
   "title": {
     "en": "Location",
+    "nl": "Locatie",
+    "de": "Standort",
+    "fr": "Position",
+    "it": "Posizione",
+    "sv": "Plats",
     "no": "Plassering",
-    "nl": "Locatie"
+    "es": "Ubicación",
+    "da": "Placering",
+    "ru": "Местоположение",
+    "pl": "Lokalizacja",
+    "ko": "위치",
+    "ja": "位置"
   },
   "getable": true,
   "setable": false,

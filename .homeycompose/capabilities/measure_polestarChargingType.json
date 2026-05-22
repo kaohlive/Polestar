@@ -4,8 +4,18 @@
     "icon": "/drivers/vehicle/assets/powerdc.svg",
     "title": {
         "en": "Charging type",
+        "nl": "Laadtype",
+        "de": "Ladetyp",
+        "fr": "Type de charge",
+        "it": "Tipo di ricarica",
+        "sv": "Laddningstyp",
         "no": "Ladetype",
-        "nl": "Laadtype"
+        "es": "Tipo de carga",
+        "da": "Opladningstype",
+        "ru": "Тип зарядки",
+        "pl": "Typ ładowania",
+        "ko": "충전 종류",
+        "ja": "充電タイプ"
     },
     "getable": true,
     "setable": false,

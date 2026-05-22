@@ -2,13 +2,35 @@
   "type": "number",
   "title": {
     "en": "Time remaining",
+    "nl": "Resterende tijd",
+    "de": "Verbleibende Zeit",
+    "fr": "Temps restant",
+    "it": "Tempo rimanente",
+    "sv": "Återstående tid",
     "no": "Gjenstående tid",
-    "nl": "Resterende tijd"
+    "es": "Tiempo restante",
+    "da": "Resterende tid",
+    "ru": "Осталось времени",
+    "pl": "Pozostały czas",
+    "ko": "남은 시간",
+    "ja": "残り時間"
   },
   "getable": true,
   "setable": false,
   "units": {
-    "en": "Min"
+    "en": "Min",
+    "nl": "Min",
+    "de": "Min",
+    "fr": "Min",
+    "it": "Min",
+    "sv": "Min",
+    "no": "Min",
+    "es": "Min",
+    "da": "Min",
+    "ru": "мин",
+    "pl": "Min",
+    "ko": "분",
+    "ja": "分"
   },
   "icon": "/drivers/vehicle/assets/timeremaining.svg"
 }

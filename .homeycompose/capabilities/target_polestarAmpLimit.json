@@ -4,8 +4,18 @@
     "icon": "/drivers/vehicle/assets/charging.svg",
     "title": {
         "en": "Charging amp limit",
+        "nl": "Ampère-limiet bij laden",
+        "de": "Ladestromgrenze",
+        "fr": "Limite d'ampérage de charge",
+        "it": "Limite amperaggio di carica",
+        "sv": "Laddströmsgräns",
         "no": "Amperegrense ved lading",
-        "nl": "Ampère-limiet bij laden"
+        "es": "Límite de amperaje de carga",
+        "da": "Strømgrænse ved opladning",
+        "ru": "Лимит тока зарядки",
+        "pl": "Limit amperażu ładowania",
+        "ko": "충전 전류 한도",
+        "ja": "充電アンペア上限"
     },
     "units": "A",
     "decimals": 0,

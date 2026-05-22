@@ -4,8 +4,18 @@
     "icon": "/drivers/vehicle/assets/tire-pressure.svg",
     "title": {
         "en": "Tyre pressure warning",
+        "nl": "Bandenspanningswaarschuwing",
+        "de": "Reifendruckwarnung",
+        "fr": "Alerte pression des pneus",
+        "it": "Avviso pressione pneumatici",
+        "sv": "Däcktrycksvarning",
         "no": "Dekktrykk-varsel",
-        "nl": "Bandenspanningswaarschuwing"
+        "es": "Aviso de presión de neumáticos",
+        "da": "Dæktryksadvarsel",
+        "ru": "Предупреждение о давлении в шинах",
+        "pl": "Ostrzeżenie o ciśnieniu w oponach",
+        "ko": "타이어 공기압 경고",
+        "ja": "タイヤ空気圧警告"
     },
     "getable": true,
     "setable": false,

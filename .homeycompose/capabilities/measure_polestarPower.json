@@ -5,8 +5,18 @@
     "icon": "/drivers/polestar-2-csv/assets/images/powerdc.svg",
     "title": {
         "en": "Power",
+        "nl": "Acceleratie",
+        "de": "Leistung",
+        "fr": "Puissance",
+        "it": "Potenza",
+        "sv": "Effekt",
         "no": "Effekt",
-        "nl": "Acceleratie"
+        "es": "Potencia",
+        "da": "Effekt",
+        "ru": "Мощность",
+        "pl": "Moc",
+        "ko": "출력",
+        "ja": "出力"
     },
     "units": "kW",
     "getable": true,

@@ -4,8 +4,18 @@
   "icon": "/drivers/polestar-2-csv/assets/images/update.svg",
   "title": {
     "en": "Updated",
+    "nl": "Bijgewerkt",
+    "de": "Aktualisiert",
+    "fr": "Mis à jour",
+    "it": "Aggiornato",
+    "sv": "Uppdaterad",
     "no": "Oppdatert",
-    "nl": "Bijgewerkt"
+    "es": "Actualizado",
+    "da": "Opdateret",
+    "ru": "Обновлено",
+    "pl": "Zaktualizowano",
+    "ko": "업데이트됨",
+    "ja": "更新済み"
   },
   "getable": true,
   "setable": false,

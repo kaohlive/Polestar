@@ -4,8 +4,18 @@
   "icon": "/drivers/polestar-2-csv/assets/images/gear.svg",
   "title": {
     "en": "Selected Gear",
+    "nl": "Geselecteerde versnelling",
+    "de": "Gewählter Gang",
+    "fr": "Vitesse engagée",
+    "it": "Marcia selezionata",
+    "sv": "Vald växel",
     "no": "Valgt gir",
-    "nl": "Geselecteerde versnelling"
+    "es": "Marcha seleccionada",
+    "da": "Valgt gear",
+    "ru": "Передача",
+    "pl": "Wybrany bieg",
+    "ko": "선택된 기어",
+    "ja": "選択中のギア"
   },
   "getable": true,
   "setable": false,

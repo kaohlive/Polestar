@@ -2,8 +2,18 @@
   "type": "boolean",
   "title": {
     "en": "Chargeport connected",
+    "nl": "Laadpoort verbonden",
+    "de": "Ladeanschluss verbunden",
+    "fr": "Trappe de charge connectée",
+    "it": "Porta di ricarica collegata",
+    "sv": "Laddport ansluten",
     "no": "Ladeport tilkoblet",
-    "nl": "Laadpoort verbonden"
+    "es": "Puerto de carga conectado",
+    "da": "Ladeport tilsluttet",
+    "ru": "Зарядный порт подключён",
+    "pl": "Gniazdo ładowania podłączone",
+    "ko": "충전 포트 연결됨",
+    "ja": "充電ポート接続中"
   },
   "getable": true,
   "setable": false,

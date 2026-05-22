@@ -2,13 +2,35 @@
   "type": "number",
   "title": {
     "en": "Odometer",
+    "nl": "Odometer",
+    "de": "Kilometerstand",
+    "fr": "Compteur kilométrique",
+    "it": "Contachilometri",
+    "sv": "Mätarställning",
     "no": "Kilometerteller",
-    "nl": "Odometer"
+    "es": "Cuentakilómetros",
+    "da": "Kilometertæller",
+    "ru": "Пробег",
+    "pl": "Licznik kilometrów",
+    "ko": "주행 거리계",
+    "ja": "オドメーター"
   },
   "getable": true,
   "setable": false,
   "units": {
-    "en": "KM"
+    "en": "KM",
+    "nl": "KM",
+    "de": "km",
+    "fr": "km",
+    "it": "km",
+    "sv": "km",
+    "no": "KM",
+    "es": "km",
+    "da": "km",
+    "ru": "км",
+    "pl": "km",
+    "ko": "km",
+    "ja": "km"
   },
   "icon": "/drivers/vehicle/assets/odometer.svg"
 }

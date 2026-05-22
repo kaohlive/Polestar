@@ -2,13 +2,35 @@
   "type": "number",
   "title": {
     "en": "Distance till service",
+    "nl": "Afstand tot service",
+    "de": "Distanz bis zum Service",
+    "fr": "Distance avant entretien",
+    "it": "Distanza al tagliando",
+    "sv": "Sträcka till service",
     "no": "Avstand til service",
-    "nl": "Afstand tot service"
+    "es": "Distancia hasta el servicio",
+    "da": "Distance til service",
+    "ru": "Расстояние до ТО",
+    "pl": "Dystans do serwisu",
+    "ko": "점검까지 남은 거리",
+    "ja": "点検まで距離"
   },
   "getable": true,
   "setable": false,
   "units": {
-    "en": "KM"
+    "en": "KM",
+    "nl": "KM",
+    "de": "km",
+    "fr": "km",
+    "it": "km",
+    "sv": "km",
+    "no": "KM",
+    "es": "km",
+    "da": "km",
+    "ru": "км",
+    "pl": "km",
+    "ko": "km",
+    "ja": "km"
   },
   "icon": "/drivers/vehicle/assets/odometer.svg"
 }

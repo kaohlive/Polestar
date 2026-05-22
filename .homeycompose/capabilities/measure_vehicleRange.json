@@ -2,13 +2,35 @@
   "type": "number",
   "title": {
     "en": "Range",
+    "nl": "Bereik",
+    "de": "Reichweite",
+    "fr": "Autonomie",
+    "it": "Autonomia",
+    "sv": "Räckvidd",
     "no": "Rekkevidde",
-    "nl": "Bereik"
+    "es": "Autonomía",
+    "da": "Rækkevidde",
+    "ru": "Запас хода",
+    "pl": "Zasięg",
+    "ko": "주행 가능 거리",
+    "ja": "走行可能距離"
   },
   "getable": true,
   "setable": false,
   "units": {
-    "en": "KM"
+    "en": "KM",
+    "nl": "KM",
+    "de": "km",
+    "fr": "km",
+    "it": "km",
+    "sv": "km",
+    "no": "KM",
+    "es": "km",
+    "da": "km",
+    "ru": "км",
+    "pl": "km",
+    "ko": "km",
+    "ja": "km"
   },
   "icon": "/drivers/vehicle/assets/range.svg"
 }

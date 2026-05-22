@@ -4,8 +4,18 @@
   "icon": "/drivers/polestar-2-csv/assets/images/altitude.svg",
   "title": {
     "en": "Altitude",
+    "nl": "Hoogte",
+    "de": "Höhe",
+    "fr": "Altitude",
+    "it": "Altitudine",
+    "sv": "Höjd",
     "no": "Høyde",
-    "nl": "Hoogte"
+    "es": "Altitud",
+    "da": "Højde",
+    "ru": "Высота",
+    "pl": "Wysokość",
+    "ko": "고도",
+    "ja": "高度"
   },
   "units": "m",
   "getable": true,

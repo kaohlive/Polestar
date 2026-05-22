@@ -1,8 +1,18 @@
 {
   "name": {
     "en": "My Polestar",
+    "nl": "Mijn Polestar",
+    "de": "Mein Polestar",
+    "fr": "Ma Polestar",
+    "it": "La mia Polestar",
+    "sv": "Min Polestar",
     "no": "Min Polestar",
-    "nl": "Mijn Polestar"
+    "es": "Mi Polestar",
+    "da": "Min Polestar",
+    "ru": "Мой Polestar",
+    "pl": "Mój Polestar",
+    "ko": "내 폴스타",
+    "ja": "マイPolestar"
   },
   "class": "car",
   "capabilities": [
@@ -52,87 +62,547 @@
   },
   "capabilitiesOptions": {
     "button.charge_start": {
-      "title": { "en": "Start charging", "no": "Start lading", "nl": "Laden starten" },
-      "desc": { "en": "Override the charge timer and start charging now.", "no": "Overstyr ladetidtakeren og start lading nå.", "nl": "Negeer de laadtimer en begin direct met laden." }
+      "title": {
+        "en": "Start charging",
+        "nl": "Laden starten",
+        "de": "Laden starten",
+        "fr": "Démarrer la charge",
+        "it": "Avvia ricarica",
+        "sv": "Starta laddning",
+        "no": "Start lading",
+        "es": "Iniciar carga",
+        "da": "Start opladning",
+        "ru": "Начать зарядку",
+        "pl": "Rozpocznij ładowanie",
+        "ko": "충전 시작",
+        "ja": "充電を開始"
+      },
+      "desc": {
+        "en": "Override the charge timer and start charging now.",
+        "nl": "Negeer de laadtimer en begin direct met laden.",
+        "de": "Lade-Timer überschreiben und sofort laden.",
+        "fr": "Ignorer la minuterie et démarrer la charge maintenant.",
+        "it": "Ignora il timer di ricarica e avvia ora la ricarica.",
+        "sv": "Åsidosätt laddningstimer och börja ladda nu.",
+        "no": "Overstyr ladetidtakeren og start lading nå.",
+        "es": "Ignora el temporizador de carga y empieza a cargar ahora.",
+        "da": "Tilsidesæt ladningstimer og start opladning nu.",
+        "ru": "Игнорировать таймер и начать зарядку сейчас.",
+        "pl": "Pomiń harmonogram i rozpocznij ładowanie teraz.",
+        "ko": "충전 타이머를 무시하고 즉시 충전을 시작합니다.",
+        "ja": "充電タイマーを上書きして今すぐ充電を開始します。"
+      }
     },
     "button.charge_stop": {
-      "title": { "en": "Stop charging", "no": "Stopp lading", "nl": "Laden stoppen" },
-      "desc": { "en": "Cancel the charge-now override.", "no": "Avbryt lad-nå-overstyringen.", "nl": "Heft de lad-nu-override op." }
+      "title": {
+        "en": "Stop charging",
+        "nl": "Laden stoppen",
+        "de": "Laden stoppen",
+        "fr": "Arrêter la charge",
+        "it": "Ferma ricarica",
+        "sv": "Stoppa laddning",
+        "no": "Stopp lading",
+        "es": "Detener carga",
+        "da": "Stop opladning",
+        "ru": "Остановить зарядку",
+        "pl": "Zatrzymaj ładowanie",
+        "ko": "충전 중지",
+        "ja": "充電を停止"
+      },
+      "desc": {
+        "en": "Cancel the charge-now override.",
+        "nl": "Heft de lad-nu-override op.",
+        "de": "Sofort-Laden-Modus aufheben.",
+        "fr": "Annuler la charge immédiate.",
+        "it": "Annulla la ricarica immediata.",
+        "sv": "Avbryt ladda-nu-läget.",
+        "no": "Avbryt lad-nå-overstyringen.",
+        "es": "Cancela la carga inmediata.",
+        "da": "Annullér oplad-nu-tilstanden.",
+        "ru": "Отменить немедленную зарядку.",
+        "pl": "Anuluj natychmiastowe ładowanie.",
+        "ko": "즉시 충전 모드를 취소합니다.",
+        "ja": "即時充電モードを解除します。"
+      }
     },
     "button.honk_flash": {
-      "title": { "en": "Honk and flash", "no": "Tut og blink", "nl": "Toeter en knipper" },
-      "desc": { "en": "Find the car — honk horn and flash lights.", "no": "Finn bilen — tut og blink med lysene.", "nl": "Vind de auto — toeteren en lichten knipperen." }
+      "title": {
+        "en": "Honk and flash",
+        "nl": "Toeter en knipper",
+        "de": "Hupen und Blinken",
+        "fr": "Klaxon et appels de phares",
+        "it": "Clacson e lampeggio",
+        "sv": "Tuta och blinka",
+        "no": "Tut og blink",
+        "es": "Claxon y luces",
+        "da": "Dyt og blink",
+        "ru": "Сигнал и моргание",
+        "pl": "Klakson i miganie",
+        "ko": "경적과 라이트",
+        "ja": "クラクションとライト点滅"
+      },
+      "desc": {
+        "en": "Find the car — honk horn and flash lights.",
+        "nl": "Vind de auto — toeteren en lichten knipperen.",
+        "de": "Auto finden — Hupe und Lichthupe.",
+        "fr": "Retrouver la voiture — klaxon et appels de phares.",
+        "it": "Trova l'auto — clacson e lampeggio dei fari.",
+        "sv": "Hitta bilen — tuta och blinka med ljusen.",
+        "no": "Finn bilen — tut og blink med lysene.",
+        "es": "Encuentra el coche — claxon y destello de luces.",
+        "da": "Find bilen — dyt og blink med lygterne.",
+        "ru": "Найти машину — сигнал и моргание фарами.",
+        "pl": "Znajdź auto — klakson i miganie świateł.",
+        "ko": "차 찾기 — 경적과 라이트 점멸.",
+        "ja": "車を探す — クラクションとライト点滅。"
+      }
     },
     "button.unlock_trunk": {
-      "title": { "en": "Unlock trunk", "no": "Lås opp bagasjerom", "nl": "Kofferbak ontgrendelen" },
-      "desc": { "en": "Unlock only the trunk, leaving the cabin locked.", "no": "Lås opp kun bagasjerommet.", "nl": "Ontgrendel alleen de kofferbak; het interieur blijft vergrendeld." }
+      "title": {
+        "en": "Unlock trunk",
+        "nl": "Kofferbak ontgrendelen",
+        "de": "Kofferraum entriegeln",
+        "fr": "Déverrouiller le coffre",
+        "it": "Sblocca bagagliaio",
+        "sv": "Lås upp bagageutrymmet",
+        "no": "Lås opp bagasjerom",
+        "es": "Desbloquear maletero",
+        "da": "Lås bagagerummet op",
+        "ru": "Открыть багажник",
+        "pl": "Odblokuj bagażnik",
+        "ko": "트렁크 잠금 해제",
+        "ja": "トランクのロック解除"
+      },
+      "desc": {
+        "en": "Unlock only the trunk, leaving the cabin locked.",
+        "nl": "Ontgrendel alleen de kofferbak; het interieur blijft vergrendeld.",
+        "de": "Nur den Kofferraum entriegeln, Kabine bleibt verriegelt.",
+        "fr": "Déverrouille uniquement le coffre; l'habitacle reste verrouillé.",
+        "it": "Sblocca solo il bagagliaio; l'abitacolo resta bloccato.",
+        "sv": "Lås endast upp bagageutrymmet; kupén förblir låst.",
+        "no": "Lås opp kun bagasjerommet; kupeen forblir låst.",
+        "es": "Desbloquea solo el maletero; el habitáculo permanece bloqueado.",
+        "da": "Lås kun bagagerummet op; kabinen forbliver låst.",
+        "ru": "Открыть только багажник; салон остаётся закрытым.",
+        "pl": "Odblokuj tylko bagażnik; kabina pozostaje zamknięta.",
+        "ko": "트렁크만 잠금 해제하며 캐빈은 잠긴 상태로 유지합니다.",
+        "ja": "トランクのみロック解除し、車内はロックしたままにします。"
+      }
     },
     "button.windows_open": {
-      "title": { "en": "Open windows", "no": "Åpne vinduer", "nl": "Ramen openen" },
-      "desc": { "en": "Open all four side windows.", "no": "Åpne alle fire sidevinduer.", "nl": "Open alle vier zijramen." }
+      "title": {
+        "en": "Open windows",
+        "nl": "Ramen openen",
+        "de": "Fenster öffnen",
+        "fr": "Ouvrir les vitres",
+        "it": "Apri finestrini",
+        "sv": "Öppna fönster",
+        "no": "Åpne vinduer",
+        "es": "Abrir ventanas",
+        "da": "Åbn vinduer",
+        "ru": "Открыть окна",
+        "pl": "Otwórz okna",
+        "ko": "창문 열기",
+        "ja": "ウィンドウを開く"
+      },
+      "desc": {
+        "en": "Open all four side windows.",
+        "nl": "Open alle vier zijramen.",
+        "de": "Alle vier Seitenfenster öffnen.",
+        "fr": "Ouvre les quatre vitres latérales.",
+        "it": "Apre tutti e quattro i finestrini laterali.",
+        "sv": "Öppna alla fyra sidofönster.",
+        "no": "Åpne alle fire sidevinduer.",
+        "es": "Abre las cuatro ventanas laterales.",
+        "da": "Åbn alle fire sidevinduer.",
+        "ru": "Открыть все четыре боковых окна.",
+        "pl": "Otwórz wszystkie cztery boczne szyby.",
+        "ko": "네 개의 옆 창문을 모두 엽니다.",
+        "ja": "サイドウィンドウを4枚すべて開けます。"
+      }
     },
     "button.windows_close": {
-      "title": { "en": "Close windows", "no": "Lukk vinduer", "nl": "Ramen sluiten" },
-      "desc": { "en": "Close all side windows.", "no": "Lukk alle sidevinduer.", "nl": "Sluit alle zijramen." }
+      "title": {
+        "en": "Close windows",
+        "nl": "Ramen sluiten",
+        "de": "Fenster schließen",
+        "fr": "Fermer les vitres",
+        "it": "Chiudi finestrini",
+        "sv": "Stäng fönster",
+        "no": "Lukk vinduer",
+        "es": "Cerrar ventanas",
+        "da": "Luk vinduer",
+        "ru": "Закрыть окна",
+        "pl": "Zamknij okna",
+        "ko": "창문 닫기",
+        "ja": "ウィンドウを閉じる"
+      },
+      "desc": {
+        "en": "Close all side windows.",
+        "nl": "Sluit alle zijramen.",
+        "de": "Alle Seitenfenster schließen.",
+        "fr": "Ferme toutes les vitres latérales.",
+        "it": "Chiude tutti i finestrini laterali.",
+        "sv": "Stäng alla sidofönster.",
+        "no": "Lukk alle sidevinduer.",
+        "es": "Cierra todas las ventanas laterales.",
+        "da": "Luk alle sidevinduer.",
+        "ru": "Закрыть все боковые окна.",
+        "pl": "Zamknij wszystkie boczne szyby.",
+        "ko": "모든 옆 창문을 닫습니다.",
+        "ja": "サイドウィンドウをすべて閉じます。"
+      }
     },
     "measure_pressure.front_left": {
-      "title": { "en": "Tyre pressure FL", "no": "Dekktrykk FV", "nl": "Bandenspanning LV" },
+      "title": {
+        "en": "Tyre pressure FL",
+        "nl": "Bandenspanning LV",
+        "de": "Reifendruck VL",
+        "fr": "Pression pneu AVG",
+        "it": "Pressione pneumatico AS",
+        "sv": "Däcktryck FV",
+        "no": "Dekktrykk FV",
+        "es": "Presión neumático DI",
+        "da": "Dæktryk FV",
+        "ru": "Давление шины ПЛ",
+        "pl": "Ciśnienie opony PL",
+        "ko": "타이어 압력 FL",
+        "ja": "タイヤ空気圧 FL"
+      },
       "units": { "en": "kPa" },
       "decimals": 0,
       "insights": true
     },
     "measure_pressure.front_right": {
-      "title": { "en": "Tyre pressure FR", "no": "Dekktrykk FH", "nl": "Bandenspanning RV" },
+      "title": {
+        "en": "Tyre pressure FR",
+        "nl": "Bandenspanning RV",
+        "de": "Reifendruck VR",
+        "fr": "Pression pneu AVD",
+        "it": "Pressione pneumatico AD",
+        "sv": "Däcktryck FH",
+        "no": "Dekktrykk FH",
+        "es": "Presión neumático DD",
+        "da": "Dæktryk FH",
+        "ru": "Давление шины ПП",
+        "pl": "Ciśnienie opony PP",
+        "ko": "타이어 압력 FR",
+        "ja": "タイヤ空気圧 FR"
+      },
       "units": { "en": "kPa" },
       "decimals": 0,
       "insights": true
     },
     "measure_pressure.rear_left": {
-      "title": { "en": "Tyre pressure RL", "no": "Dekktrykk BV", "nl": "Bandenspanning LA" },
+      "title": {
+        "en": "Tyre pressure RL",
+        "nl": "Bandenspanning LA",
+        "de": "Reifendruck HL",
+        "fr": "Pression pneu ARG",
+        "it": "Pressione pneumatico PS",
+        "sv": "Däcktryck BV",
+        "no": "Dekktrykk BV",
+        "es": "Presión neumático TI",
+        "da": "Dæktryk BV",
+        "ru": "Давление шины ЗЛ",
+        "pl": "Ciśnienie opony TL",
+        "ko": "타이어 압력 RL",
+        "ja": "タイヤ空気圧 RL"
+      },
       "units": { "en": "kPa" },
       "decimals": 0,
       "insights": true
     },
     "measure_pressure.rear_right": {
-      "title": { "en": "Tyre pressure RR", "no": "Dekktrykk BH", "nl": "Bandenspanning RA" },
+      "title": {
+        "en": "Tyre pressure RR",
+        "nl": "Bandenspanning RA",
+        "de": "Reifendruck HR",
+        "fr": "Pression pneu ARD",
+        "it": "Pressione pneumatico PD",
+        "sv": "Däcktryck BH",
+        "no": "Dekktrykk BH",
+        "es": "Presión neumático TD",
+        "da": "Dæktryk BH",
+        "ru": "Давление шины ЗП",
+        "pl": "Ciśnienie opony TP",
+        "ko": "타이어 압력 RR",
+        "ja": "タイヤ空気圧 RR"
+      },
       "units": { "en": "kPa" },
       "decimals": 0,
       "insights": true
     },
     "locked": {
-      "title": { "en": "Locked", "no": "Låst", "nl": "Vergrendeld" },
-      "desc": { "en": "Central-lock state. Toggle to lock/unlock the car.",
-                "no": "Status for sentrallås. Trykk for å låse / låse opp bilen.",
-                "nl": "Centrale-vergrendelingsstatus. Schakel om de auto te vergrendelen of ontgrendelen." }
+      "title": {
+        "en": "Locked",
+        "nl": "Vergrendeld",
+        "de": "Verriegelt",
+        "fr": "Verrouillée",
+        "it": "Bloccata",
+        "sv": "Låst",
+        "no": "Låst",
+        "es": "Bloqueada",
+        "da": "Låst",
+        "ru": "Заблокировано",
+        "pl": "Zablokowano",
+        "ko": "잠김",
+        "ja": "ロック中"
+      },
+      "desc": {
+        "en": "Central-lock state. Toggle to lock/unlock the car.",
+        "nl": "Centrale-vergrendelingsstatus. Schakel om de auto te vergrendelen of ontgrendelen.",
+        "de": "Status der Zentralverriegelung. Umschalten zum Ver-/Entriegeln.",
+        "fr": "État du verrouillage centralisé. Basculez pour verrouiller/déverrouiller.",
+        "it": "Stato chiusura centralizzata. Toggle per bloccare/sbloccare l'auto.",
+        "sv": "Centrallåsets status. Växla för att låsa/låsa upp bilen.",
+        "no": "Status for sentrallås. Trykk for å låse / låse opp bilen.",
+        "es": "Estado del cierre centralizado. Conmuta para bloquear/desbloquear.",
+        "da": "Centrallåsens status. Slå til/fra for at låse/låse op.",
+        "ru": "Состояние центрального замка. Переключите, чтобы запереть/отпереть.",
+        "pl": "Stan centralnego zamka. Przełącz, aby zamknąć/otworzyć auto.",
+        "ko": "중앙 잠금 상태. 차량을 잠그거나 해제하려면 전환하세요.",
+        "ja": "セントラルロック状態。トグルで施錠／解錠します。"
+      }
     },
     "onoff.climate": {
-      "title": { "en": "Climate", "no": "Klima", "nl": "Klimaat" },
-      "desc": { "en": "Start or stop parking climatization. Uses the heating settings from device settings.",
-                "no": "Start eller stopp klimaanlegg. Bruker oppvarmingsinnstillinger fra enhetsinnstillinger.",
-                "nl": "Start of stop de parkeer-klimaatregeling. Gebruikt de verwarmingsinstellingen uit de device-settings." }
+      "title": {
+        "en": "Climate",
+        "nl": "Klimaat",
+        "de": "Klima",
+        "fr": "Climatisation",
+        "it": "Clima",
+        "sv": "Klimat",
+        "no": "Klima",
+        "es": "Climatización",
+        "da": "Klima",
+        "ru": "Климат",
+        "pl": "Klimat",
+        "ko": "공조",
+        "ja": "空調"
+      },
+      "desc": {
+        "en": "Start or stop parking climatization. Uses the heating settings from device settings.",
+        "nl": "Start of stop de parkeer-klimaatregeling. Gebruikt de verwarmingsinstellingen uit de device-settings.",
+        "de": "Start/Stopp der Standklimatisierung. Verwendet die Heizungseinstellungen aus den Geräteeinstellungen.",
+        "fr": "Démarre ou arrête la climatisation à l'arrêt. Utilise les réglages de chauffage du device.",
+        "it": "Avvia o ferma la climatizzazione in sosta. Usa le impostazioni di riscaldamento del dispositivo.",
+        "sv": "Starta eller stoppa parkeringsklimatisering. Använder värmeinställningar från enheten.",
+        "no": "Start eller stopp klimaanlegg. Bruker oppvarmingsinnstillinger fra enhetsinnstillinger.",
+        "es": "Inicia o detiene la climatización en estacionamiento. Usa los ajustes de calor del dispositivo.",
+        "da": "Start eller stop parkeringsklima. Bruger varmeindstillingerne fra enheden.",
+        "ru": "Включить/выключить климат при стоянке. Использует настройки обогрева устройства.",
+        "pl": "Włącz lub wyłącz preklimatyzację. Używa ustawień ogrzewania z device-settings.",
+        "ko": "주차 공조를 시작/중지합니다. 기기 설정의 난방 값을 사용합니다.",
+        "ja": "駐車時の空調を開始／停止します。デバイス設定の暖房値を使用します。"
+      }
     },
     "target_temperature": {
       "min": 16,
       "max": 30,
       "step": 0.5,
       "decimals": 1,
-      "title": { "en": "Climate target", "no": "Klima-mål", "nl": "Klimaatdoel" },
-      "desc": { "en": "Desired climatization temperature. Used as default when starting climate from the toggle.",
-                "no": "Ønsket klimatemperatur. Brukes som standard ved start via klima-bryteren.",
-                "nl": "Gewenste klimaattemperatuur. Wordt als default gebruikt bij het aanzetten via de climate-toggle." }
+      "title": {
+        "en": "Climate target",
+        "nl": "Klimaatdoel",
+        "de": "Klima-Soll",
+        "fr": "Cible climatisation",
+        "it": "Obiettivo clima",
+        "sv": "Klimatmål",
+        "no": "Klima-mål",
+        "es": "Objetivo climatización",
+        "da": "Klima-mål",
+        "ru": "Цель климата",
+        "pl": "Cel klimatu",
+        "ko": "공조 목표",
+        "ja": "空調の目標"
+      },
+      "desc": {
+        "en": "Desired climatization temperature. Used as default when starting climate from the toggle.",
+        "nl": "Gewenste klimaattemperatuur. Wordt als default gebruikt bij het aanzetten via de climate-toggle.",
+        "de": "Gewünschte Klimatisierungstemperatur. Wird beim Start per Toggle als Standard verwendet.",
+        "fr": "Température de climatisation souhaitée. Utilisée par défaut au démarrage depuis le toggle.",
+        "it": "Temperatura clima desiderata. Usata come default all'avvio dal toggle.",
+        "sv": "Önskad klimattemperatur. Används som standard vid start via toggeln.",
+        "no": "Ønsket klimatemperatur. Brukes som standard ved start via klima-bryteren.",
+        "es": "Temperatura deseada. Se usa por defecto al iniciar la climatización desde el conmutador.",
+        "da": "Ønsket klima-temperatur. Bruges som standard ved start via toggle.",
+        "ru": "Желаемая температура климата. По умолчанию при включении переключателем.",
+        "pl": "Pożądana temperatura klimatu. Używana jako domyślna przy włączeniu z toggle.",
+        "ko": "원하는 공조 온도. 토글로 공조 시작 시 기본값으로 사용됩니다.",
+        "ja": "希望する空調温度。トグルから空調開始時の既定値として使用します。"
+      }
     },
     "measure_temperature": {
-      "title": { "en": "Interior temperature", "no": "Innetemperatur", "nl": "Binnentemperatuur" }
+      "title": {
+        "en": "Interior temperature",
+        "nl": "Binnentemperatuur",
+        "de": "Innentemperatur",
+        "fr": "Température intérieure",
+        "it": "Temperatura interna",
+        "sv": "Innertemperatur",
+        "no": "Innetemperatur",
+        "es": "Temperatura interior",
+        "da": "Indetemperatur",
+        "ru": "Температура в салоне",
+        "pl": "Temperatura wewnątrz",
+        "ko": "실내 온도",
+        "ja": "車内温度"
+      }
     },
-    "alarm_contact.door_front_left":  { "title": { "en": "Door FL open",  "no": "Dør FV åpen",  "nl": "Deur LV open" } },
-    "alarm_contact.door_front_right": { "title": { "en": "Door FR open",  "no": "Dør FH åpen",  "nl": "Deur RV open" } },
-    "alarm_contact.door_rear_left":   { "title": { "en": "Door RL open",  "no": "Dør BV åpen",  "nl": "Deur LA open" } },
-    "alarm_contact.door_rear_right":  { "title": { "en": "Door RR open",  "no": "Dør BH åpen",  "nl": "Deur RA open" } },
-    "alarm_contact.window_any":       { "title": { "en": "Window open",   "no": "Vindu åpent",  "nl": "Raam open" } },
-    "alarm_contact.tailgate":         { "title": { "en": "Tailgate open", "no": "Bakluke åpen", "nl": "Kofferbak open" } },
-    "alarm_contact.hood":             { "title": { "en": "Hood open",     "no": "Panser åpent", "nl": "Motorkap open" } },
-    "alarm_contact.sunroof":          { "title": { "en": "Sunroof open",  "no": "Takluke åpen", "nl": "Schuifdak open" } },
-    "alarm_contact.tank_lid":         { "title": { "en": "Charge port open", "no": "Ladeluke åpen", "nl": "Laadklep open" } }
+    "alarm_contact.door_front_left": {
+      "title": {
+        "en": "Door FL open",
+        "nl": "Deur LV open",
+        "de": "Tür VL offen",
+        "fr": "Porte AVG ouverte",
+        "it": "Porta AS aperta",
+        "sv": "Dörr FV öppen",
+        "no": "Dør FV åpen",
+        "es": "Puerta DI abierta",
+        "da": "Dør FV åben",
+        "ru": "Дверь ПЛ открыта",
+        "pl": "Drzwi PL otwarte",
+        "ko": "FL 도어 열림",
+        "ja": "FLドア開"
+      }
+    },
+    "alarm_contact.door_front_right": {
+      "title": {
+        "en": "Door FR open",
+        "nl": "Deur RV open",
+        "de": "Tür VR offen",
+        "fr": "Porte AVD ouverte",
+        "it": "Porta AD aperta",
+        "sv": "Dörr FH öppen",
+        "no": "Dør FH åpen",
+        "es": "Puerta DD abierta",
+        "da": "Dør FH åben",
+        "ru": "Дверь ПП открыта",
+        "pl": "Drzwi PP otwarte",
+        "ko": "FR 도어 열림",
+        "ja": "FRドア開"
+      }
+    },
+    "alarm_contact.door_rear_left": {
+      "title": {
+        "en": "Door RL open",
+        "nl": "Deur LA open",
+        "de": "Tür HL offen",
+        "fr": "Porte ARG ouverte",
+        "it": "Porta PS aperta",
+        "sv": "Dörr BV öppen",
+        "no": "Dør BV åpen",
+        "es": "Puerta TI abierta",
+        "da": "Dør BV åben",
+        "ru": "Дверь ЗЛ открыта",
+        "pl": "Drzwi TL otwarte",
+        "ko": "RL 도어 열림",
+        "ja": "RLドア開"
+      }
+    },
+    "alarm_contact.door_rear_right": {
+      "title": {
+        "en": "Door RR open",
+        "nl": "Deur RA open",
+        "de": "Tür HR offen",
+        "fr": "Porte ARD ouverte",
+        "it": "Porta PD aperta",
+        "sv": "Dörr BH öppen",
+        "no": "Dør BH åpen",
+        "es": "Puerta TD abierta",
+        "da": "Dør BH åben",
+        "ru": "Дверь ЗП открыта",
+        "pl": "Drzwi TP otwarte",
+        "ko": "RR 도어 열림",
+        "ja": "RRドア開"
+      }
+    },
+    "alarm_contact.window_any": {
+      "title": {
+        "en": "Window open",
+        "nl": "Raam open",
+        "de": "Fenster offen",
+        "fr": "Vitre ouverte",
+        "it": "Finestrino aperto",
+        "sv": "Fönster öppet",
+        "no": "Vindu åpent",
+        "es": "Ventana abierta",
+        "da": "Vindue åbent",
+        "ru": "Окно открыто",
+        "pl": "Okno otwarte",
+        "ko": "창문 열림",
+        "ja": "ウィンドウ開"
+      }
+    },
+    "alarm_contact.tailgate": {
+      "title": {
+        "en": "Tailgate open",
+        "nl": "Kofferbak open",
+        "de": "Heckklappe offen",
+        "fr": "Hayon ouvert",
+        "it": "Portellone aperto",
+        "sv": "Bakluckan öppen",
+        "no": "Bakluke åpen",
+        "es": "Portón abierto",
+        "da": "Bagklap åben",
+        "ru": "Багажник открыт",
+        "pl": "Klapa bagażnika otwarta",
+        "ko": "트렁크 열림",
+        "ja": "テールゲート開"
+      }
+    },
+    "alarm_contact.hood": {
+      "title": {
+        "en": "Hood open",
+        "nl": "Motorkap open",
+        "de": "Motorhaube offen",
+        "fr": "Capot ouvert",
+        "it": "Cofano aperto",
+        "sv": "Motorhuven öppen",
+        "no": "Panser åpent",
+        "es": "Capó abierto",
+        "da": "Motorhjelm åben",
+        "ru": "Капот открыт",
+        "pl": "Maska otwarta",
+        "ko": "후드 열림",
+        "ja": "ボンネット開"
+      }
+    },
+    "alarm_contact.sunroof": {
+      "title": {
+        "en": "Sunroof open",
+        "nl": "Schuifdak open",
+        "de": "Schiebedach offen",
+        "fr": "Toit ouvrant ouvert",
+        "it": "Tetto apribile aperto",
+        "sv": "Soltak öppet",
+        "no": "Takluke åpen",
+        "es": "Techo solar abierto",
+        "da": "Soltag åbent",
+        "ru": "Люк открыт",
+        "pl": "Szyberdach otwarty",
+        "ko": "선루프 열림",
+        "ja": "サンルーフ開"
+      }
+    },
+    "alarm_contact.tank_lid": {
+      "title": {
+        "en": "Charge port open",
+        "nl": "Laadklep open",
+        "de": "Ladeklappe offen",
+        "fr": "Trappe de charge ouverte",
+        "it": "Sportello di ricarica aperto",
+        "sv": "Laddlucka öppen",
+        "no": "Ladeluke åpen",
+        "es": "Tapa de carga abierta",
+        "da": "Ladeklap åben",
+        "ru": "Лючок зарядки открыт",
+        "pl": "Klapka ładowania otwarta",
+        "ko": "충전 포트 열림",
+        "ja": "充電ポート開"
+      }
+    }
   },
   "platforms": [
     "local"

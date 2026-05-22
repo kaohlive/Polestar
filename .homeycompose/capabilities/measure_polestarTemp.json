@@ -4,8 +4,18 @@
   "icon": "/drivers/polestar-2-csv/assets/images/temp.svg",
   "title": {
     "en": "Ambient Temperature",
+    "nl": "Buitentemperatuur",
+    "de": "Außentemperatur",
+    "fr": "Température extérieure",
+    "it": "Temperatura esterna",
+    "sv": "Utomhustemperatur",
     "no": "Utetemperatur",
-    "nl": "Buitentemperatuur"
+    "es": "Temperatura exterior",
+    "da": "Udetemperatur",
+    "ru": "Наружная температура",
+    "pl": "Temperatura zewnętrzna",
+    "ko": "외기 온도",
+    "ja": "外気温"
   },
   "units": "°C",
   "getable": true,

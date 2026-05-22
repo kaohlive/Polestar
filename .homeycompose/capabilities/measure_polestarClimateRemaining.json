@@ -4,8 +4,18 @@
     "icon": "/drivers/vehicle/assets/update.svg",
     "title": {
         "en": "Climate time remaining",
+        "nl": "Climate resterend",
+        "de": "Verbleibende Klimazeit",
+        "fr": "Climatisation - temps restant",
+        "it": "Tempo clima rimanente",
+        "sv": "Klimat - tid kvar",
         "no": "Klima-tid igjen",
-        "nl": "Climate resterend"
+        "es": "Climatización - tiempo restante",
+        "da": "Klima - resterende tid",
+        "ru": "Климат — оставшееся время",
+        "pl": "Klimat — pozostały czas",
+        "ko": "공조 남은 시간",
+        "ja": "空調 残り時間"
     },
     "units": "min",
     "decimals": 0,

@@ -4,8 +4,18 @@
   "icon": "/drivers/polestar-2-csv/assets/images/ccs.svg",
   "title": {
     "en": "Charge port",
+    "nl": "Laadpoort",
+    "de": "Ladeanschluss",
+    "fr": "Trappe de charge",
+    "it": "Porta di ricarica",
+    "sv": "Laddport",
     "no": "Ladeport",
-    "nl": "Laadpoort"
+    "es": "Puerto de carga",
+    "da": "Ladeport",
+    "ru": "Зарядный порт",
+    "pl": "Gniazdo ładowania",
+    "ko": "충전 포트",
+    "ja": "充電ポート"
   },
   "getable": true,
   "setable": false,

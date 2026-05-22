@@ -4,8 +4,18 @@
     "icon": "/drivers/vehicle/assets/charging.svg",
     "title": {
         "en": "Session charge",
+        "nl": "Laadsessie",
+        "de": "Sitzungsladung",
+        "fr": "Charge de la session",
+        "it": "Ricarica sessione",
+        "sv": "Laddning sessionen",
         "no": "Øktens lading",
-        "nl": "Laadsessie"
+        "es": "Carga de sesión",
+        "da": "Sessionsopladning",
+        "ru": "Зарядка сессии",
+        "pl": "Ładowanie w sesji",
+        "ko": "세션 충전량",
+        "ja": "セッション充電量"
     },
     "units": "kWh",
     "decimals": 2,
