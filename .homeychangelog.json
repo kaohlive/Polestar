@@ -178,5 +178,8 @@
   },
   "3.2.1": {
     "en": "Dashboard widget polish: charging block now follows the same orange-label / white-value pattern as charge and range. Power is the primary number, with current and time remaining as a subtitle."
+  },
+  "3.2.2": {
+    "en": "Fix crash on the legacy Car Stats Viewer driver when finishing a trip without a webhook slug (the deprecated trip-summary image code tried to base64-encode null)."
   }
 }

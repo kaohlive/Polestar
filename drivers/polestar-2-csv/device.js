@@ -250,14 +250,9 @@ class PolestarBetaDevice extends Device {
                             altStart: fmt(first.alt, 0, ' m'),
                             altEnd:   fmt(last.alt, 0, ' m'),
                         };
-                        const encodedSlug = base64url.encode(this.slug);
-                        /*this.tripSummaryImage.setUrl(`${this.apiUrl}/tripSummary/${encodedSlug}?mapType=${this.settings.mapImageType}&theme=${this.settings.tripSummaryStyle}&lang=${this.locale}`);
-                        this.tripInfoImage.setUrl(`${this.apiUrl}/tripInfo/${encodedSlug}?theme=${this.settings.tripInfoStyle}&lang=${this.locale}`);
-                        this.tripScoreImage.setUrl(`${this.apiUrl}/tripScore/${encodedSlug}?theme=${this.settings.tripScoreStyle}&lang=${this.locale}`);
-
-                        await this.tripSummaryImage.update();
-                        await this.tripInfoImage.update();
-                        await this.tripScoreImage.update();*/
+                        /* Image-generation backend deprecated; trip-summary/info/score
+                           images are no longer produced. Keeping the trigger payload
+                           text-only. */
                         await this.driver._tripEndedFlow.trigger(this, {
                             //lastTrip: this.tripSummaryImage,
                             //tripInfo: this.tripInfoImage,
