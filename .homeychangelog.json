@@ -184,5 +184,8 @@
   },
   "3.2.3": {
     "en": "Restore the lastTrip / tripInfo / tripScore image tokens on the legacy Car Stats Viewer's trip-ended flow card so existing flows keep firing. Tokens now serve a static driver image since the per-trip render backend is gone."
+  },
+  "3.2.4": {
+    "en": "Door / window / hood / tailgate / sunroof / charge-port contact-alarm capability titles now name the sensor location only (e.g. 'Front-left door' instead of 'Door FL open'). Auto-generated flow cards now read naturally as 'Front-left door is open' and are distinguishable when many are added to one flow. Applied across all 13 languages."
   }
 }
