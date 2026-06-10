@@ -57,6 +57,19 @@ class Vehicle extends Driver {
             return args.device ? args.device.isLocked() : false;
         });
 
+        // Contact-sensor cards: one trigger card per direction (opened/closed)
+        // with a dropdown selecting which alarm_contact sub-capability. The
+        // device fires the trigger with state.sensor = full sub-cap id; the
+        // run-listener gates by matching the user's selected dropdown value.
+        this._contactOpenedTrigger = this.homey.flow.getDeviceTriggerCard('contact_opened');
+        this._contactOpenedTrigger.registerRunListener(async (args, state) => args.sensor === state.sensor);
+        this._contactClosedTrigger = this.homey.flow.getDeviceTriggerCard('contact_closed');
+        this._contactClosedTrigger.registerRunListener(async (args, state) => args.sensor === state.sensor);
+        this.homey.flow.getConditionCard('contact_is_open').registerRunListener(async (args) => {
+            if (!args.device || !args.sensor) return false;
+            return args.device.getCapabilityValue(args.sensor) === true;
+        });
+
         this.homey.app.log('Polestar flow cards registered', 'Polestar Driver', 'DEBUG');
     }
 

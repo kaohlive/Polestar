@@ -187,5 +187,8 @@
   },
   "3.2.4": {
     "en": "Door / window / hood / tailgate / sunroof / charge-port contact-alarm capability titles now name the sensor location only (e.g. 'Front-left door' instead of 'Door FL open'). Auto-generated flow cards now read naturally as 'Front-left door is open' and are distinguishable when many are added to one flow. Applied across all 13 languages."
+  },
+  "3.2.5": {
+    "en": "Three new explicit flow cards for contact sensors: 'A sensor opened', 'A sensor closed', 'A sensor is open'. Each has a dropdown to pick which door / window / hatch — once selected the card reads naturally (e.g. 'Front-left door opened'). Prefer these over the generic auto-generated Contact alarm cards, which all looked identical in the card library."
   }
 }

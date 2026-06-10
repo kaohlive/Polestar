@@ -547,6 +547,25 @@ class PolestarVehicle extends Device {
         this.homey.api.realtime('updatevehicle');
     }
 
+    // Writes an alarm_contact sub-cap and, on a false→true / true→false
+    // transition, fires the matching contact_opened / contact_closed
+    // device-trigger flow card. The trigger run-listener gates on the
+    // user's selected sensor dropdown value.
+    async _setContact(capId, newValue) {
+        const prev = this.getCapabilityValue(capId);
+        await this.setCapabilityValue(capId, newValue);
+        if (prev === newValue) return;
+        const card = newValue
+            ? this.driver && this.driver._contactOpenedTrigger
+            : this.driver && this.driver._contactClosedTrigger;
+        if (!card) return;
+        try {
+            await card.trigger(this, {}, { sensor: capId });
+        } catch (err) {
+            this.homey.app.log(`Contact trigger failed for ${capId}`, this.name, 'ERROR', err);
+        }
+    }
+
     async updateExteriorState() {
         if (this._destroyed) return;
         if (!this.polestar || typeof this.polestar.getExterior !== 'function') return;
@@ -558,15 +577,15 @@ class PolestarVehicle extends Device {
             if (typeof ext.isLocked === 'boolean') {
                 await this.setCapabilityValue('locked', ext.isLocked);
             }
-            await this.setCapabilityValue('alarm_contact.door_front_left',  !!ext.doors.frontLeftOpen);
-            await this.setCapabilityValue('alarm_contact.door_front_right', !!ext.doors.frontRightOpen);
-            await this.setCapabilityValue('alarm_contact.door_rear_left',   !!ext.doors.rearLeftOpen);
-            await this.setCapabilityValue('alarm_contact.door_rear_right',  !!ext.doors.rearRightOpen);
-            await this.setCapabilityValue('alarm_contact.window_any', !!ext.windows.anyOpen);
-            await this.setCapabilityValue('alarm_contact.tailgate',   !!ext.tailgateOpen);
-            await this.setCapabilityValue('alarm_contact.hood',       !!ext.hoodOpen);
-            await this.setCapabilityValue('alarm_contact.sunroof',    !!ext.sunroofOpen);
-            await this.setCapabilityValue('alarm_contact.tank_lid',   !!ext.tankLidOpen);
+            await this._setContact('alarm_contact.door_front_left',  !!ext.doors.frontLeftOpen);
+            await this._setContact('alarm_contact.door_front_right', !!ext.doors.frontRightOpen);
+            await this._setContact('alarm_contact.door_rear_left',   !!ext.doors.rearLeftOpen);
+            await this._setContact('alarm_contact.door_rear_right',  !!ext.doors.rearRightOpen);
+            await this._setContact('alarm_contact.window_any', !!ext.windows.anyOpen);
+            await this._setContact('alarm_contact.tailgate',   !!ext.tailgateOpen);
+            await this._setContact('alarm_contact.hood',       !!ext.hoodOpen);
+            await this._setContact('alarm_contact.sunroof',    !!ext.sunroofOpen);
+            await this._setContact('alarm_contact.tank_lid',   !!ext.tankLidOpen);
         } catch (err) {
             if (err.message === 'Not logged in') {
                 await this.attemptReLogin();

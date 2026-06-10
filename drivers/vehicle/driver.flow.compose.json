@@ -135,6 +135,136 @@
             "ja": "車両が充電ポートに接続された充電器を検知したとき"
         },
         "$filter": "capabilities=measure_vehicleConnected"
+    },
+    {
+        "id": "contact_opened",
+        "title": {
+            "en": "A sensor opened",
+            "nl": "Een sensor geopend",
+            "de": "Ein Sensor geöffnet",
+            "fr": "Un capteur ouvert",
+            "it": "Un sensore aperto",
+            "sv": "En sensor öppnad",
+            "no": "En sensor åpnet",
+            "es": "Un sensor abierto",
+            "da": "En sensor åbnet",
+            "ru": "Датчик открыт",
+            "pl": "Czujnik otwarty",
+            "ko": "센서가 열렸음",
+            "ja": "センサーが開いた"
+        },
+        "titleFormatted": {
+            "en": "[[sensor]] opened",
+            "nl": "[[sensor]] geopend",
+            "de": "[[sensor]] geöffnet",
+            "fr": "[[sensor]] ouvert",
+            "it": "[[sensor]] aperto",
+            "sv": "[[sensor]] öppnad",
+            "no": "[[sensor]] åpnet",
+            "es": "[[sensor]] abierto",
+            "da": "[[sensor]] åbnet",
+            "ru": "[[sensor]] открыт",
+            "pl": "[[sensor]] otwarty",
+            "ko": "[[sensor]] 열렸음",
+            "ja": "[[sensor]] が開いた"
+        },
+        "hint": {
+            "en": "Fires when the selected door / window / hatch transitions from closed to open.",
+            "nl": "Triggert als de gekozen deur / raam / klep van dicht naar open gaat.",
+            "de": "Wird ausgelöst, wenn die gewählte Tür / Fenster / Klappe von geschlossen auf offen wechselt.",
+            "fr": "Se déclenche quand l'élément sélectionné passe de fermé à ouvert.",
+            "it": "Si attiva quando l'elemento selezionato passa da chiuso ad aperto.",
+            "sv": "Utlöses när vald dörr / fönster / lucka går från stängd till öppen.",
+            "no": "Utløses når valgt dør / vindu / luke går fra lukket til åpen.",
+            "es": "Se activa cuando el elemento seleccionado pasa de cerrado a abierto.",
+            "da": "Udløses når valgt dør / vindue / klap går fra lukket til åben.",
+            "ru": "Срабатывает, когда выбранный элемент переходит из закрытого в открытое состояние.",
+            "pl": "Wyzwala się, gdy wybrany element przechodzi z zamkniętego w otwarty.",
+            "ko": "선택한 문/창/덮개가 닫힘에서 열림으로 바뀔 때 실행됩니다.",
+            "ja": "選択したドア／ウィンドウ／フタが閉から開へ変わったときに発火します。"
+        },
+        "args": [
+            {
+                "type": "dropdown",
+                "name": "sensor",
+                "values": [
+                    { "id": "alarm_contact.door_front_left",  "label": { "en": "Front-left door", "nl": "Deur linksvoor", "de": "Tür vorne links", "fr": "Porte avant gauche", "it": "Porta anteriore sinistra", "sv": "Dörr fram vänster", "no": "Dør foran venstre", "es": "Puerta delantera izquierda", "da": "Dør foran venstre", "ru": "Передняя левая дверь", "pl": "Drzwi przednie lewe", "ko": "앞 왼쪽 도어", "ja": "前左ドア" } },
+                    { "id": "alarm_contact.door_front_right", "label": { "en": "Front-right door", "nl": "Deur rechtsvoor", "de": "Tür vorne rechts", "fr": "Porte avant droite", "it": "Porta anteriore destra", "sv": "Dörr fram höger", "no": "Dør foran høyre", "es": "Puerta delantera derecha", "da": "Dør foran højre", "ru": "Передняя правая дверь", "pl": "Drzwi przednie prawe", "ko": "앞 오른쪽 도어", "ja": "前右ドア" } },
+                    { "id": "alarm_contact.door_rear_left",   "label": { "en": "Rear-left door", "nl": "Deur linksachter", "de": "Tür hinten links", "fr": "Porte arrière gauche", "it": "Porta posteriore sinistra", "sv": "Dörr bak vänster", "no": "Dør bak venstre", "es": "Puerta trasera izquierda", "da": "Dør bag venstre", "ru": "Задняя левая дверь", "pl": "Drzwi tylne lewe", "ko": "뒤 왼쪽 도어", "ja": "後左ドア" } },
+                    { "id": "alarm_contact.door_rear_right",  "label": { "en": "Rear-right door", "nl": "Deur rechtsachter", "de": "Tür hinten rechts", "fr": "Porte arrière droite", "it": "Porta posteriore destra", "sv": "Dörr bak höger", "no": "Dør bak høyre", "es": "Puerta trasera derecha", "da": "Dør bag højre", "ru": "Задняя правая дверь", "pl": "Drzwi tylne prawe", "ko": "뒤 오른쪽 도어", "ja": "後右ドア" } },
+                    { "id": "alarm_contact.window_any",       "label": { "en": "Side window", "nl": "Zijraam", "de": "Seitenfenster", "fr": "Vitre latérale", "it": "Finestrino laterale", "sv": "Sidofönster", "no": "Sidevindu", "es": "Ventana lateral", "da": "Sidevindue", "ru": "Боковое окно", "pl": "Boczne okno", "ko": "측면 창문", "ja": "サイドウィンドウ" } },
+                    { "id": "alarm_contact.tailgate",         "label": { "en": "Tailgate", "nl": "Kofferbak", "de": "Heckklappe", "fr": "Hayon", "it": "Portellone", "sv": "Baklucka", "no": "Bakluke", "es": "Portón", "da": "Bagklap", "ru": "Багажник", "pl": "Klapa bagażnika", "ko": "트렁크", "ja": "テールゲート" } },
+                    { "id": "alarm_contact.hood",             "label": { "en": "Hood", "nl": "Motorkap", "de": "Motorhaube", "fr": "Capot", "it": "Cofano", "sv": "Motorhuv", "no": "Panser", "es": "Capó", "da": "Motorhjelm", "ru": "Капот", "pl": "Maska", "ko": "보닛", "ja": "ボンネット" } },
+                    { "id": "alarm_contact.sunroof",          "label": { "en": "Sunroof", "nl": "Schuifdak", "de": "Schiebedach", "fr": "Toit ouvrant", "it": "Tetto apribile", "sv": "Soltak", "no": "Takluke", "es": "Techo solar", "da": "Soltag", "ru": "Люк", "pl": "Szyberdach", "ko": "선루프", "ja": "サンルーフ" } },
+                    { "id": "alarm_contact.tank_lid",         "label": { "en": "Charge port lid", "nl": "Laadklep", "de": "Ladeklappe", "fr": "Trappe de charge", "it": "Sportello di ricarica", "sv": "Laddlucka", "no": "Ladeluke", "es": "Tapa de carga", "da": "Ladeklap", "ru": "Лючок зарядного порта", "pl": "Klapka ładowania", "ko": "충전 포트 덮개", "ja": "充電ポート蓋" } }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "contact_closed",
+        "title": {
+            "en": "A sensor closed",
+            "nl": "Een sensor gesloten",
+            "de": "Ein Sensor geschlossen",
+            "fr": "Un capteur fermé",
+            "it": "Un sensore chiuso",
+            "sv": "En sensor stängd",
+            "no": "En sensor lukket",
+            "es": "Un sensor cerrado",
+            "da": "En sensor lukket",
+            "ru": "Датчик закрыт",
+            "pl": "Czujnik zamknięty",
+            "ko": "센서가 닫혔음",
+            "ja": "センサーが閉じた"
+        },
+        "titleFormatted": {
+            "en": "[[sensor]] closed",
+            "nl": "[[sensor]] gesloten",
+            "de": "[[sensor]] geschlossen",
+            "fr": "[[sensor]] fermé",
+            "it": "[[sensor]] chiuso",
+            "sv": "[[sensor]] stängd",
+            "no": "[[sensor]] lukket",
+            "es": "[[sensor]] cerrado",
+            "da": "[[sensor]] lukket",
+            "ru": "[[sensor]] закрыт",
+            "pl": "[[sensor]] zamknięty",
+            "ko": "[[sensor]] 닫혔음",
+            "ja": "[[sensor]] が閉じた"
+        },
+        "hint": {
+            "en": "Fires when the selected door / window / hatch transitions from open to closed.",
+            "nl": "Triggert als de gekozen deur / raam / klep van open naar dicht gaat.",
+            "de": "Wird ausgelöst, wenn die gewählte Tür / Fenster / Klappe von offen auf geschlossen wechselt.",
+            "fr": "Se déclenche quand l'élément sélectionné passe d'ouvert à fermé.",
+            "it": "Si attiva quando l'elemento selezionato passa da aperto a chiuso.",
+            "sv": "Utlöses när vald dörr / fönster / lucka går från öppen till stängd.",
+            "no": "Utløses når valgt dør / vindu / luke går fra åpen til lukket.",
+            "es": "Se activa cuando el elemento seleccionado pasa de abierto a cerrado.",
+            "da": "Udløses når valgt dør / vindue / klap går fra åben til lukket.",
+            "ru": "Срабатывает, когда выбранный элемент переходит из открытого в закрытое состояние.",
+            "pl": "Wyzwala się, gdy wybrany element przechodzi z otwartego w zamknięty.",
+            "ko": "선택한 문/창/덮개가 열림에서 닫힘으로 바뀔 때 실행됩니다.",
+            "ja": "選択したドア／ウィンドウ／フタが開から閉へ変わったときに発火します。"
+        },
+        "args": [
+            {
+                "type": "dropdown",
+                "name": "sensor",
+                "values": [
+                    { "id": "alarm_contact.door_front_left",  "label": { "en": "Front-left door", "nl": "Deur linksvoor", "de": "Tür vorne links", "fr": "Porte avant gauche", "it": "Porta anteriore sinistra", "sv": "Dörr fram vänster", "no": "Dør foran venstre", "es": "Puerta delantera izquierda", "da": "Dør foran venstre", "ru": "Передняя левая дверь", "pl": "Drzwi przednie lewe", "ko": "앞 왼쪽 도어", "ja": "前左ドア" } },
+                    { "id": "alarm_contact.door_front_right", "label": { "en": "Front-right door", "nl": "Deur rechtsvoor", "de": "Tür vorne rechts", "fr": "Porte avant droite", "it": "Porta anteriore destra", "sv": "Dörr fram höger", "no": "Dør foran høyre", "es": "Puerta delantera derecha", "da": "Dør foran højre", "ru": "Передняя правая дверь", "pl": "Drzwi przednie prawe", "ko": "앞 오른쪽 도어", "ja": "前右ドア" } },
+                    { "id": "alarm_contact.door_rear_left",   "label": { "en": "Rear-left door", "nl": "Deur linksachter", "de": "Tür hinten links", "fr": "Porte arrière gauche", "it": "Porta posteriore sinistra", "sv": "Dörr bak vänster", "no": "Dør bak venstre", "es": "Puerta trasera izquierda", "da": "Dør bag venstre", "ru": "Задняя левая дверь", "pl": "Drzwi tylne lewe", "ko": "뒤 왼쪽 도어", "ja": "後左ドア" } },
+                    { "id": "alarm_contact.door_rear_right",  "label": { "en": "Rear-right door", "nl": "Deur rechtsachter", "de": "Tür hinten rechts", "fr": "Porte arrière droite", "it": "Porta posteriore destra", "sv": "Dörr bak höger", "no": "Dør bak høyre", "es": "Puerta trasera derecha", "da": "Dør bag højre", "ru": "Задняя правая дверь", "pl": "Drzwi tylne prawe", "ko": "뒤 오른쪽 도어", "ja": "後右ドア" } },
+                    { "id": "alarm_contact.window_any",       "label": { "en": "Side window", "nl": "Zijraam", "de": "Seitenfenster", "fr": "Vitre latérale", "it": "Finestrino laterale", "sv": "Sidofönster", "no": "Sidevindu", "es": "Ventana lateral", "da": "Sidevindue", "ru": "Боковое окно", "pl": "Boczne okno", "ko": "측면 창문", "ja": "サイドウィンドウ" } },
+                    { "id": "alarm_contact.tailgate",         "label": { "en": "Tailgate", "nl": "Kofferbak", "de": "Heckklappe", "fr": "Hayon", "it": "Portellone", "sv": "Baklucka", "no": "Bakluke", "es": "Portón", "da": "Bagklap", "ru": "Багажник", "pl": "Klapa bagażnika", "ko": "트렁크", "ja": "テールゲート" } },
+                    { "id": "alarm_contact.hood",             "label": { "en": "Hood", "nl": "Motorkap", "de": "Motorhaube", "fr": "Capot", "it": "Cofano", "sv": "Motorhuv", "no": "Panser", "es": "Capó", "da": "Motorhjelm", "ru": "Капот", "pl": "Maska", "ko": "보닛", "ja": "ボンネット" } },
+                    { "id": "alarm_contact.sunroof",          "label": { "en": "Sunroof", "nl": "Schuifdak", "de": "Schiebedach", "fr": "Toit ouvrant", "it": "Tetto apribile", "sv": "Soltak", "no": "Takluke", "es": "Techo solar", "da": "Soltag", "ru": "Люк", "pl": "Szyberdach", "ko": "선루프", "ja": "サンルーフ" } },
+                    { "id": "alarm_contact.tank_lid",         "label": { "en": "Charge port lid", "nl": "Laadklep", "de": "Ladeklappe", "fr": "Trappe de charge", "it": "Sportello di ricarica", "sv": "Laddlucka", "no": "Ladeluke", "es": "Tapa de carga", "da": "Ladeklap", "ru": "Лючок зарядного порта", "pl": "Klapka ładowania", "ko": "충전 포트 덮개", "ja": "充電ポート蓋" } }
+                ]
+            }
+        ]
     }
     ],
     "conditions": [
@@ -226,6 +356,56 @@
             },
             "args": [
                 { "type": "number", "name": "amperage", "min": 6, "max": 32, "step": 1, "placeholder": { "en": "A" } }
+            ]
+        },
+        {
+            "id": "contact_is_open",
+            "title": {
+                "en": "A sensor !{{is|is not}} open",
+                "nl": "Een sensor !{{is|is niet}} open",
+                "de": "Ein Sensor !{{ist|ist nicht}} offen",
+                "fr": "Un capteur !{{est|n'est pas}} ouvert",
+                "it": "Un sensore !{{è|non è}} aperto",
+                "sv": "En sensor !{{är|är inte}} öppen",
+                "no": "En sensor !{{er|er ikke}} åpen",
+                "es": "Un sensor !{{está|no está}} abierto",
+                "da": "En sensor !{{er|er ikke}} åben",
+                "ru": "Датчик !{{открыт|закрыт}}",
+                "pl": "Czujnik !{{jest|nie jest}} otwarty",
+                "ko": "센서가 !{{열림|닫힘}}",
+                "ja": "センサーが!{{開いている|閉じている}}"
+            },
+            "titleFormatted": {
+                "en": "[[sensor]] !{{is|is not}} open",
+                "nl": "[[sensor]] !{{is|is niet}} open",
+                "de": "[[sensor]] !{{ist|ist nicht}} offen",
+                "fr": "[[sensor]] !{{est|n'est pas}} ouvert",
+                "it": "[[sensor]] !{{è|non è}} aperto",
+                "sv": "[[sensor]] !{{är|är inte}} öppen",
+                "no": "[[sensor]] !{{er|er ikke}} åpen",
+                "es": "[[sensor]] !{{está|no está}} abierto",
+                "da": "[[sensor]] !{{er|er ikke}} åben",
+                "ru": "[[sensor]] !{{открыт|закрыт}}",
+                "pl": "[[sensor]] !{{jest|nie jest}} otwarty",
+                "ko": "[[sensor]] !{{열림|닫힘}}",
+                "ja": "[[sensor]]が!{{開いている|閉じている}}"
+            },
+            "args": [
+                {
+                    "type": "dropdown",
+                    "name": "sensor",
+                    "values": [
+                        { "id": "alarm_contact.door_front_left",  "label": { "en": "Front-left door", "nl": "Deur linksvoor", "de": "Tür vorne links", "fr": "Porte avant gauche", "it": "Porta anteriore sinistra", "sv": "Dörr fram vänster", "no": "Dør foran venstre", "es": "Puerta delantera izquierda", "da": "Dør foran venstre", "ru": "Передняя левая дверь", "pl": "Drzwi przednie lewe", "ko": "앞 왼쪽 도어", "ja": "前左ドア" } },
+                        { "id": "alarm_contact.door_front_right", "label": { "en": "Front-right door", "nl": "Deur rechtsvoor", "de": "Tür vorne rechts", "fr": "Porte avant droite", "it": "Porta anteriore destra", "sv": "Dörr fram höger", "no": "Dør foran høyre", "es": "Puerta delantera derecha", "da": "Dør foran højre", "ru": "Передняя правая дверь", "pl": "Drzwi przednie prawe", "ko": "앞 오른쪽 도어", "ja": "前右ドア" } },
+                        { "id": "alarm_contact.door_rear_left",   "label": { "en": "Rear-left door", "nl": "Deur linksachter", "de": "Tür hinten links", "fr": "Porte arrière gauche", "it": "Porta posteriore sinistra", "sv": "Dörr bak vänster", "no": "Dør bak venstre", "es": "Puerta trasera izquierda", "da": "Dør bag venstre", "ru": "Задняя левая дверь", "pl": "Drzwi tylne lewe", "ko": "뒤 왼쪽 도어", "ja": "後左ドア" } },
+                        { "id": "alarm_contact.door_rear_right",  "label": { "en": "Rear-right door", "nl": "Deur rechtsachter", "de": "Tür hinten rechts", "fr": "Porte arrière droite", "it": "Porta posteriore destra", "sv": "Dörr bak höger", "no": "Dør bak høyre", "es": "Puerta trasera derecha", "da": "Dør bag højre", "ru": "Задняя правая дверь", "pl": "Drzwi tylne prawe", "ko": "뒤 오른쪽 도어", "ja": "後右ドア" } },
+                        { "id": "alarm_contact.window_any",       "label": { "en": "Side window", "nl": "Zijraam", "de": "Seitenfenster", "fr": "Vitre latérale", "it": "Finestrino laterale", "sv": "Sidofönster", "no": "Sidevindu", "es": "Ventana lateral", "da": "Sidevindue", "ru": "Боковое окно", "pl": "Boczne okno", "ko": "측면 창문", "ja": "サイドウィンドウ" } },
+                        { "id": "alarm_contact.tailgate",         "label": { "en": "Tailgate", "nl": "Kofferbak", "de": "Heckklappe", "fr": "Hayon", "it": "Portellone", "sv": "Baklucka", "no": "Bakluke", "es": "Portón", "da": "Bagklap", "ru": "Багажник", "pl": "Klapa bagażnika", "ko": "트렁크", "ja": "テールゲート" } },
+                        { "id": "alarm_contact.hood",             "label": { "en": "Hood", "nl": "Motorkap", "de": "Motorhaube", "fr": "Capot", "it": "Cofano", "sv": "Motorhuv", "no": "Panser", "es": "Capó", "da": "Motorhjelm", "ru": "Капот", "pl": "Maska", "ko": "보닛", "ja": "ボンネット" } },
+                        { "id": "alarm_contact.sunroof",          "label": { "en": "Sunroof", "nl": "Schuifdak", "de": "Schiebedach", "fr": "Toit ouvrant", "it": "Tetto apribile", "sv": "Soltak", "no": "Takluke", "es": "Techo solar", "da": "Soltag", "ru": "Люк", "pl": "Szyberdach", "ko": "선루프", "ja": "サンルーフ" } },
+                        { "id": "alarm_contact.tank_lid",         "label": { "en": "Charge port lid", "nl": "Laadklep", "de": "Ladeklappe", "fr": "Trappe de charge", "it": "Sportello di ricarica", "sv": "Laddlucka", "no": "Ladeluke", "es": "Tapa de carga", "da": "Ladeklap", "ru": "Лючок зарядного порта", "pl": "Klapka ładowania", "ko": "충전 포트 덮개", "ja": "充電ポート蓋" } }
+                    ]
+                }
             ]
         }
     ],
