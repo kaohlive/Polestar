@@ -88,18 +88,21 @@ class Polestar extends Homey.App {
 
 		const logMessage = `${datestring} [${instance}] [${severity}] ${message}`;
 
-		if (data) {
-			console.log(logMessage, data || '');
+		// Use a nullish check so we still log explicit 0 / false / '' values —
+		// `if (data)` would silently drop them and we'd be unable to tell
+		// "vehicle count: 0" from "vehicle count: undefined" in the log.
+		if (data !== null && data !== undefined) {
+			console.log(logMessage, data);
 
 			if (typeof data === 'string') {
 				entry.data = { data };
-			} else if (data.message) {
+			} else if (data && data.message) {
 				entry.data = { error: data.message, stacktrace: data.stack };
 			} else {
 				entry.data = data;
 			}
 		} else {
-			console.log(logMessage || '');
+			console.log(logMessage);
 		}
 
 		debugLog.push(entry);

@@ -193,5 +193,8 @@
   },
   "3.2.6": {
     "en": "Fix pairing for older Polestar 2 cars (2021-ish) that aren't listed via the new C3 backend. When C3 returns an empty vehicle list, the pair / repair flow now silently retries against the legacy backend and, if it finds vehicles, switches the app to use legacy for all subsequent operations. Users no longer need to know about the c3_backend_disabled escape hatch."
+  },
+  "3.2.7": {
+    "en": "Fix the app logger silently dropping numeric 0, false, and empty-string data values. Lines like 'vehicle count: 0' previously rendered as 'vehicle count:' (no value), making pairing / discovery issues harder to diagnose."
   }
 }
