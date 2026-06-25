@@ -102,6 +102,16 @@ class Vehicle extends Driver {
                 await polestar.login();
                 var testresult = await polestar.getVehicles();
                 this.homey.app.log('Credential test ok:', 'Polestar Driver', 'DEBUG', testresult);
+                if (!testresult || testresult.length === 0) {
+                    const legacy = await this._tryLegacyFallback(data.username, data.password);
+                    if (legacy.ok) {
+                        this.homey.settings.set('c3_backend_disabled', true);
+                        this.homey.app.log('Repair: C3 returned no vehicles; legacy backend found ' + legacy.count + '. Switching to legacy.', 'Polestar Driver');
+                        await session.nextView();
+                        return true;
+                    }
+                    return false;
+                }
                 await session.nextView();
                 return true;
             } catch (err) {
@@ -217,10 +227,34 @@ class Vehicle extends Driver {
             }
             this.homey.app.log('Credential test ok, vehicle count:', 'Polestar Driver', 'DEBUG', (vehicles || []).length);
             if (!vehicles || vehicles.length === 0) {
+                // C3 backend doesn't list some older Polestar 2 cars (2021-ish).
+                // Try the legacy backend before giving up — and if it finds
+                // vehicles, persist the preference so all later operations
+                // use it too.
+                const legacy = await this._tryLegacyFallback(data.username, data.password);
+                if (legacy.ok) {
+                    this.homey.settings.set('c3_backend_disabled', true);
+                    this.homey.app.log('C3 returned no vehicles; legacy backend found ' + legacy.count + '. Switching to legacy.', 'Polestar Driver');
+                    return { ok: true };
+                }
                 return { ok: false, reason: 'no_vehicles' };
             }
             return { ok: true };
         });
+    }
+
+    async _tryLegacyFallback(email, password) {
+        try {
+            const legacy = new LegacyPolestar(email, password);
+            await legacy.login();
+            const vehicles = await legacy.getVehicles();
+            if (vehicles && vehicles.length > 0) {
+                return { ok: true, count: vehicles.length };
+            }
+        } catch (err) {
+            this.homey.app.log('Legacy fallback failed:', 'Polestar Driver', 'DEBUG', err && err.message);
+        }
+        return { ok: false, count: 0 };
     }
 
 }
