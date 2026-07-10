@@ -1,7 +1,7 @@
 'use strict';
 
 const { AuthManager } = require('./auth');
-const { discoverC3Endpoint, getVehicles } = require('./discovery');
+const { discoverC3Endpoint, decodeGetMyCarsResponse } = require('./discovery');
 const grpc = require('./grpc');
 const codec = require('./codec');
 const { wrapChronos } = require('./chronos');
@@ -49,6 +49,7 @@ const SVC_AMP_LIMIT = '/chronos.services.v1.AmpLimitService';
 const SVC_INVOCATION = '/invocation.InvocationService';
 const SVC_LOCATION = '/dtlinternet.DtlInternetService';
 const SVC_OTA_DISCOVERY = '/ota_mobcache.OtaDiscoveryService';
+const GET_MY_CARS = '/car_information.CarInformation/GetMyCars';
 
 // ChargeTargetLevelSettingType enum
 const CHARGE_TARGET_DAILY = 1;
@@ -71,8 +72,8 @@ class PolestarC3 {
     }
 
     async listVehicles() {
-        const token = await this._auth.ensureValidToken();
-        return getVehicles(token);
+        const response = await this._call(GET_MY_CARS, Buffer.alloc(0));
+        return decodeGetMyCarsResponse(response);
     }
 
     async setVehicle(vin) {
