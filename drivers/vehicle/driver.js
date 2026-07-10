@@ -1,13 +1,20 @@
 'use strict';
 
 const { Driver } = require('homey');
-const LegacyPolestar = require('../../clone_modules/polestar.js');
 const PolestarC3Compat = require('../../clone_modules/polestar-c3/compat');
 const HomeyCrypt = require('../../lib/homeycrypt')
 
+function loadLegacyClient() {
+    try {
+        return require('../../clone_modules/polestar.js');
+    } catch (_) {
+        throw new Error('Legacy Polestar backend unavailable. Use the C3 backend instead.');
+    }
+}
+
 function Polestar(email, password, homey) {
     const legacy = homey && homey.settings.get('c3_backend_disabled') === true;
-    const Client = legacy ? LegacyPolestar : PolestarC3Compat;
+    const Client = legacy ? loadLegacyClient() : PolestarC3Compat;
     return new Client(email, password);
 }
 
@@ -114,6 +121,11 @@ class Vehicle extends Driver {
     async onPair(session) {
         let mydevices;
 
+        session.setHandler('pairlog', async (message) => {
+            this.homey.app.log(`[pair] ${message}`, 'Polestar Driver');
+            return true;
+        });
+
         session.setHandler('showView', async (viewId) => {
             //These actions send data to the custom views
 
@@ -157,14 +169,16 @@ class Vehicle extends Driver {
                     var vehicles = vehiclelist.map((bev) => {
                         try {
                             this.homey.app.log('Located vehicle info, lets convert it into a Polestar bev', 'Polestar Driver');
+                            const modelName = bev.content?.model?.name || 'Polestar';
+                            const registration = bev.registrationNo || (bev.vin ? bev.vin.slice(-6) : '');
                             let device = {
                                 id: bev.vin,
-                                name: bev.content.model.name + ' (' + bev.registrationNo + ')',
+                                name: registration ? `${modelName} (${registration})` : modelName,
                                 data: {
                                     vin: bev.vin,
                                     registration: bev.registrationNo,
                                     internalVehicleIdentifier: bev.internalVehicleIdentifier,
-                                    modelName: bev.content.model.name,
+                                    modelName,
                                     modelYear: bev.modelYear,
                                     carImage: bev.content.images?.studio?.url || null,
                                     deliveryDate: bev.deliveryDate,

@@ -40,7 +40,6 @@ class PolestarCompat {
 
     async login() {
         await this._client.login();
-        this._vehicles = await this._client.listVehicles();
         return true;
     }
 
@@ -56,10 +55,17 @@ class PolestarCompat {
     }
 
     async setVehicle(vin) {
+        if (vin) {
+            const match = this._vehicles && this._vehicles.find((vehicle) => vehicle.vin === vin);
+            await this._client.setVehicle(vin);
+            return {
+                vin,
+                id: match && match.internalVehicleIdentifier,
+            };
+        }
+
         if (!this._vehicles) this._vehicles = await this._client.listVehicles();
-        const match = vin
-            ? this._vehicles.find((v) => v.vin === vin)
-            : this._vehicles[0];
+        const match = this._vehicles[0];
         if (!match) throw new Error('Vehicle not found');
         await this._client.setVehicle(match.vin);
         return {

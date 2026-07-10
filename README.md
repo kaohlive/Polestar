@@ -7,7 +7,7 @@ status and remote-control commands as Homey capabilities and flow cards.
 ## Supported vehicles
 
 - **Polestar 4** — tested
-- **Polestar 3** — should work via the shared C3 backend (unverified)
+- **Polestar 3** — verified through the official C3 linked-vehicle discovery and control backend
 - **Polestar 2** — should work via C3; feedback from P2 owners welcome
 
 Feature availability differs per model. The integration probes each service on

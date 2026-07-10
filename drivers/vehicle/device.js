@@ -1,7 +1,6 @@
 'use strict';
 
 const { Device } = require('homey');
-const LegacyPolestar = require('../../clone_modules/polestar.js');
 const PolestarC3Compat = require('../../clone_modules/polestar-c3/compat');
 const HomeyCrypt = require('../../lib/homeycrypt')
 
@@ -15,9 +14,17 @@ const OPTIONAL_FEATURES = {
     windows:    { capabilities: ['button.windows_open', 'button.windows_close'] },
 };
 
+function loadLegacyClient() {
+    try {
+        return require('../../clone_modules/polestar.js');
+    } catch (_) {
+        throw new Error('Legacy Polestar backend unavailable. Use the C3 backend instead.');
+    }
+}
+
 function selectClient(homey) {
     const legacy = homey.settings.get('c3_backend_disabled') === true;
-    return legacy ? LegacyPolestar : PolestarC3Compat;
+    return legacy ? loadLegacyClient() : PolestarC3Compat;
 }
 
 function isUnimplementedError(err) {

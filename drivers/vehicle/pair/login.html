@@ -25,51 +25,54 @@
 </form>
 
 <script type="text/javascript">
-	$(document).ready(function() {
-        const loginForm = $('#loginForm');
-		const usernameElement = $('#username');
-		const passwordElement = $('#password');
-		const saveElement = $('#save');
+	(function () {
+		var form = document.getElementById('loginForm');
+		var usernameElement = document.getElementById('username');
+		var passwordElement = document.getElementById('password');
 
-		loginForm.submit(function(e) {
-			e.preventDefault();
+		function pairlog(message) {
+			try { Homey.emit('pairlog', String(message)).catch(function () {}); } catch (_) {}
+		}
 
-			Homey.showLoadingOverlay();
-			Homey.emit('testlogin', {
-				'username': usernameElement.val(),
-				'password': passwordElement.val()
-			}).then(async function(result) {
-				// Backwards compat: older driver returned a plain boolean.
-				const ok = result === true || (result && result.ok === true);
-				const reason = result && result.reason;
-				if (ok) {
-					await Homey.emit('discover_vehicles').then(function(result) {
-						if (result) {
-							Homey.hideLoadingOverlay();
-							Homey.nextView();
-						}
-					});
-					return;
-				}
-				Homey.hideLoadingOverlay();
-				if (reason === 'no_vehicles') {
-					Homey.alert("Login succeeded but no vehicles were returned for this account. Are you signed in with the right Polestar ID? Try again in a minute — Polestar's backend can briefly return an empty list.");
-				} else {
-					Homey.alert("Login validation failed — check your e-mail address and password and try again.");
-				}
-			});
+		Homey.on('loadaccount', function (credentials) {
+			usernameElement.value = credentials && credentials.username || '';
+			passwordElement.value = credentials && credentials.password || '';
 		});
 
-		Homey.on('loadaccount', function(credentials, callback) {
-			usernameElement.val(credentials.username);
-			passwordElement.val(credentials.password);
-		});
-
-		Homey.on('noVehiclesFound', function(message) {
+		Homey.on('noVehiclesFound', function (message) {
 			Homey.alert(message);
 			return Homey.done();
 		});
-	});
+
+		form.addEventListener('submit', function (event) {
+			event.preventDefault();
+			Homey.showLoadingOverlay();
+			pairlog('login submitted');
+
+			Homey.emit('testlogin', {
+				username: usernameElement.value,
+				password: passwordElement.value
+			}).then(function (result) {
+				var ok = result === true || (result && result.ok === true);
+				if (!ok) {
+					Homey.hideLoadingOverlay();
+					var message = result && result.reason === 'no_vehicles'
+						? 'Login succeeded, but no linked vehicles were returned for this account.'
+						: 'Login validation failed. Check your email address and password.';
+					return Homey.alert(message);
+				}
+
+				return Homey.emit('discover_vehicles').then(function (discovered) {
+					Homey.hideLoadingOverlay();
+					if (discovered) Homey.nextView();
+				});
+			}).catch(function (error) {
+				Homey.hideLoadingOverlay();
+				pairlog('login failed: ' + (error && error.message || error));
+				Homey.alert('Something went wrong while contacting Polestar.');
+			});
+		});
+	})();
 </script>
 
 </body>

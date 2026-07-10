@@ -2,7 +2,9 @@
   "name": "com.coderax.polestar",
   "version": "1.0.0",
   "main": "app.js",
-  "scripts": {},
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
   "devDependencies": {
     "@tsconfig/node16": "^16.1.1",
     "@types/homey": "npm:homey-apps-sdk-v3-types@^0.3.5",
