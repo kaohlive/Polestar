@@ -196,5 +196,8 @@
   },
   "3.2.7": {
     "en": "Fix the app logger silently dropping numeric 0, false, and empty-string data values. Lines like 'vehicle count: 0' previously rendered as 'vehicle count:' (no value), making pairing / discovery issues harder to diagnose."
+  },
+  "3.2.8": {
+    "en": "Vehicle discovery now uses the C3 GetMyCars service, which also surfaces whether the account is linked to the car and holds owner rights (thanks olemarkus, PR #3). Non-owner accounts — e.g. lease drivers or secondhand buyers whose ownership was never transferred — should now pair successfully; pairing logs record the linked/owner state so we can investigate later if any features turn out to require owner rights. Also wires up `npm test` to run the new fixture suite."
   }
 }

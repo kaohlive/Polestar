@@ -166,7 +166,14 @@ class Vehicle extends Driver {
                 if (vehiclelist && vehiclelist.length > 0) {
                     var vehicles = vehiclelist.map((bev) => {
                         try {
-                            this.homey.app.log('Located vehicle info, lets convert it into a Polestar bev', 'Polestar Driver');
+                            // Log ownership status so we can correlate feature-availability
+                            // complaints with linked/owner state (C3 GetMyCars returns these
+                            // as of PR #3). Non-owner accounts on lease / secondhand cars may
+                            // hit permission-limited endpoints; we don't know yet which
+                            // features degrade without owner rights.
+                            const linked = bev.userIsLinked === true ? 'yes' : (bev.userIsLinked === false ? 'no' : '?');
+                            const owner  = bev.userIsOwner  === true ? 'yes' : (bev.userIsOwner  === false ? 'no' : '?');
+                            this.homey.app.log(`Located vehicle ${bev.content.model.name} — linked:${linked} owner:${owner}`, 'Polestar Driver');
                             let device = {
                                 id: bev.vin,
                                 name: bev.content.model.name + ' (' + bev.registrationNo + ')',
