@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.Coderax.Polestar",
-  "version": "3.2.9",
+  "version": "3.2.10",
   "compatibility": ">=12.4.5",
   "sdk": 3,
   "platforms": [
@@ -899,6 +899,246 @@
         ]
       },
       {
+        "id": "ota_update_available",
+        "title": {
+          "en": "New software update available",
+          "nl": "Nieuwe software-update beschikbaar",
+          "de": "Neues Software-Update verfügbar",
+          "fr": "Nouvelle mise à jour logicielle disponible",
+          "it": "Nuovo aggiornamento software disponibile",
+          "sv": "Ny programuppdatering tillgänglig",
+          "no": "Ny programvareoppdatering tilgjengelig",
+          "es": "Nueva actualización de software disponible",
+          "da": "Ny softwareopdatering tilgængelig",
+          "ru": "Доступно новое обновление ПО",
+          "pl": "Dostępna nowa aktualizacja oprogramowania",
+          "ko": "새 소프트웨어 업데이트 사용 가능",
+          "ja": "新しいソフトウェア更新が利用可能"
+        },
+        "hint": {
+          "en": "Fires when Polestar reports a new OTA update is ready to install.",
+          "nl": "Wordt getriggerd als Polestar meldt dat er een nieuwe OTA-update klaarstaat.",
+          "de": "Wird ausgelöst, wenn Polestar ein neues OTA-Update meldet.",
+          "fr": "Se déclenche lorsque Polestar signale une nouvelle mise à jour OTA prête.",
+          "it": "Si attiva quando Polestar segnala un nuovo aggiornamento OTA pronto.",
+          "sv": "Utlöses när Polestar rapporterar en ny OTA-uppdatering redo att installeras.",
+          "no": "Utløses når Polestar rapporterer en ny OTA-oppdatering klar for installasjon.",
+          "es": "Se activa cuando Polestar informa de una nueva actualización OTA lista.",
+          "da": "Udløses når Polestar rapporterer en ny OTA-opdatering klar til installation.",
+          "ru": "Срабатывает, когда Polestar сообщает о готовом к установке OTA-обновлении.",
+          "pl": "Uruchamia się, gdy Polestar zgłasza nową aktualizację OTA gotową do instalacji.",
+          "ko": "Polestar가 설치할 새 OTA 업데이트가 준비되었음을 보고할 때 실행됩니다.",
+          "ja": "Polestarが新しいOTA更新の準備完了を報告したときに発火します。"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "ota_update_installed",
+        "title": {
+          "en": "Software update no longer pending",
+          "nl": "Software-update niet meer pending",
+          "de": "Software-Update nicht mehr ausstehend",
+          "fr": "Mise à jour logicielle plus en attente",
+          "it": "Aggiornamento software non più in attesa",
+          "sv": "Programuppdatering väntar inte längre",
+          "no": "Programvareoppdatering venter ikke lenger",
+          "es": "Actualización de software ya no pendiente",
+          "da": "Softwareopdatering afventer ikke længere",
+          "ru": "Обновление ПО больше не ожидает",
+          "pl": "Aktualizacja oprogramowania nie oczekuje",
+          "ko": "소프트웨어 업데이트 대기 중 아님",
+          "ja": "ソフトウェア更新の待機解除"
+        },
+        "hint": {
+          "en": "Fires when a previously pending OTA update is no longer reported by Polestar (installed, cancelled, or superseded).",
+          "nl": "Wordt getriggerd als een eerder pending OTA-update niet meer door Polestar wordt gemeld (geïnstalleerd, geannuleerd of vervangen).",
+          "de": "Wird ausgelöst, wenn ein zuvor ausstehendes OTA-Update nicht mehr von Polestar gemeldet wird (installiert, storniert oder ersetzt).",
+          "fr": "Se déclenche lorsqu'une mise à jour OTA précédemment en attente n'est plus signalée par Polestar (installée, annulée ou remplacée).",
+          "it": "Si attiva quando un aggiornamento OTA precedentemente in attesa non è più segnalato da Polestar (installato, annullato o sostituito).",
+          "sv": "Utlöses när en tidigare väntande OTA-uppdatering inte längre rapporteras av Polestar (installerad, avbruten eller ersatt).",
+          "no": "Utløses når en tidligere ventende OTA-oppdatering ikke lenger rapporteres av Polestar (installert, avbrutt eller erstattet).",
+          "es": "Se activa cuando una actualización OTA previamente pendiente ya no es informada por Polestar (instalada, cancelada o reemplazada).",
+          "da": "Udløses når en tidligere afventende OTA-opdatering ikke længere rapporteres af Polestar (installeret, annulleret eller erstattet).",
+          "ru": "Срабатывает, когда ранее ожидающее OTA-обновление больше не сообщается Polestar (установлено, отменено или заменено).",
+          "pl": "Uruchamia się, gdy wcześniej oczekująca aktualizacja OTA nie jest już zgłaszana przez Polestar (zainstalowana, anulowana lub zastąpiona).",
+          "ko": "이전에 대기 중이던 OTA 업데이트가 더 이상 Polestar에서 보고되지 않을 때(설치, 취소 또는 대체) 실행됩니다.",
+          "ja": "以前は待機中だったOTA更新がPolestarから報告されなくなったとき（インストール、キャンセル、または置換）に発火します。"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "tyre_pressure_warning_raised",
+        "title": {
+          "en": "Tyre pressure warning raised",
+          "nl": "Bandenspanningswaarschuwing opgekomen",
+          "de": "Reifendruckwarnung ausgelöst",
+          "fr": "Alerte pression pneus déclenchée",
+          "it": "Avviso pressione pneumatici attivato",
+          "sv": "Däcktrycksvarning utlöst",
+          "no": "Dekktrykk-varsel utløst",
+          "es": "Aviso de presión de neumáticos activado",
+          "da": "Dæktryksadvarsel udløst",
+          "ru": "Появилось предупреждение о давлении в шинах",
+          "pl": "Ostrzeżenie o ciśnieniu w oponach aktywne",
+          "ko": "타이어 공기압 경고 발생",
+          "ja": "タイヤ空気圧警告が発生"
+        },
+        "hint": {
+          "en": "Fires when any tyre starts reporting a pressure warning.",
+          "nl": "Wordt getriggerd als een band een spanningswaarschuwing gaat melden.",
+          "de": "Wird ausgelöst, wenn ein Reifen eine Druckwarnung meldet.",
+          "fr": "Se déclenche lorsqu'un pneu commence à signaler une alerte de pression.",
+          "it": "Si attiva quando un pneumatico inizia a segnalare un avviso di pressione.",
+          "sv": "Utlöses när ett däck börjar rapportera en tryckvarning.",
+          "no": "Utløses når et dekk begynner å rapportere en trykk-advarsel.",
+          "es": "Se activa cuando un neumático empieza a informar de una alerta de presión.",
+          "da": "Udløses når et dæk begynder at rapportere en trykadvarsel.",
+          "ru": "Срабатывает, когда шина начинает сообщать о предупреждении о давлении.",
+          "pl": "Uruchamia się, gdy opona zaczyna zgłaszać ostrzeżenie o ciśnieniu.",
+          "ko": "타이어가 공기압 경고를 보고하기 시작할 때 실행됩니다.",
+          "ja": "いずれかのタイヤが空気圧警告を報告し始めたときに発火します。"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "tyre_pressure_warning_cleared",
+        "title": {
+          "en": "Tyre pressure warning cleared",
+          "nl": "Bandenspanningswaarschuwing weg",
+          "de": "Reifendruckwarnung aufgehoben",
+          "fr": "Alerte pression pneus levée",
+          "it": "Avviso pressione pneumatici cessato",
+          "sv": "Däcktrycksvarning upphävd",
+          "no": "Dekktrykk-varsel opphørt",
+          "es": "Aviso de presión de neumáticos desaparecido",
+          "da": "Dæktryksadvarsel ophørt",
+          "ru": "Предупреждение о давлении в шинах снято",
+          "pl": "Ostrzeżenie o ciśnieniu w oponach ustąpiło",
+          "ko": "타이어 공기압 경고 해제",
+          "ja": "タイヤ空気圧警告が解除"
+        },
+        "hint": {
+          "en": "Fires when no tyre reports a pressure warning anymore.",
+          "nl": "Wordt getriggerd als er geen band meer een spanningswaarschuwing meldt.",
+          "de": "Wird ausgelöst, wenn kein Reifen mehr eine Druckwarnung meldet.",
+          "fr": "Se déclenche lorsque plus aucun pneu ne signale d'alerte de pression.",
+          "it": "Si attiva quando nessun pneumatico segnala più un avviso di pressione.",
+          "sv": "Utlöses när inget däck längre rapporterar en tryckvarning.",
+          "no": "Utløses når ingen dekk lenger rapporterer en trykk-advarsel.",
+          "es": "Se activa cuando ningún neumático informa ya de una alerta de presión.",
+          "da": "Udløses når intet dæk længere rapporterer en trykadvarsel.",
+          "ru": "Срабатывает, когда ни одна шина больше не сообщает о предупреждении о давлении.",
+          "pl": "Uruchamia się, gdy żadna opona nie zgłasza już ostrzeżenia o ciśnieniu.",
+          "ko": "더 이상 어떤 타이어도 공기압 경고를 보고하지 않을 때 실행됩니다.",
+          "ja": "どのタイヤも空気圧警告を報告しなくなったときに発火します。"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "climate_started",
+        "title": {
+          "en": "Climate started",
+          "nl": "Climate gestart",
+          "de": "Klima gestartet",
+          "fr": "Climatisation démarrée",
+          "it": "Clima avviato",
+          "sv": "Klimat startat",
+          "no": "Klima startet",
+          "es": "Climatización iniciada",
+          "da": "Klima startet",
+          "ru": "Климат запущен",
+          "pl": "Klimatyzacja uruchomiona",
+          "ko": "공조 시작됨",
+          "ja": "空調が開始"
+        },
+        "hint": {
+          "en": "Fires when parking climatization begins running.",
+          "nl": "Wordt getriggerd als de parkeer-climatisering aangaat.",
+          "de": "Wird ausgelöst, wenn die Standklimatisierung startet.",
+          "fr": "Se déclenche lorsque la climatisation à l'arrêt démarre.",
+          "it": "Si attiva quando la climatizzazione in sosta parte.",
+          "sv": "Utlöses när parkeringsklimatiseringen börjar köra.",
+          "no": "Utløses når klima starter.",
+          "es": "Se activa cuando la climatización en estacionamiento arranca.",
+          "da": "Udløses når parkeringsklima starter.",
+          "ru": "Срабатывает, когда включается климат на стоянке.",
+          "pl": "Uruchamia się, gdy startuje preklimatyzacja.",
+          "ko": "주차 공조가 시작될 때 실행됩니다.",
+          "ja": "駐車時の空調が動き始めたときに発火します。"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "climate_stopped",
+        "title": {
+          "en": "Climate stopped",
+          "nl": "Climate gestopt",
+          "de": "Klima gestoppt",
+          "fr": "Climatisation arrêtée",
+          "it": "Clima fermato",
+          "sv": "Klimat stoppat",
+          "no": "Klima stoppet",
+          "es": "Climatización detenida",
+          "da": "Klima stoppet",
+          "ru": "Климат остановлен",
+          "pl": "Klimatyzacja zatrzymana",
+          "ko": "공조 정지됨",
+          "ja": "空調が停止"
+        },
+        "hint": {
+          "en": "Fires when parking climatization stops running.",
+          "nl": "Wordt getriggerd als de parkeer-climatisering uitgaat.",
+          "de": "Wird ausgelöst, wenn die Standklimatisierung stoppt.",
+          "fr": "Se déclenche lorsque la climatisation à l'arrêt cesse.",
+          "it": "Si attiva quando la climatizzazione in sosta si ferma.",
+          "sv": "Utlöses när parkeringsklimatiseringen slutar köra.",
+          "no": "Utløses når klima stopper.",
+          "es": "Se activa cuando la climatización en estacionamiento se detiene.",
+          "da": "Udløses når parkeringsklima stopper.",
+          "ru": "Срабатывает, когда климат на стоянке останавливается.",
+          "pl": "Uruchamia się, gdy preklimatyzacja się kończy.",
+          "ko": "주차 공조가 정지될 때 실행됩니다.",
+          "ja": "駐車時の空調が停止したときに発火します。"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
         "id": "contact_opened",
         "title": {
           "en": "A sensor opened",
@@ -1487,6 +1727,131 @@
           "pl": "Samochód !{{jest|nie jest}} w domu",
           "ko": "차량이 집에 !{{있음|없음}}",
           "ja": "車が自宅に!{{ある|ない}}"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "is_charging",
+        "title": {
+          "en": "Car !{{is|is not}} charging",
+          "nl": "Auto !{{is|is niet}} aan het laden",
+          "de": "Auto !{{lädt|lädt nicht}}",
+          "fr": "Voiture !{{est|n'est pas}} en charge",
+          "it": "Auto !{{è|non è}} in carica",
+          "sv": "Bilen !{{laddar|laddar inte}}",
+          "no": "Bil !{{lader|lader ikke}}",
+          "es": "Coche !{{está|no está}} cargando",
+          "da": "Bilen !{{oplader|oplader ikke}}",
+          "ru": "Автомобиль !{{заряжается|не заряжается}}",
+          "pl": "Samochód !{{ładuje|nie ładuje}} się",
+          "ko": "차량이 !{{충전 중|충전 중이 아님}}",
+          "ja": "車が!{{充電中|充電中でない}}"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "is_connected_to_charger",
+        "title": {
+          "en": "Car !{{is|is not}} connected to a charger",
+          "nl": "Auto !{{is|is niet}} verbonden met een lader",
+          "de": "Auto !{{ist|ist nicht}} mit einem Ladegerät verbunden",
+          "fr": "Voiture !{{est|n'est pas}} connectée à un chargeur",
+          "it": "Auto !{{è|non è}} collegata a un caricatore",
+          "sv": "Bilen !{{är|är inte}} ansluten till en laddare",
+          "no": "Bil !{{er|er ikke}} tilkoblet en lader",
+          "es": "Coche !{{está|no está}} conectado a un cargador",
+          "da": "Bil !{{er|er ikke}} tilsluttet en oplader",
+          "ru": "Автомобиль !{{подключён|не подключён}} к зарядке",
+          "pl": "Samochód !{{jest|nie jest}} podłączony do ładowarki",
+          "ko": "차량이 충전기에 !{{연결됨|연결되지 않음}}",
+          "ja": "車が充電器に!{{接続されている|接続されていない}}"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "ota_is_available",
+        "title": {
+          "en": "Software update !{{is|is not}} available",
+          "nl": "Software-update !{{is|is niet}} beschikbaar",
+          "de": "Software-Update !{{ist|ist nicht}} verfügbar",
+          "fr": "Mise à jour logicielle !{{est|n'est pas}} disponible",
+          "it": "Aggiornamento software !{{è|non è}} disponibile",
+          "sv": "Programuppdatering !{{är|är inte}} tillgänglig",
+          "no": "Programvareoppdatering !{{er|er ikke}} tilgjengelig",
+          "es": "Actualización de software !{{está|no está}} disponible",
+          "da": "Softwareopdatering !{{er|er ikke}} tilgængelig",
+          "ru": "Обновление ПО !{{доступно|недоступно}}",
+          "pl": "Aktualizacja oprogramowania !{{jest|nie jest}} dostępna",
+          "ko": "소프트웨어 업데이트가 !{{있음|없음}}",
+          "ja": "ソフトウェア更新が!{{ある|ない}}"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "tyre_pressure_warning_active",
+        "title": {
+          "en": "Tyre pressure warning !{{is|is not}} active",
+          "nl": "Bandenspanningswaarschuwing !{{is|is niet}} actief",
+          "de": "Reifendruckwarnung !{{ist|ist nicht}} aktiv",
+          "fr": "Alerte pression pneus !{{est|n'est pas}} active",
+          "it": "Avviso pressione pneumatici !{{è|non è}} attivo",
+          "sv": "Däcktrycksvarning !{{är|är inte}} aktiv",
+          "no": "Dekktrykk-varsel !{{er|er ikke}} aktivt",
+          "es": "Aviso de presión de neumáticos !{{está|no está}} activo",
+          "da": "Dæktryksadvarsel !{{er|er ikke}} aktiv",
+          "ru": "Предупреждение о давлении в шинах !{{активно|неактивно}}",
+          "pl": "Ostrzeżenie o ciśnieniu w oponach !{{jest|nie jest}} aktywne",
+          "ko": "타이어 공기압 경고가 !{{활성|비활성}}",
+          "ja": "タイヤ空気圧警告が!{{アクティブ|非アクティブ}}"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ]
+      },
+      {
+        "id": "climate_is_running",
+        "title": {
+          "en": "Climate !{{is|is not}} running",
+          "nl": "Climate !{{is|is niet}} actief",
+          "de": "Klima !{{läuft|läuft nicht}}",
+          "fr": "Climatisation !{{fonctionne|ne fonctionne pas}}",
+          "it": "Clima !{{è|non è}} in funzione",
+          "sv": "Klimat !{{körs|körs inte}}",
+          "no": "Klima !{{er aktivt|er ikke aktivt}}",
+          "es": "Climatización !{{está|no está}} funcionando",
+          "da": "Klima !{{kører|kører ikke}}",
+          "ru": "Климат !{{работает|не работает}}",
+          "pl": "Klimatyzacja !{{działa|nie działa}}",
+          "ko": "공조가 !{{작동 중|정지}}",
+          "ja": "空調が!{{動作中|停止中}}"
         },
         "args": [
           {

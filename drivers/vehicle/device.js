@@ -183,7 +183,7 @@ class PolestarVehicle extends Device {
         try {
             const ota = await this.polestar.getOtaStatus();
             if (!ota) return;
-            await this.setCapabilityValue('alarm_polestarOtaAvailable', !!ota.updateAvailable);
+            await this._setBoolAndTrigger('alarm_polestarOtaAvailable', !!ota.updateAvailable, '_otaAvailableTrigger', '_otaInstalledTrigger');
             // "UNKNOWN" (state=0) really means "no pending update info returned" — show a
             // friendlier label so the tile doesn't imply the sensor is broken.
             const stateText = (!ota.state && !ota.newVersion) ? 'No pending update' : (ota.stateLabel || 'UNKNOWN');
@@ -424,7 +424,7 @@ class PolestarVehicle extends Device {
                     if (Number.isFinite(tp.rearRightKpa))  this.setCapabilityValue('measure_pressure.rear_right',  tp.rearRightKpa);
                 }
                 if (typeof healthInfo.anyTyreWarning === 'boolean') {
-                    this.setCapabilityValue('alarm_polestarTyrePressure', healthInfo.anyTyreWarning);
+                    await this._setBoolAndTrigger('alarm_polestarTyrePressure', healthInfo.anyTyreWarning, '_tyreWarningRaisedTrigger', '_tyreWarningClearedTrigger');
                 }
             } else {
                 this.setCapabilityValue('alarm_generic', false);
@@ -618,6 +618,27 @@ class PolestarVehicle extends Device {
         this.homey.api.realtime('updatevehicle');
     }
 
+    // Writes a boolean capability and, on a real false→true / true→false
+    // transition, fires the matching device-trigger flow card. Skips firing
+    // when the previous value wasn't a boolean (device boot / first-ever
+    // set), so users don't get a spurious "climate started" the moment the
+    // app comes up. The trigger card refs are held on the driver instance
+    // by _registerFlowCards().
+    async _setBoolAndTrigger(capId, newValue, trueCardKey, falseCardKey) {
+        const prev = this.getCapabilityValue(capId);
+        await this.setCapabilityValue(capId, newValue);
+        if (prev === newValue || typeof prev !== 'boolean') return;
+        const card = newValue
+            ? this.driver && this.driver[trueCardKey]
+            : this.driver && this.driver[falseCardKey];
+        if (!card) return;
+        try {
+            await card.trigger(this, {}, {});
+        } catch (err) {
+            this.homey.app.log(`Trigger ${newValue ? trueCardKey : falseCardKey} failed for ${capId}`, this.name, 'ERROR', err.message);
+        }
+    }
+
     // Writes an alarm_contact sub-cap and, on a false→true / true→false
     // transition, fires the matching contact_opened / contact_closed
     // device-trigger flow card. The trigger run-listener gates on the
@@ -674,7 +695,7 @@ class PolestarVehicle extends Device {
             if (!cl) return;
             this.homey.app.log('Climate:', this.name, 'DEBUG', cl);
 
-            await this.setCapabilityValue('onoff.climate', !!cl.isActive);
+            await this._setBoolAndTrigger('onoff.climate', !!cl.isActive, '_climateStartedTrigger', '_climateStoppedTrigger');
             // Polestar often encodes temps in tenths of °C. Heuristic: if the raw number
             // is clearly out of human range (<45 assumed to be whole °C, otherwise /10).
             const normalizeTemp = (raw) => {

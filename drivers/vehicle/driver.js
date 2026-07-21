@@ -80,6 +80,27 @@ class Vehicle extends Driver {
             return args.device ? args.device.getCapabilityValue('measure_polestarAtHome') === true : false;
         });
 
+        // OTA / tyre-pressure / climate transition triggers. Fired by
+        // _setBoolAndTrigger() in device.js from the respective update
+        // functions when the boolean value flips.
+        this._otaAvailableTrigger = this.homey.flow.getDeviceTriggerCard('ota_update_available');
+        this._otaInstalledTrigger = this.homey.flow.getDeviceTriggerCard('ota_update_installed');
+        this._tyreWarningRaisedTrigger  = this.homey.flow.getDeviceTriggerCard('tyre_pressure_warning_raised');
+        this._tyreWarningClearedTrigger = this.homey.flow.getDeviceTriggerCard('tyre_pressure_warning_cleared');
+        this._climateStartedTrigger = this.homey.flow.getDeviceTriggerCard('climate_started');
+        this._climateStoppedTrigger = this.homey.flow.getDeviceTriggerCard('climate_stopped');
+
+        // Conditions for the other custom booleans. Each just reads the current
+        // capability value; the !{{is|is not}} tokens in the title let the user
+        // invert the check in the flow editor.
+        const boolCondition = (capId) => async (args) =>
+            args.device ? args.device.getCapabilityValue(capId) === true : false;
+        this.homey.flow.getConditionCard('is_charging').registerRunListener(boolCondition('measure_vehicleChargeState'));
+        this.homey.flow.getConditionCard('is_connected_to_charger').registerRunListener(boolCondition('measure_vehicleConnected'));
+        this.homey.flow.getConditionCard('ota_is_available').registerRunListener(boolCondition('alarm_polestarOtaAvailable'));
+        this.homey.flow.getConditionCard('tyre_pressure_warning_active').registerRunListener(boolCondition('alarm_polestarTyrePressure'));
+        this.homey.flow.getConditionCard('climate_is_running').registerRunListener(boolCondition('onoff.climate'));
+
         this.homey.app.log('Polestar flow cards registered', 'Polestar Driver', 'DEBUG');
     }
 
