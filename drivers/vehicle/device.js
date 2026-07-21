@@ -1,7 +1,7 @@
 'use strict';
 
 const { Device } = require('homey');
-const LegacyPolestar = require('../../clone_modules/polestar.js');
+const LegacyPolestar = require('@andysmithfal/polestar.js');
 const PolestarC3Compat = require('../../clone_modules/polestar-c3/compat');
 const HomeyCrypt = require('../../lib/homeycrypt')
 
