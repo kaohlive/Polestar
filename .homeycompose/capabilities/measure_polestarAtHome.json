@@ -1,0 +1,23 @@
+{
+  "type": "boolean",
+  "uiComponent": "sensor",
+  "icon": "/drivers/vehicle/assets/location.svg",
+  "title": {
+    "en": "Car at home",
+    "nl": "Auto thuis",
+    "de": "Auto zu Hause",
+    "fr": "Voiture à la maison",
+    "it": "Auto a casa",
+    "sv": "Bilen hemma",
+    "no": "Bil hjemme",
+    "es": "Coche en casa",
+    "da": "Bilen hjemme",
+    "ru": "Автомобиль дома",
+    "pl": "Samochód w domu",
+    "ko": "차량이 집에 있음",
+    "ja": "車が自宅にある"
+  },
+  "getable": true,
+  "setable": false,
+  "insights": true
+}

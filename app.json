@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.Coderax.Polestar",
-  "version": "3.2.8",
+  "version": "3.2.9",
   "compatibility": ">=12.4.5",
   "sdk": 3,
   "platforms": [
@@ -38,7 +38,9 @@
     "ja": "HomeyからPolestarを監視・操作 — 充電、空調、ロック、ウィンドウなど。"
   },
   "category": "internet",
-  "permissions": [],
+  "permissions": [
+    "homey:manager:geolocation"
+  ],
   "images": {
     "small": "/assets/images/small.png",
     "large": "/assets/images/large.png",
@@ -817,6 +819,86 @@
         ]
       },
       {
+        "id": "car_came_home",
+        "title": {
+          "en": "Car came home",
+          "nl": "Auto is thuisgekomen",
+          "de": "Auto ist zu Hause angekommen",
+          "fr": "Voiture rentrée à la maison",
+          "it": "Auto tornata a casa",
+          "sv": "Bilen kom hem",
+          "no": "Bil kom hjem",
+          "es": "Coche llegó a casa",
+          "da": "Bil kom hjem",
+          "ru": "Автомобиль приехал домой",
+          "pl": "Samochód wrócił do domu",
+          "ko": "차량이 집에 도착함",
+          "ja": "車が自宅に到着"
+        },
+        "hint": {
+          "en": "Fires when the vehicle enters the configured home radius.",
+          "nl": "Wordt getriggerd als de auto binnen de ingestelde thuisstraal komt.",
+          "de": "Wird ausgelöst, wenn das Auto den konfigurierten Heim-Radius betritt.",
+          "fr": "Se déclenche lorsque la voiture entre dans le rayon domicile configuré.",
+          "it": "Si attiva quando l'auto entra nel raggio casa configurato.",
+          "sv": "Utlöses när bilen kommer inom den inställda hem-radien.",
+          "no": "Utløses når bilen kommer innenfor den innstilte hjemme-radiusen.",
+          "es": "Se activa cuando el coche entra en el radio de casa configurado.",
+          "da": "Udløses når bilen kommer inden for den indstillede hjemme-radius.",
+          "ru": "Срабатывает, когда автомобиль въезжает в настроенный радиус дома.",
+          "pl": "Uruchamia się, gdy samochód wjeżdża w skonfigurowany promień domu.",
+          "ko": "차량이 설정된 집 반경에 들어올 때 실행됩니다.",
+          "ja": "車が設定した自宅半径に入ったときに発火します。"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle&capabilities=measure_polestarAtHome"
+          }
+        ]
+      },
+      {
+        "id": "car_left_home",
+        "title": {
+          "en": "Car left home",
+          "nl": "Auto is vertrokken van huis",
+          "de": "Auto hat Zuhause verlassen",
+          "fr": "Voiture a quitté la maison",
+          "it": "Auto ha lasciato casa",
+          "sv": "Bilen lämnade hemmet",
+          "no": "Bil dro hjemmefra",
+          "es": "Coche salió de casa",
+          "da": "Bil forlod hjem",
+          "ru": "Автомобиль уехал из дома",
+          "pl": "Samochód opuścił dom",
+          "ko": "차량이 집을 떠남",
+          "ja": "車が自宅を出発"
+        },
+        "hint": {
+          "en": "Fires when the vehicle leaves the configured home radius.",
+          "nl": "Wordt getriggerd als de auto de ingestelde thuisstraal verlaat.",
+          "de": "Wird ausgelöst, wenn das Auto den konfigurierten Heim-Radius verlässt.",
+          "fr": "Se déclenche lorsque la voiture quitte le rayon domicile configuré.",
+          "it": "Si attiva quando l'auto lascia il raggio casa configurato.",
+          "sv": "Utlöses när bilen lämnar den inställda hem-radien.",
+          "no": "Utløses når bilen forlater den innstilte hjemme-radiusen.",
+          "es": "Se activa cuando el coche sale del radio de casa configurado.",
+          "da": "Udløses når bilen forlader den indstillede hjemme-radius.",
+          "ru": "Срабатывает, когда автомобиль покидает настроенный радиус дома.",
+          "pl": "Uruchamia się, gdy samochód opuszcza skonfigurowany promień domu.",
+          "ko": "차량이 설정된 집 반경을 벗어날 때 실행됩니다.",
+          "ja": "車が設定した自宅半径を出たときに発火します。"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle&capabilities=measure_polestarAtHome"
+          }
+        ]
+      },
+      {
         "id": "contact_opened",
         "title": {
           "en": "A sensor opened",
@@ -1386,6 +1468,31 @@
             "placeholder": {
               "en": "A"
             }
+          }
+        ]
+      },
+      {
+        "id": "car_is_at_home",
+        "title": {
+          "en": "Car !{{is|is not}} at home",
+          "nl": "Auto !{{is|is niet}} thuis",
+          "de": "Auto !{{ist|ist nicht}} zu Hause",
+          "fr": "Voiture !{{est|n'est pas}} à la maison",
+          "it": "Auto !{{è|non è}} a casa",
+          "sv": "Bilen !{{är|är inte}} hemma",
+          "no": "Bil !{{er|er ikke}} hjemme",
+          "es": "Coche !{{está|no está}} en casa",
+          "da": "Bil !{{er|er ikke}} hjemme",
+          "ru": "Автомобиль !{{дома|не дома}}",
+          "pl": "Samochód !{{jest|nie jest}} w domu",
+          "ko": "차량이 집에 !{{있음|없음}}",
+          "ja": "車が自宅に!{{ある|ない}}"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
           }
         ]
       },
@@ -3307,6 +3414,7 @@
         "measure_temperature",
         "measure_polestarClimateRemaining",
         "measure_polestarLocation",
+        "measure_polestarAtHome",
         "alarm_polestarOtaAvailable",
         "measure_polestarOtaState",
         "measure_polestarOtaVersion",
@@ -4059,6 +4167,47 @@
           ]
         },
         {
+          "id": "home_radius_m",
+          "type": "number",
+          "label": {
+            "en": "Home radius",
+            "nl": "Straal thuis",
+            "de": "Radius Zuhause",
+            "fr": "Rayon domicile",
+            "it": "Raggio casa",
+            "sv": "Hem-radie",
+            "no": "Hjemme-radius",
+            "es": "Radio de casa",
+            "da": "Hjemme-radius",
+            "ru": "Радиус дома",
+            "pl": "Promień domu",
+            "ko": "집 반경",
+            "ja": "自宅半径"
+          },
+          "value": 150,
+          "min": 25,
+          "max": 2000,
+          "step": 25,
+          "units": {
+            "en": "m"
+          },
+          "hint": {
+            "en": "How close (in meters) the car must be to Homey's location to count as 'at home'. Default 150 m covers most driveways plus GPS jitter. Increase if your Homey and parking spot are far apart, decrease for a tight fit.",
+            "nl": "Hoe dicht (in meters) de auto bij Homey's locatie moet zijn om als 'thuis' te tellen. Standaard 150 m dekt de meeste opritten plus GPS-jitter. Verhoog als Homey en parkeerplek uit elkaar liggen, verlaag voor een strakke pasvorm.",
+            "de": "Wie nahe (in Metern) das Auto zu Homey's Standort sein muss, um als 'zu Hause' zu gelten. Standard 150 m deckt die meisten Auffahrten plus GPS-Rauschen. Erhöhen, wenn Homey und Parkplatz weit auseinander liegen.",
+            "fr": "À quelle distance (en mètres) la voiture doit être de l'emplacement de Homey pour compter comme 'à la maison'. 150 m par défaut couvre la plupart des allées plus le bruit GPS.",
+            "it": "Quanto vicino (in metri) l'auto deve essere alla posizione di Homey per contare come 'a casa'. Predefinito 150 m copre la maggior parte dei vialetti più il rumore GPS.",
+            "sv": "Hur nära (i meter) bilen måste vara Homeys plats för att räknas som 'hemma'. Standard 150 m täcker de flesta uppfarter plus GPS-brus.",
+            "no": "Hvor nær (i meter) bilen må være Homeys posisjon for å telle som 'hjemme'. Standard 150 m dekker de fleste innkjørsler pluss GPS-støy.",
+            "es": "Qué tan cerca (en metros) debe estar el coche de la ubicación de Homey para contar como 'en casa'. Predeterminado 150 m cubre la mayoría de las entradas más el ruido GPS.",
+            "da": "Hvor tæt (i meter) bilen skal være på Homeys placering for at tælle som 'hjemme'. Standard 150 m dækker de fleste indkørsler plus GPS-støj.",
+            "ru": "Как близко (в метрах) автомобиль должен быть к местоположению Homey, чтобы считаться «дома». По умолчанию 150 м покрывает большинство подъездов плюс GPS-помехи.",
+            "pl": "Jak blisko (w metrach) samochód musi znajdować się od lokalizacji Homey, aby liczyć się jako 'w domu'. Domyślnie 150 m obejmuje większość podjazdów plus szum GPS.",
+            "ko": "차량이 Homey 위치에서 몇 미터 이내에 있어야 '집에 있음'으로 간주할지. 기본 150 m는 대부분의 주차 공간과 GPS 오차를 커버합니다.",
+            "ja": "車がHomeyの位置から何メートル以内なら「自宅」とみなすか。既定の150 mでほとんどのドライブウェイとGPS誤差をカバーします。"
+          }
+        },
+        {
           "id": "windows_supported",
           "type": "checkbox",
           "label": {
@@ -4723,6 +4872,29 @@
         "ja": "高度"
       },
       "units": "m",
+      "getable": true,
+      "setable": false,
+      "insights": true
+    },
+    "measure_polestarAtHome": {
+      "type": "boolean",
+      "uiComponent": "sensor",
+      "icon": "/drivers/vehicle/assets/location.svg",
+      "title": {
+        "en": "Car at home",
+        "nl": "Auto thuis",
+        "de": "Auto zu Hause",
+        "fr": "Voiture à la maison",
+        "it": "Auto a casa",
+        "sv": "Bilen hemma",
+        "no": "Bil hjemme",
+        "es": "Coche en casa",
+        "da": "Bilen hjemme",
+        "ru": "Автомобиль дома",
+        "pl": "Samochód w domu",
+        "ko": "차량이 집에 있음",
+        "ja": "車が自宅にある"
+      },
       "getable": true,
       "setable": false,
       "insights": true

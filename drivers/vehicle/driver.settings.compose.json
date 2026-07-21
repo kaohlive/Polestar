@@ -132,6 +132,45 @@
         ]
     },
     {
+        "id": "home_radius_m",
+        "type": "number",
+        "label": {
+            "en": "Home radius",
+            "nl": "Straal thuis",
+            "de": "Radius Zuhause",
+            "fr": "Rayon domicile",
+            "it": "Raggio casa",
+            "sv": "Hem-radie",
+            "no": "Hjemme-radius",
+            "es": "Radio de casa",
+            "da": "Hjemme-radius",
+            "ru": "Радиус дома",
+            "pl": "Promień domu",
+            "ko": "집 반경",
+            "ja": "自宅半径"
+        },
+        "value": 150,
+        "min": 25,
+        "max": 2000,
+        "step": 25,
+        "units": { "en": "m" },
+        "hint": {
+            "en": "How close (in meters) the car must be to Homey's location to count as 'at home'. Default 150 m covers most driveways plus GPS jitter. Increase if your Homey and parking spot are far apart, decrease for a tight fit.",
+            "nl": "Hoe dicht (in meters) de auto bij Homey's locatie moet zijn om als 'thuis' te tellen. Standaard 150 m dekt de meeste opritten plus GPS-jitter. Verhoog als Homey en parkeerplek uit elkaar liggen, verlaag voor een strakke pasvorm.",
+            "de": "Wie nahe (in Metern) das Auto zu Homey's Standort sein muss, um als 'zu Hause' zu gelten. Standard 150 m deckt die meisten Auffahrten plus GPS-Rauschen. Erhöhen, wenn Homey und Parkplatz weit auseinander liegen.",
+            "fr": "À quelle distance (en mètres) la voiture doit être de l'emplacement de Homey pour compter comme 'à la maison'. 150 m par défaut couvre la plupart des allées plus le bruit GPS.",
+            "it": "Quanto vicino (in metri) l'auto deve essere alla posizione di Homey per contare come 'a casa'. Predefinito 150 m copre la maggior parte dei vialetti più il rumore GPS.",
+            "sv": "Hur nära (i meter) bilen måste vara Homeys plats för att räknas som 'hemma'. Standard 150 m täcker de flesta uppfarter plus GPS-brus.",
+            "no": "Hvor nær (i meter) bilen må være Homeys posisjon for å telle som 'hjemme'. Standard 150 m dekker de fleste innkjørsler pluss GPS-støy.",
+            "es": "Qué tan cerca (en metros) debe estar el coche de la ubicación de Homey para contar como 'en casa'. Predeterminado 150 m cubre la mayoría de las entradas más el ruido GPS.",
+            "da": "Hvor tæt (i meter) bilen skal være på Homeys placering for at tælle som 'hjemme'. Standard 150 m dækker de fleste indkørsler plus GPS-støj.",
+            "ru": "Как близко (в метрах) автомобиль должен быть к местоположению Homey, чтобы считаться «дома». По умолчанию 150 м покрывает большинство подъездов плюс GPS-помехи.",
+            "pl": "Jak blisko (w metrach) samochód musi znajdować się od lokalizacji Homey, aby liczyć się jako 'w domu'. Domyślnie 150 m obejmuje większość podjazdów plus szum GPS.",
+            "ko": "차량이 Homey 위치에서 몇 미터 이내에 있어야 '집에 있음'으로 간주할지. 기본 150 m는 대부분의 주차 공간과 GPS 오차를 커버합니다.",
+            "ja": "車がHomeyの位置から何メートル以内なら「自宅」とみなすか。既定の150 mでほとんどのドライブウェイとGPS誤差をカバーします。"
+        }
+    },
+    {
         "id": "windows_supported",
         "type": "checkbox",
         "label": {

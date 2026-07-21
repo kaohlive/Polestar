@@ -7,6 +7,18 @@ const HomeyCrypt = require('../../lib/homeycrypt')
 
 const measureInterval = 60000;
 const KM_TO_MILES = 0.621371;
+const DEFAULT_HOME_RADIUS_M = 150;
+const EARTH_RADIUS_M = 6371000;
+
+// Haversine great-circle distance in meters. Inlined so we don't pull in
+// geolib just for one call. Accurate to sub-meter at driveway scale.
+function haversineMeters(lat1, lng1, lat2, lng2) {
+    const toRad = (deg) => (deg * Math.PI) / 180;
+    const dLat = toRad(lat2 - lat1);
+    const dLng = toRad(lng2 - lng1);
+    const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+    return 2 * EARTH_RADIUS_M * Math.asin(Math.min(1, Math.sqrt(a)));
+}
 
 // Map feature-key → { capabilities: [...] } for auto-remove on UNIMPLEMENTED.
 const OPTIONAL_FEATURES = {
@@ -187,15 +199,73 @@ class PolestarVehicle extends Device {
     async updateLocationState() {
         if (this._destroyed) return;
         if (!this.polestar || typeof this.polestar.getLocation !== 'function') return;
+        this.homey.app.log('Retrieve vehicle location', this.name, 'DEBUG');
         try {
             const loc = await this.polestar.getLocation();
-            if (!loc || !Number.isFinite(loc.latitude) || !Number.isFinite(loc.longitude)) return;
+            if (!loc) {
+                this.homey.app.log('Location: no data returned by backend (getLocation → null); capability left unchanged', this.name, 'DEBUG');
+                return;
+            }
+            if (!Number.isFinite(loc.latitude) || !Number.isFinite(loc.longitude)) {
+                this.homey.app.log('Location: got a response but coords are not finite; capability left unchanged', this.name, 'DEBUG', loc);
+                return;
+            }
             this._lastLocation = loc;
             const str = `${loc.latitude.toFixed(5)}, ${loc.longitude.toFixed(5)}`;
             await this.setCapabilityValue('measure_polestarLocation', str);
+            this.homey.app.log('Location:', this.name, 'DEBUG', str);
+            await this._evaluateAtHome(loc);
         } catch (err) {
             if (err.message === 'Not logged in') { await this.attemptReLogin(); return; }
+            if (isUnimplementedError(err)) {
+                this.homey.app.log('Location: backend reports UNIMPLEMENTED — not supported on this vehicle', this.name, 'DEBUG');
+                return;
+            }
             this.homey.app.log('Failed to retrieve location', this.name, 'DEBUG', err.message);
+        }
+    }
+
+    // Compare vehicle location to Homey's own location and toggle the
+    // measure_polestarAtHome boolean. If Homey's geolocation isn't available
+    // (permission missing / mode manual with no lat set) we skip silently
+    // rather than pinning the tile to false.
+    async _evaluateAtHome(loc) {
+        if (this._destroyed) return;
+        if (!this.hasCapability('measure_polestarAtHome')) return;
+        let homeLat, homeLng;
+        try {
+            homeLat = this.homey.geolocation.getLatitude();
+            homeLng = this.homey.geolocation.getLongitude();
+        } catch (err) {
+            this.homey.app.log('At-home: cannot read Homey geolocation', this.name, 'DEBUG', err.message);
+            return;
+        }
+        if (!Number.isFinite(homeLat) || !Number.isFinite(homeLng) || (homeLat === 0 && homeLng === 0)) {
+            this.homey.app.log('At-home: Homey has no usable geolocation, skipping', this.name, 'DEBUG');
+            return;
+        }
+        const radius = Number(this.getSetting('home_radius_m')) || DEFAULT_HOME_RADIUS_M;
+        const meters = haversineMeters(loc.latitude, loc.longitude, homeLat, homeLng);
+        const atHome = meters <= radius;
+        const prev = this.getCapabilityValue('measure_polestarAtHome');
+        await this.setCapabilityValue('measure_polestarAtHome', atHome);
+        if (prev !== atHome) {
+            this.homey.app.log(`At-home: ${atHome ? 'arrived' : 'left'} (distance ${Math.round(meters)} m, radius ${radius} m)`, this.name, 'DEBUG');
+            // Suppress the false→true fire on device boot when prev is null
+            // (initial capability value before we ever set it). Real transitions
+            // where prev is a boolean still fire.
+            if (typeof prev === 'boolean') {
+                const card = atHome
+                    ? this.driver && this.driver._carCameHomeTrigger
+                    : this.driver && this.driver._carLeftHomeTrigger;
+                if (card) {
+                    try {
+                        await card.trigger(this, {}, {});
+                    } catch (err) {
+                        this.homey.app.log('At-home trigger failed', this.name, 'ERROR', err.message);
+                    }
+                }
+            }
         }
     }
 
@@ -312,6 +382,7 @@ class PolestarVehicle extends Device {
             'alarm_contact.sunroof',
             'alarm_contact.tank_lid',
             'measure_polestarLocation',
+            'measure_polestarAtHome',
             'alarm_polestarOtaAvailable',
             'measure_polestarOtaState',
             'measure_polestarOtaVersion',

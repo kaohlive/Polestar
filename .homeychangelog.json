@@ -199,5 +199,8 @@
   },
   "3.2.8": {
     "en": "Vehicle discovery now uses the C3 GetMyCars service, which also surfaces whether the account is linked to the car and holds owner rights (thanks olemarkus, PR #3). Non-owner accounts — e.g. lease drivers or secondhand buyers whose ownership was never transferred — should now pair successfully; pairing logs record the linked/owner state so we can investigate later if any features turn out to require owner rights. Also wires up `npm test` to run the new fixture suite."
+  },
+  "3.2.9": {
+    "en": "New 'Car at home' boolean capability that flips true when the car is within a configurable radius of Homey's own location (default 150 m, adjustable in device settings). Comes with three flow cards: 'Car came home' and 'Car left home' triggers, plus an invertable 'Car is / is not at home' condition. Also adds diagnostic logging to the 15-minute location refresh — previously it returned silently on missing data or invalid coordinates, making 'location tile stopped updating' reports impossible to triage."
   }
 }

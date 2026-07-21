@@ -1,6 +1,6 @@
 {
   "id": "com.Coderax.Polestar",
-  "version": "3.2.8",
+  "version": "3.2.9",
   "compatibility": ">=12.4.5",
   "sdk": 3,
   "platforms": [
@@ -37,7 +37,9 @@
     "ja": "HomeyからPolestarを監視・操作 — 充電、空調、ロック、ウィンドウなど。"
   },
   "category": "internet",
-  "permissions": [],
+  "permissions": [
+    "homey:manager:geolocation"
+  ],
   "images": {
     "small": "/assets/images/small.png",
     "large": "/assets/images/large.png",

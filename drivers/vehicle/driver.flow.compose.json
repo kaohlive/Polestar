@@ -137,6 +137,74 @@
         "$filter": "capabilities=measure_vehicleConnected"
     },
     {
+        "id": "car_came_home",
+        "title": {
+            "en": "Car came home",
+            "nl": "Auto is thuisgekomen",
+            "de": "Auto ist zu Hause angekommen",
+            "fr": "Voiture rentrée à la maison",
+            "it": "Auto tornata a casa",
+            "sv": "Bilen kom hem",
+            "no": "Bil kom hjem",
+            "es": "Coche llegó a casa",
+            "da": "Bil kom hjem",
+            "ru": "Автомобиль приехал домой",
+            "pl": "Samochód wrócił do domu",
+            "ko": "차량이 집에 도착함",
+            "ja": "車が自宅に到着"
+        },
+        "hint": {
+            "en": "Fires when the vehicle enters the configured home radius.",
+            "nl": "Wordt getriggerd als de auto binnen de ingestelde thuisstraal komt.",
+            "de": "Wird ausgelöst, wenn das Auto den konfigurierten Heim-Radius betritt.",
+            "fr": "Se déclenche lorsque la voiture entre dans le rayon domicile configuré.",
+            "it": "Si attiva quando l'auto entra nel raggio casa configurato.",
+            "sv": "Utlöses när bilen kommer inom den inställda hem-radien.",
+            "no": "Utløses når bilen kommer innenfor den innstilte hjemme-radiusen.",
+            "es": "Se activa cuando el coche entra en el radio de casa configurado.",
+            "da": "Udløses når bilen kommer inden for den indstillede hjemme-radius.",
+            "ru": "Срабатывает, когда автомобиль въезжает в настроенный радиус дома.",
+            "pl": "Uruchamia się, gdy samochód wjeżdża w skonfigurowany promień domu.",
+            "ko": "차량이 설정된 집 반경에 들어올 때 실행됩니다.",
+            "ja": "車が設定した自宅半径に入ったときに発火します。"
+        },
+        "$filter": "capabilities=measure_polestarAtHome"
+    },
+    {
+        "id": "car_left_home",
+        "title": {
+            "en": "Car left home",
+            "nl": "Auto is vertrokken van huis",
+            "de": "Auto hat Zuhause verlassen",
+            "fr": "Voiture a quitté la maison",
+            "it": "Auto ha lasciato casa",
+            "sv": "Bilen lämnade hemmet",
+            "no": "Bil dro hjemmefra",
+            "es": "Coche salió de casa",
+            "da": "Bil forlod hjem",
+            "ru": "Автомобиль уехал из дома",
+            "pl": "Samochód opuścił dom",
+            "ko": "차량이 집을 떠남",
+            "ja": "車が自宅を出発"
+        },
+        "hint": {
+            "en": "Fires when the vehicle leaves the configured home radius.",
+            "nl": "Wordt getriggerd als de auto de ingestelde thuisstraal verlaat.",
+            "de": "Wird ausgelöst, wenn das Auto den konfigurierten Heim-Radius verlässt.",
+            "fr": "Se déclenche lorsque la voiture quitte le rayon domicile configuré.",
+            "it": "Si attiva quando l'auto lascia il raggio casa configurato.",
+            "sv": "Utlöses när bilen lämnar den inställda hem-radien.",
+            "no": "Utløses når bilen forlater den innstilte hjemme-radiusen.",
+            "es": "Se activa cuando el coche sale del radio de casa configurado.",
+            "da": "Udløses når bilen forlader den indstillede hjemme-radius.",
+            "ru": "Срабатывает, когда автомобиль покидает настроенный радиус дома.",
+            "pl": "Uruchamia się, gdy samochód opuszcza skonfigurowany promień domu.",
+            "ko": "차량이 설정된 집 반경을 벗어날 때 실행됩니다.",
+            "ja": "車が設定した自宅半径を出たときに発火します。"
+        },
+        "$filter": "capabilities=measure_polestarAtHome"
+    },
+    {
         "id": "contact_opened",
         "title": {
             "en": "A sensor opened",
@@ -357,6 +425,24 @@
             "args": [
                 { "type": "number", "name": "amperage", "min": 6, "max": 32, "step": 1, "placeholder": { "en": "A" } }
             ]
+        },
+        {
+            "id": "car_is_at_home",
+            "title": {
+                "en": "Car !{{is|is not}} at home",
+                "nl": "Auto !{{is|is niet}} thuis",
+                "de": "Auto !{{ist|ist nicht}} zu Hause",
+                "fr": "Voiture !{{est|n'est pas}} à la maison",
+                "it": "Auto !{{è|non è}} a casa",
+                "sv": "Bilen !{{är|är inte}} hemma",
+                "no": "Bil !{{er|er ikke}} hjemme",
+                "es": "Coche !{{está|no está}} en casa",
+                "da": "Bil !{{er|er ikke}} hjemme",
+                "ru": "Автомобиль !{{дома|не дома}}",
+                "pl": "Samochód !{{jest|nie jest}} w domu",
+                "ko": "차량이 집에 !{{있음|없음}}",
+                "ja": "車が自宅に!{{ある|ない}}"
+            }
         },
         {
             "id": "contact_is_open",

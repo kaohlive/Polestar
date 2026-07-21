@@ -39,6 +39,7 @@
     "measure_temperature",
     "measure_polestarClimateRemaining",
     "measure_polestarLocation",
+    "measure_polestarAtHome",
     "alarm_polestarOtaAvailable",
     "measure_polestarOtaState",
     "measure_polestarOtaVersion",

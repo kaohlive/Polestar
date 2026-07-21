@@ -70,6 +70,16 @@ class Vehicle extends Driver {
             return args.device.getCapabilityValue(args.sensor) === true;
         });
 
+        // At-home cards: no args; the device fires them from _evaluateAtHome
+        // whenever the measure_polestarAtHome boolean transitions. Condition
+        // reads the current capability value — invertable by the user in the
+        // flow editor via the !{{is|is not}} tokens in the title.
+        this._carCameHomeTrigger = this.homey.flow.getDeviceTriggerCard('car_came_home');
+        this._carLeftHomeTrigger = this.homey.flow.getDeviceTriggerCard('car_left_home');
+        this.homey.flow.getConditionCard('car_is_at_home').registerRunListener(async (args) => {
+            return args.device ? args.device.getCapabilityValue('measure_polestarAtHome') === true : false;
+        });
+
         this.homey.app.log('Polestar flow cards registered', 'Polestar Driver', 'DEBUG');
     }
 
