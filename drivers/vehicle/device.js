@@ -297,8 +297,13 @@ class PolestarVehicle extends Device {
             await this.addCapability('measure_battery');
         if (!this.hasCapability('ev_charging_state'))
             await this.addCapability('ev_charging_state');
-        if (!this.hasCapability('measure_polestarBattery'))
-            await this.addCapability('measure_polestarBattery');
+        if (this.hasCapability('measure_polestarBattery')) {
+            try {
+                await this.removeCapability('measure_polestarBattery');
+            } catch (err) {
+                this.homey.app.log('Failed to remove duplicate battery capability', this.name, 'WARNING', err);
+            }
+        }
         if(!this.hasCapability('measure_current'))
            await this.addCapability('measure_current');
         if(!this.hasCapability('measure_power'))
@@ -471,7 +476,6 @@ class PolestarVehicle extends Device {
             this.homey.app.log('Battery:', 'PolestarVehicle', 'DEBUG', batteryInfo);
 
             const batterySoc = Math.floor(batteryInfo.batteryChargeLevelPercentage);
-            this.setCapabilityValue('measure_polestarBattery', batterySoc);
             this.setCapabilityValue('measure_battery', batterySoc);
 
             // Restored charging metrics — C3 fills these reliably; GraphQL used to leave them null.
