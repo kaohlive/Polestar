@@ -30,6 +30,8 @@ const {
     ChargingStatus,
     ChargerConnectionStatus,
     ChargingType,
+    ManualPreconditioningStatus,
+    ManualPreconditioningUnavailableReason,
     ServiceWarning,
     TyrePressureWarning,
     OpenStatus,
@@ -150,6 +152,13 @@ class PolestarC3 {
             decoded.battery.charger_connection_status_label =
                 ChargerConnectionStatus[decoded.battery.charger_connection_status] || null;
             decoded.battery.charging_type_label = ChargingType[decoded.battery.charging_type] || null;
+            if (decoded.battery.manual_preconditioning) {
+                const preconditioning = decoded.battery.manual_preconditioning;
+                preconditioning.status_label =
+                    ManualPreconditioningStatus[preconditioning.status] || null;
+                preconditioning.unavailable_reason_label =
+                    ManualPreconditioningUnavailableReason[preconditioning.unavailable_reason] || null;
+            }
         }
         return decoded;
     }
