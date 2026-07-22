@@ -57,6 +57,12 @@ class Vehicle extends Driver {
             return args.device ? args.device.isLocked() : false;
         });
 
+        this._batteryPreconditioningChangedTrigger =
+            this.homey.flow.getDeviceTriggerCard('battery_preconditioning_changed');
+        this.homey.flow.getConditionCard('battery_preconditioning_state_is').registerRunListener(
+            async (args) => args.device ? args.device.batteryPreconditioningStateIs(args.state) : false,
+        );
+
         // Contact-sensor cards: one trigger card per direction (opened/closed)
         // with a dropdown selecting which alarm_contact sub-capability. The
         // device fires the trigger with state.sensor = full sub-cap id; the

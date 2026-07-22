@@ -3,6 +3,7 @@
 const { Device } = require('homey');
 const LegacyPolestar = require('../../clone_modules/polestar.js');
 const PolestarC3Compat = require('../../clone_modules/polestar-c3/compat');
+const { transitionPreconditioningState } = require('../../clone_modules/polestar-c3/preconditioning');
 const HomeyCrypt = require('../../lib/homeycrypt')
 
 const measureInterval = 60000;
@@ -470,6 +471,8 @@ class PolestarVehicle extends Device {
             var batteryInfo = await this.polestar.getBattery();
             this.homey.app.log('Battery:', 'PolestarVehicle', 'DEBUG', batteryInfo);
 
+            await this._updateBatteryPreconditioningState(batteryInfo);
+
             const batterySoc = Math.floor(batteryInfo.batteryChargeLevelPercentage);
             this.setCapabilityValue('measure_polestarBattery', batterySoc);
             this.setCapabilityValue('measure_battery', batterySoc);
@@ -637,6 +640,29 @@ class PolestarVehicle extends Device {
         } catch (err) {
             this.homey.app.log(`Trigger ${newValue ? trueCardKey : falseCardKey} failed for ${capId}`, this.name, 'ERROR', err.message);
         }
+    }
+
+    async _updateBatteryPreconditioningState(batteryInfo) {
+        const reported = batteryInfo.batteryPreconditioningReported === true;
+        const key = reported ? batteryInfo.batteryPreconditioningStatusKey : null;
+        const label = reported ? (batteryInfo.batteryPreconditioningStatusLabel || 'Unknown') : 'Not reported';
+
+        const transition = transitionPreconditioningState(this._batteryPreconditioningStatusKey, key);
+        this._batteryPreconditioningStatusKey = transition.key;
+
+        if (!transition.changed) return;
+
+        const card = this.driver?._batteryPreconditioningChangedTrigger;
+        if (!card) return;
+        try {
+            await card.trigger(this, { state: label }, {});
+        } catch (err) {
+            this.homey.app.log('Battery preconditioning state trigger failed', this.name, 'ERROR', err);
+        }
+    }
+
+    batteryPreconditioningStateIs(state) {
+        return this._batteryPreconditioningStatusKey === state;
     }
 
     // Writes an alarm_contact sub-cap and, on a false→true / true→false
