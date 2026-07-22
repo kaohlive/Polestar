@@ -11,8 +11,7 @@
     "@types/node": "^20.8.10"
   },
   "dependencies": {
-    "@andysmithfal/polestar.js": "^1.0.3",
-    "axios": "^1.6.0",
+    "axios": "^1.7.4",
     "base64-url": "^2.3.3",
     "geolib": "^3.3.4",
     "homey-api": "^3.4.13",

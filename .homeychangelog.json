@@ -205,5 +205,8 @@
   },
   "3.2.10": {
     "en": "Flow-card completeness sweep for boolean capabilities that were missing them: 'Software update available/no-longer-pending' triggers + 'Software update is/is not available' condition; 'Tyre pressure warning raised/cleared' triggers + 'Tyre pressure warning is/is not active' condition; 'Climate started/stopped' triggers + 'Climate is/is not running' condition; and invertable 'Car is/is not charging' and 'Car is/is not connected to a charger' conditions to complement the existing charging-transition triggers. All 13 languages."
+  },
+  "3.2.11": {
+    "en": "Internal cleanup: removed the misleading @andysmithfal/polestar.js npm dependency (the app has always loaded the local patched fork under clone_modules/polestar.js) and added FORK_NOTES.md documenting what our fork changes versus upstream. Security bumps: axios floor raised to ^1.7.4 (installed 1.18.1) for the SSRF fix in CVE-2024-39338; qs and ws refreshed via npm audit to patched versions. Four moderate CVEs remain in transitive deps of homey-api (parseuri / engine.io-client / socket.io-client, all in code paths the app does not exercise) and will clear when Athom bumps their transport stack."
   }
 }
