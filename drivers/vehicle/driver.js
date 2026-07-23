@@ -4,6 +4,7 @@ const { Driver } = require('homey');
 const LegacyPolestar = require('../../clone_modules/polestar.js');
 const PolestarC3Compat = require('../../clone_modules/polestar-c3/compat');
 const HomeyCrypt = require('../../lib/homeycrypt')
+const toPairingDevice = require('./pairing-device');
 
 function Polestar(email, password, homey) {
     const legacy = homey && homey.settings.get('c3_backend_disabled') === true;
@@ -205,20 +206,7 @@ class Vehicle extends Driver {
                             const linked = bev.userIsLinked === true ? 'yes' : (bev.userIsLinked === false ? 'no' : '?');
                             const owner  = bev.userIsOwner  === true ? 'yes' : (bev.userIsOwner  === false ? 'no' : '?');
                             this.homey.app.log(`Located vehicle ${bev.content.model.name} — linked:${linked} owner:${owner}`, 'Polestar Driver');
-                            let device = {
-                                id: bev.vin,
-                                name: bev.content.model.name + ' (' + bev.registrationNo + ')',
-                                data: {
-                                    vin: bev.vin,
-                                    registration: bev.registrationNo,
-                                    internalVehicleIdentifier: bev.internalVehicleIdentifier,
-                                    modelName: bev.content.model.name,
-                                    modelYear: bev.modelYear,
-                                    carImage: bev.content.images?.studio?.url || null,
-                                    deliveryDate: bev.deliveryDate,
-                                    hasPerformancePackage: bev.hasPerformancePackage
-                                }
-                            }
+                            const device = toPairingDevice(bev);
 
                             return device;
                         } catch (err) {
