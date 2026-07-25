@@ -4,6 +4,7 @@ const { Device } = require('homey');
 const LegacyPolestar = require('../../clone_modules/polestar.js');
 const PolestarC3Compat = require('../../clone_modules/polestar-c3/compat');
 const HomeyCrypt = require('../../lib/homeycrypt')
+const EvChargingState = require('../../lib/evChargingState')
 
 const measureInterval = 60000;
 const KM_TO_MILES = 0.621371;
@@ -481,7 +482,16 @@ class PolestarVehicle extends Device {
             this.setCapabilityValue('measure_current', amps);
             this.setCapabilityValue('measure_power', watts);
             this.setCapabilityValue('measure_voltage', volts);
-            const isCharging = batteryInfo.chargingStatus === 'CHARGING_STATUS_CHARGING';
+            // Resolve the plug state once, here, and let everything below read it:
+            // the energy accrual gate, measure_vehicleChargeState and
+            // ev_charging_state all used to derive "is it charging?" separately,
+            // which is how smart-charging sessions ended up accruing no energy.
+            const isConnected = EvChargingState.resolveConnected(batteryInfo);
+            const evChargingState = EvChargingState.resolveChargingState({
+                chargingStatus: batteryInfo.chargingStatus,
+                connected: isConnected,
+            });
+            const isCharging = evChargingState === EvChargingState.PLUGGED_IN_CHARGING;
             const hoursPerPoll = measureInterval / (1000 * 60 * 60);
             const deltaKwh = isCharging && watts > 0 ? (watts / 1000) * hoursPerPoll : 0;
 
@@ -527,78 +537,14 @@ class PolestarVehicle extends Device {
             }
             this.setCapabilityValue('measure_vehicleRange', range);
 
-            // C3 exposes charger_connection_status as a separate, authoritative field.
-            // Fall back to the chargingStatus heuristic only when that label is absent (legacy client).
-            const connectedByStatus = new Set([
-                'CHARGING_STATUS_CHARGING',
-                'CHARGING_STATUS_DONE',
-                'CHARGING_STATUS_SCHEDULED',
-                'CHARGING_STATUS_SMART_CHARGING',
-                'CHARGING_STATUS_SMART_CHARGING_PAUSED',
-                'CHARGING_STATUS_ERROR',
-                'CHARGING_STATUS_FAULT'
-            ]);
-            const isConnected = batteryInfo.chargerConnectionStatusLabel
-                ? batteryInfo.chargerConnectionStatusLabel === 'CONNECTED'
-                : connectedByStatus.has(batteryInfo.chargingStatus);
-
-            if (isConnected) {
-                this.setCapabilityValue('measure_vehicleConnected', true);
-            } else {
-                this.setCapabilityValue('measure_vehicleConnected', false);
-                this.setCapabilityValue('ev_charging_state', 'plugged_out');
-            }
-
-            switch (batteryInfo.chargingStatus) {
-                case 'CHARGING_STATUS_CHARGING':
-                    this.setCapabilityValue('measure_vehicleChargeState', true);
-                    this.setCapabilityValue('ev_charging_state', 'plugged_in_charging');
-                    this.setCapabilityValue('measure_vehicleChargeTimeRemaining', batteryInfo.estimatedChargingTimeToFullMinutes);
-                break;
-                case 'CHARGING_STATUS_IDLE':
-                    this.setCapabilityValue('measure_vehicleChargeState', false);
-                    this.setCapabilityValue('ev_charging_state', isConnected ? 'plugged_in' : 'plugged_out');
-                    this.setCapabilityValue('measure_vehicleChargeTimeRemaining', null);
-                break;
-                case 'CHARGING_STATUS_DONE':
-                    // Target SoC reached — connector still in, no power flowing, no
-                    // resume queued. Homey's "plugged_in_paused" implies a deliberate
-                    // pause, which misrepresents a completed session.
-                    this.setCapabilityValue('measure_vehicleChargeState', false);
-                    this.setCapabilityValue('ev_charging_state', 'plugged_in');
-                    this.setCapabilityValue('measure_vehicleChargeTimeRemaining', null);
-                break;
-                case 'CHARGING_STATUS_SCHEDULED':
-                case 'CHARGING_STATUS_SMART_CHARGING':
-                case 'CHARGING_STATUS_SMART_CHARGING_PAUSED':
-                    this.setCapabilityValue('measure_vehicleChargeState', false);
-                    this.setCapabilityValue('ev_charging_state', 'plugged_in_paused');
-                    this.setCapabilityValue('measure_vehicleChargeTimeRemaining', null);
-                break;
-                case 'CHARGING_STATUS_DISCHARGING':
-                    this.setCapabilityValue('measure_vehicleChargeState', false);
-                    this.setCapabilityValue('ev_charging_state', 'plugged_in');
-                    this.setCapabilityValue('measure_vehicleChargeTimeRemaining', null);
-                break;
-
-                case 'CHARGING_STATUS_ERROR':
-                case 'CHARGING_STATUS_FAULT':
-                    this.setCapabilityValue('measure_vehicleChargeState', false);
-                    this.setCapabilityValue('ev_charging_state', 'plugged_in');
-                    this.setCapabilityValue('measure_vehicleChargeTimeRemaining', null);
-                    // TODO: Add capability to show charging error
-                break;
-                default:
-                    this.setCapabilityValue('measure_vehicleChargeState', false);
-                    this.setCapabilityValue('ev_charging_state', 'plugged_out');
-                    this.setCapabilityValue('measure_vehicleChargeTimeRemaining', null);
-                break;
-            }
-
-            // if (batteryInfo.chargerConnectionStatus == 'CHARGER_CONNECTION_STATUS_CONNECTED')
-            //     this.setCapabilityValue('measure_vehicleConnected', true);
-            // else
-            //     this.setCapabilityValue('measure_vehicleConnected', false);
+            // Plug state was resolved above, alongside the energy accrual gate, so
+            // these three can no longer contradict each other mid-poll.
+            this.setCapabilityValue('measure_vehicleConnected', isConnected);
+            this.setCapabilityValue('ev_charging_state', evChargingState);
+            this.setCapabilityValue('measure_vehicleChargeState', isCharging);
+            this.setCapabilityValue('measure_vehicleChargeTimeRemaining',
+                isCharging ? batteryInfo.estimatedChargingTimeToFullMinutes : null);
+            // TODO: Add capability to show charging error (CHARGING_STATUS_ERROR)
         } catch (err) {
             if (err.message === 'Not logged in') {
                 this.homey.app.log('Session expired, attempting to re-login', 'PolestarVehicle', 'WARNING');
