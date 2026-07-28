@@ -1,0 +1,3 @@
+[submodule "clone_modules/polestar.js"]
+	path = clone_modules/polestar.js
+	url = https://github.com/kaohlive/polestar.js.git
