@@ -159,7 +159,22 @@
           return;
         }
 
-        Homey.api('GET', `/status?registration=${device.registration}`)
+        // Widgets configured before the VIN switch hold a registration, and how
+        // Homey stored the picked device back then is undocumented — it may sit
+        // flat or nested under .data. Send every identifier we can find and let
+        // the API prefer the VIN.
+        const params = new URLSearchParams();
+        const vin = device.vin || device.data?.vin;
+        const registration = device.registration || device.data?.registration;
+        if (vin) params.set('vin', vin);
+        if (registration) params.set('registration', registration);
+
+        if (!params.toString()) {
+          showError('Please select your Polestar from the widget\'s settings.');
+          return;
+        }
+
+        Homey.api('GET', `/status?${params.toString()}`)
           .then(status_ => {
             status = status_;
             renderStatus();

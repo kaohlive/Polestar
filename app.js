@@ -40,12 +40,19 @@ class Polestar extends Homey.App {
 				const driver = await this.homey.drivers.getDriver('vehicle');
 				const devices = await driver.getDevices();
 				this.log('Located '+devices.length+' vehicles: filter using '+query)
-				this.log(devices[0].getData().registration)
+				// Homey stores the picked entry verbatim, so this object is the
+				// widget's identity. The VIN is what the dashboard API keys on;
+				// registration rides along so widgets configured before the VIN
+				// switch keep resolving through the fallback.
 				return Object.values(devices)
-				  .map(device => ({
-					name: device.getName(),
-					registration: device.getData().registration,
-				  }))
+				  .map(device => {
+					const data = device.getData();
+					return {
+					  name: device.getName(),
+					  vin: data.vin,
+					  registration: data.registration || null,
+					};
+				  })
 				  .filter(vehicle => vehicle.name.toLowerCase().includes(query.toLowerCase()));
 			  });
 		  } catch (err) {
