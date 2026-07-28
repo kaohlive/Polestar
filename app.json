@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.Coderax.Polestar",
-  "version": "3.2.11",
+  "version": "3.3.0",
   "compatibility": ">=12.4.5",
   "sdk": 3,
   "platforms": [
@@ -413,12 +413,12 @@
             "name": "lastTrip",
             "title": {
               "en": "Your last trip",
-              "no": "Din siste reise",
+              "no": "Din forrige reise",
               "nl": "Uw recente rit"
             },
             "example": {
               "en": "An image visualizing your last trip, combined with useful trip data",
-              "no": "Et bilde som viser din siste reise, kombinert med nyttige reise-data",
+              "no": "Et bilde som viser din forrige reise, kombinert med nyttige reisedata",
               "nl": "Een visuele weergave van uw recente trip, gecombineerd met nuttige rit info"
             }
           },
@@ -432,7 +432,7 @@
             },
             "example": {
               "en": "An image visualizing data about your last trip",
-              "no": "Et bilde som viser data om din siste reise",
+              "no": "Et bilde som viser data om din forrige reise",
               "nl": "Een afbeelding met uw recente rit weergegeven"
             }
           },
@@ -446,7 +446,7 @@
             },
             "example": {
               "en": "An image visualizing how well your last trip was",
-              "no": "Et bilde som viser hvor bra din siste reise var",
+              "no": "Et bilde som viser hvor bra din forrige reise var",
               "nl": "Een afbeelding over hoe goed uw rit was"
             }
           },
@@ -553,7 +553,7 @@
             "name": "socStart",
             "title": {
               "en": "Start State of Charge",
-              "no": "Starttilstand for lading",
+              "no": "Startnivå for lading",
               "nl": "Startniveau van batterijniveau"
             },
             "example": {
@@ -567,7 +567,7 @@
             "name": "socEnd",
             "title": {
               "en": "End State of Charge",
-              "no": "Slutttilstand for lading",
+              "no": "Sluttnivå for lading",
               "nl": "Eindniveau van batterijniveau"
             },
             "example": {
@@ -595,7 +595,7 @@
             "name": "altStart",
             "title": {
               "en": "Start Altitude",
-              "no": "Start høyde",
+              "no": "Starthøyde",
               "nl": "Start hoogte"
             },
             "example": {
@@ -609,7 +609,7 @@
             "name": "altEnd",
             "title": {
               "en": "End Altitude",
-              "no": "Slutt høyde",
+              "no": "Slutthøyde",
               "nl": "Eind hoogte"
             },
             "example": {
@@ -3486,7 +3486,7 @@
               },
               "hint": {
                 "en": "Enable or disable the trip summary. (Optional) NOTE: By enabling you accept that your trip data will be stored anonymously in the cloud. You can disable this at any time. By deleting the device, you will also permanently delete all your trip data. App restart is required after changing this setting.",
-                "no": "Aktiver eller deaktiver turoppsummeringen. (Valgfritt) MERK: Ved å aktivere godtar du at turoppsummeringen lagres anonymt i skyen. Du kan deaktivere dette når som helst. Ved å slette enheten vil du også slette all turoppsummeringsdata permanent. App restart er nødvendig etter endring av denne innstillingen.",
+                "no": "Aktiver eller deaktiver turoppsummeringen. (Valgfritt) MERK: Ved å aktivere godtar du at turoppsummeringen lagres anonymt i skyen. Du kan deaktivere dette når som helst. Ved å slette enheten vil du også slette all turoppsummeringsdata permanent. Omstart av appen er nødvendig etter endring av denne innstillingen.",
                 "nl": "Aan of uit zetten van de rit samenvatting. (Optioneel) OPMERKING: Door de rit samenvatting te activeren accepteert u dat de rit informatie annoniem wordt opgeslagen in de cloud. U kunt dit ten alle tijden weer uitzetten. Als u dit device weer verwijdert wordt ook de cloud data permanent verwijdert. De App moet opnieuw worden opgestart als u deze instelling aanpast."
               }
             },
@@ -3529,12 +3529,12 @@
               "value": "light",
               "label": {
                 "en": "Trip info style",
-                "no": "Turinfoens stil",
+                "no": "Turinformasjonens stil",
                 "nl": "Rit samenvatting stijl"
               },
               "hint": {
                 "en": "This changes the style of the trip info. (Optional)",
-                "no": "Dette endrer stilen til turinfoen. (Valgfritt)",
+                "no": "Dette endrer stilen til turinformasjonen. (Valgfritt)",
                 "nl": "Dit verandert de stijl van de rit samenvatting. (Optioneel)"
               },
               "values": [
@@ -3595,12 +3595,12 @@
               "value": "mapboxOutdoors",
               "label": {
                 "en": "Map image type",
-                "no": "Kart-bildetype",
+                "no": "Kartbildetype",
                 "nl": "Kaartweergave stijl"
               },
               "hint": {
                 "en": "This changes the type of the map that is shown in the trip summary. (Optional)",
-                "no": "Dette endrer hvilket type kart som vises i turoppsummeringen. (Valgfritt)",
+                "no": "Dette endrer hvilken type kart som vises i turoppsummeringen. (Valgfritt)",
                 "nl": "Dit verandert de stijl van de kaart die bij de rit samenvatting wordt weergegeven. (Optioneel)"
               },
               "values": [
@@ -3660,7 +3660,7 @@
           "type": "group",
           "label": {
             "en": "Webhook Settings",
-            "no": "Webhook innstillinger",
+            "no": "Webhook-innstillinger",
             "nl": "Webhook instellingen"
           },
           "children": [
@@ -3683,7 +3683,7 @@
               "type": "text",
               "hint": {
                 "en": "Do not change unless instructed by developer. This setting has no function, and is only for information.",
-                "no": "Ikke endre med mindre du har fått beskjed om det av utvikler. Dette er ikke en funksjon, og er kun til informasjon.",
+                "no": "Ikke endre med mindre du har fått beskjed om det av utvikler. Denne innstillingen har ingen funksjon, og er kun til informasjon.",
                 "nl": "Niet aanpassingen tenzij door de developer opgedragen. Deze setting heeft geen functie, en is er ter informatie"
               },
               "label": {
@@ -3697,7 +3697,7 @@
               "type": "label",
               "hint": {
                 "en": "Do not change unless instructed by developer. This setting has no function, and is only for information.",
-                "no": "Ikke endre med mindre du har fått beskjed om det av utvikler. Dette er ikke en funksjon, og er kun til informasjon.",
+                "no": "Ikke endre med mindre du har fått beskjed om det av utvikler. Denne innstillingen har ingen funksjon, og er kun til informasjon.",
                 "nl": "Niet aanpassingen tenzij door de developer opgedragen. Deze setting heeft geen functie, en is er ter informatie"
               },
               "label": {
@@ -5347,7 +5347,7 @@
         "fr": "Temps restant",
         "it": "Tempo rimanente",
         "sv": "Återstående tid",
-        "no": "Gjenstaende tid",
+        "no": "Gjenstående tid",
         "es": "Tiempo restante",
         "da": "Resterende tid",
         "ru": "Осталось времени",
@@ -5526,7 +5526,7 @@
         "fr": "Position",
         "it": "Posizione",
         "sv": "Plats",
-        "no": "Plassering",
+        "no": "Posisjon",
         "es": "Ubicación",
         "da": "Placering",
         "ru": "Местоположение",
@@ -5549,7 +5549,7 @@
         "fr": "Recharge maison ce mois-ci",
         "it": "Caricato a casa questo mese",
         "sv": "Laddat hemma denna månad",
-        "no": "Ladet hjemme denne mnd",
+        "no": "Ladet hjemme denne måneden",
         "es": "Cargado en casa este mes",
         "da": "Opladet hjemme denne måned",
         "ru": "Заряжено дома в этом месяце",

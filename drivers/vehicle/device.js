@@ -298,8 +298,10 @@ class PolestarVehicle extends Device {
             await this.addCapability('measure_battery');
         if (!this.hasCapability('ev_charging_state'))
             await this.addCapability('ev_charging_state');
-        if (!this.hasCapability('measure_polestarBattery'))
-            await this.addCapability('measure_polestarBattery');
+        // measure_polestarBattery is deprecated — it duplicates measure_battery.
+        // Deliberately not added to new devices, and deliberately not removed
+        // from existing ones: removeCapability would drop their Insights history
+        // and break any tile or widget already pointing at it.
         if(!this.hasCapability('measure_current'))
            await this.addCapability('measure_current');
         if(!this.hasCapability('measure_power'))
@@ -472,8 +474,11 @@ class PolestarVehicle extends Device {
             this.homey.app.log('Battery:', 'PolestarVehicle', 'DEBUG', batteryInfo);
 
             const batterySoc = Math.floor(batteryInfo.batteryChargeLevelPercentage);
-            this.setCapabilityValue('measure_polestarBattery', batterySoc);
             this.setCapabilityValue('measure_battery', batterySoc);
+            // Deprecated duplicate — only present on devices paired before it was
+            // retired, kept fed so their existing flows and tiles keep working.
+            if (this.hasCapability('measure_polestarBattery'))
+                this.setCapabilityValue('measure_polestarBattery', batterySoc);
 
             // Restored charging metrics — C3 fills these reliably; GraphQL used to leave them null.
             const amps = Number.isFinite(batteryInfo.chargingCurrentAmps) ? batteryInfo.chargingCurrentAmps : 0;

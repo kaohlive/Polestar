@@ -29,7 +29,7 @@ module.exports = {
     const unitLabel = distanceUnit === 'miles' ? 'MI' : 'KM';
 
     return {
-      battery: vehicle.getCapabilityValue('measure_polestarBattery'),
+      battery: vehicle.getCapabilityValue('measure_battery'),
       connected: vehicle.getCapabilityValue('measure_vehicleConnected'),
       charging: vehicle.getCapabilityValue('measure_vehicleChargeState'),
       current: vehicle.getCapabilityValue('measure_current'),
