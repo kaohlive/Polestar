@@ -1,6 +1,18 @@
 {
     "triggers": [
     {
+        "id": "battery_preconditioning_changed",
+        "title": {
+            "en": "Battery preconditioning changed"
+        },
+        "hint": {
+            "en": "When the reported battery preconditioning state changes."
+        },
+        "tokens": [
+            { "name": "state", "type": "string", "title": { "en": "State" } }
+        ]
+    },
+    {
         "id": "measure_vehicleChargeState_false",
         "title": {
             "en": "Car stopped charging",
@@ -534,6 +546,34 @@
     }
     ],
     "conditions": [
+        {
+            "id": "battery_preconditioning_state_is",
+            "title": {
+                "en": "Battery preconditioning state !{{is|is not}}"
+            },
+            "titleFormatted": {
+                "en": "Battery preconditioning state !{{is|is not}} [[state]]"
+            },
+            "args": [
+                {
+                    "type": "dropdown",
+                    "name": "state",
+                    "values": [
+                        { "id": "in_progress", "label": { "en": "In progress" } },
+                        { "id": "on", "label": { "en": "On" } },
+                        { "id": "off", "label": { "en": "Off" } },
+                        { "id": "finished", "label": { "en": "Finished" } },
+                        { "id": "optimal", "label": { "en": "Battery temperature optimal" } },
+                        { "id": "planned", "label": { "en": "Planned" } },
+                        { "id": "fault", "label": { "en": "Unavailable: fault" } },
+                        { "id": "charging", "label": { "en": "Unavailable: charging" } },
+                        { "id": "low_energy", "label": { "en": "Unavailable: low energy" } },
+                        { "id": "unavailable", "label": { "en": "Unavailable" } },
+                        { "id": "unknown", "label": { "en": "Unknown" } }
+                    ]
+                }
+            ]
+        },
         {
             "id": "is_locked",
             "title": {

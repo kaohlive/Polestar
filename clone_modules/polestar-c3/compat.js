@@ -20,6 +20,7 @@
 
 const { PolestarC3 } = require('./client');
 const { ChargingStatus } = require('./messages');
+const { normalizeManualPreconditioning } = require('./preconditioning');
 
 // Throttle — the C3 servers return the latest cached value; we don't want to
 // hammer them with one call per field from device.js.
@@ -87,6 +88,7 @@ class PolestarCompat {
         const resp = await this._fetchBattery();
         const b = resp.battery || {};
         const whTotal = toNumber(b.total_consumption_wh);
+        const preconditioning = normalizeManualPreconditioning(b.manual_preconditioning);
         return {
             batteryChargeLevelPercentage: toNumber(b.charge_level),
             chargingStatus: this._mapChargingStatus(b.charging_status),
@@ -100,6 +102,9 @@ class PolestarCompat {
             chargingTypeLabel: b.charging_type_label || null,
             chargerConnectionStatusLabel: b.charger_connection_status_label || null,
             chargerPowerStatus: toNumber(b.charger_power_status),
+            batteryPreconditioningReported: preconditioning.reported,
+            batteryPreconditioningStatusKey: preconditioning.key,
+            batteryPreconditioningStatusLabel: preconditioning.label,
             timestamp: b.timestamp || null,
         };
     }

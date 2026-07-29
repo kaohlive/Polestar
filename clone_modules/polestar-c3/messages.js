@@ -5,6 +5,13 @@ const TimestampSchema = {
     nanos: { num: 2, type: 'int32' },
 };
 
+const ManualPreconditioningSchema = {
+    status: { num: 1, type: 'enum' },
+    unavailable_reason: { num: 2, type: 'enum' },
+    ending_at: { num: 3, type: 'message', schema: TimestampSchema },
+    started_at: { num: 4, type: 'message', schema: TimestampSchema },
+};
+
 const VehicleRequestSchema = {
     id: { num: 1, type: 'string' },
     vin: { num: 2, type: 'string' },
@@ -37,6 +44,7 @@ const BatterySchema = {
     consumption_pct_auto: { num: 24, type: 'double' },
     consumption_pct_since_charge: { num: 25, type: 'double' },
     charger_power_status: { num: 26, type: 'enum' },
+    manual_preconditioning: { num: 29, type: 'message', schema: ManualPreconditioningSchema },
 };
 
 const GetBatteryResponseSchema = {
@@ -70,6 +78,24 @@ const ChargingType = {
     2: 'AC',
     3: 'DC',
     4: 'WIRELESS',
+};
+
+const ManualPreconditioningStatus = {
+    0: 'UNSPECIFIED',
+    1: 'OFF',
+    2: 'PRECONDITIONING_FINISHED',
+    3: 'ON',
+    4: 'BATTERY_TEMPERATURE_OPTIMAL',
+    5: 'UNAVAILABLE',
+};
+
+const ManualPreconditioningUnavailableReason = {
+    0: 'UNSPECIFIED',
+    1: 'STATUS_FAULT',
+    2: 'CHARGING_IN_PROGRESS',
+    3: 'LOW_ENERGY',
+    4: 'PRECONDITIONING_PLANNED',
+    5: 'PRECONDITIONING_IN_PROGRESS',
 };
 
 const OdometerStatusSchema = {
@@ -331,6 +357,7 @@ const HeatingIntensity = { UNSPECIFIED: 0, OFF: 1, LEVEL1: 2, LEVEL2: 3, LEVEL3:
 module.exports = {
     TimestampSchema,
     VehicleRequestSchema,
+    ManualPreconditioningSchema,
     BatterySchema,
     GetBatteryResponseSchema,
     OdometerStatusSchema,
@@ -344,6 +371,8 @@ module.exports = {
     ChargingStatus,
     ChargerConnectionStatus,
     ChargingType,
+    ManualPreconditioningStatus,
+    ManualPreconditioningUnavailableReason,
     ServiceWarning,
     TyrePressureWarning,
     OpenStatus,
