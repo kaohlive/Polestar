@@ -25,7 +25,8 @@ WHAT YOU CAN CONTROL
 - Unlock the trunk only
 - Honk horn, flash lights, or both — to find the car in a parking lot
 - Start and stop charging (overrides the scheduled timer)
-- Set the charge limit (50-100%) and, where supported, the charging amperage
+- Set the model-specific charge limit (Polestar 3: 40-100% in 10% steps) and,
+  where supported, the charging amperage
 - Start parking climatization with a chosen target temperature, per-seat
   heating (front left, front right, rear left, rear right) and steering-wheel
   heating
@@ -41,6 +42,6 @@ PRIVACY AND SAFETY
 A master switch in device settings disables every write command instantly —
 useful while servicing the car or if an automation misbehaves. Optional
 features the car reports as unsupported are removed from the UI
-automatically (e.g. the amp-limit slider on Polestar 4).
+automatically when the vehicle API reports that a control is unsupported.
 
 Enjoy the road with Polestar and Homey.

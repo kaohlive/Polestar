@@ -1952,12 +1952,12 @@
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=vehicle"
+            "filter": "driver_id=vehicle&capabilities=target_polestarChargeLimit"
           },
           {
             "type": "number",
             "name": "level",
-            "min": 50,
+            "min": 1,
             "max": 100,
             "step": 1,
             "placeholder": {
@@ -2002,7 +2002,7 @@
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=vehicle"
+            "filter": "driver_id=vehicle&capabilities=target_polestarAmpLimit"
           },
           {
             "type": "number",
@@ -2519,30 +2519,30 @@
           "ja": "充電上限を [[level]]% に設定"
         },
         "hint": {
-          "en": "Target state-of-charge where the car stops charging (50–100%).",
-          "nl": "SoC-doel waarop de auto stopt met laden (50–100%).",
-          "de": "Ziel-Ladestand, bei dem das Auto die Ladung beendet (50–100%).",
-          "fr": "Niveau de charge cible auquel la voiture cesse de charger (50–100%).",
-          "it": "Stato di carica obiettivo a cui l'auto smette di caricare (50–100%).",
-          "sv": "Mål-laddningsgräns där bilen slutar ladda (50–100%).",
-          "no": "Ladegrense der bilen stopper ladingen (50–100%).",
-          "es": "Estado de carga objetivo al que el coche detiene la carga (50–100%).",
-          "da": "Mål-ladningsniveau hvor bilen stopper opladning (50–100%).",
-          "ru": "Целевой уровень заряда (50–100%), при котором машина прекращает зарядку.",
-          "pl": "Docelowy poziom naładowania, przy którym auto kończy ładowanie (50–100%).",
-          "ko": "차량이 충전을 멈추는 목표 충전량 (50–100%).",
-          "ja": "車両が充電を停止する目標SoC（50–100%）。"
+          "en": "Target state-of-charge where the car stops charging. Allowed values depend on the vehicle (Polestar 3: 40–100% in 10% steps).",
+          "nl": "SoC-doel waarop de auto stopt met laden. Toegestane waarden hangen af van het voertuig (Polestar 3: 40–100% in stappen van 10%).",
+          "de": "Ziel-Ladestand, bei dem das Auto die Ladung beendet. Zulässige Werte hängen vom Fahrzeug ab (Polestar 3: 40–100% in 10%-Schritten).",
+          "fr": "Niveau de charge cible auquel la voiture cesse de charger. Les valeurs autorisées dépendent du véhicule (Polestar 3 : 40–100% par pas de 10%).",
+          "it": "Stato di carica obiettivo a cui l'auto smette di caricare. I valori consentiti dipendono dal veicolo (Polestar 3: 40–100% con incrementi del 10%).",
+          "sv": "Mål-laddningsgräns där bilen slutar ladda. Tillåtna värden beror på bilen (Polestar 3: 40–100% i steg om 10%).",
+          "no": "Ladegrense der bilen stopper ladingen. Tillatte verdier avhenger av bilen (Polestar 3: 40–100% i trinn på 10%).",
+          "es": "Estado de carga objetivo al que el coche detiene la carga. Los valores permitidos dependen del vehículo (Polestar 3: 40–100% en pasos del 10%).",
+          "da": "Mål-ladningsniveau hvor bilen stopper opladning. Tilladte værdier afhænger af bilen (Polestar 3: 40–100% i trin på 10%).",
+          "ru": "Целевой уровень, при котором машина прекращает зарядку. Допустимые значения зависят от автомобиля (Polestar 3: 40–100% с шагом 10%).",
+          "pl": "Docelowy poziom, przy którym auto kończy ładowanie. Dozwolone wartości zależą od pojazdu (Polestar 3: 40–100% co 10%).",
+          "ko": "차량이 충전을 멈추는 목표 충전량입니다. 허용 값은 차량에 따라 다릅니다(Polestar 3: 40–100%, 10% 단위).",
+          "ja": "車両が充電を停止する目標SoCです。設定可能値は車両により異なります（Polestar 3：40～100%、10%刻み）。"
         },
         "args": [
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=vehicle"
+            "filter": "driver_id=vehicle&capabilities=target_polestarChargeLimit"
           },
           {
             "type": "number",
             "name": "level",
-            "min": 50,
+            "min": 1,
             "max": 100,
             "step": 1,
             "placeholder": {
@@ -3638,25 +3638,25 @@
           "ja": "アンペア上限を [[amperage]] A に設定"
         },
         "hint": {
-          "en": "Caps the AC charging current (6–32 A). Note: Polestar 4 currently reports this feature as unsupported.",
-          "nl": "Maximum AC-laadstroom (6–32 A). Let op: Polestar 4 meldt dat deze functie niet wordt ondersteund.",
-          "de": "Begrenzt den AC-Ladestrom (6–32 A). Hinweis: Polestar 4 meldet diese Funktion derzeit als nicht unterstützt.",
-          "fr": "Limite le courant de charge AC (6–32 A). Note : la Polestar 4 indique cette fonction comme non supportée.",
-          "it": "Limita la corrente di ricarica AC (6–32 A). Nota: la Polestar 4 segnala questa funzione come non supportata.",
-          "sv": "Begränsar AC-laddströmmen (6–32 A). Obs: Polestar 4 rapporterar denna funktion som ej stödd.",
-          "no": "Maks vekselstrømsladestrøm (6–32 A). Merk: Polestar 4 rapporterer dette som ikke støttet.",
-          "es": "Limita la corriente de carga AC (6–32 A). Nota: Polestar 4 reporta esta función como no soportada.",
-          "da": "Begrænser AC-ladestrømmen (6–32 A). Bemærk: Polestar 4 rapporterer denne funktion som ikke understøttet.",
-          "ru": "Ограничивает ток зарядки AC (6–32 A). Примечание: Polestar 4 сообщает об отсутствии поддержки.",
-          "pl": "Ogranicza prąd ładowania AC (6–32 A). Uwaga: Polestar 4 zgłasza tę funkcję jako nieobsługiwaną.",
-          "ko": "AC 충전 전류를 제한합니다 (6–32 A). 참고: Polestar 4는 이 기능을 미지원으로 보고합니다.",
-          "ja": "AC充電電流を制限します（6–32 A）。注意：Polestar 4は本機能を未対応として報告します。"
+          "en": "Caps the AC charging current (6–32 A) where supported. This control is hidden when the vehicle API reports it unsupported.",
+          "nl": "Begrenst de AC-laadstroom (6–32 A) waar ondersteund. Deze bediening wordt verborgen als de voertuig-API meldt dat deze niet wordt ondersteund.",
+          "de": "Begrenzt den AC-Ladestrom (6–32 A), sofern unterstützt. Die Steuerung wird ausgeblendet, wenn die Fahrzeug-API sie als nicht unterstützt meldet.",
+          "fr": "Limite le courant de charge AC (6–32 A) lorsque cette fonction est prise en charge. Le contrôle est masqué si l'API du véhicule signale qu'elle n'est pas prise en charge.",
+          "it": "Limita la corrente di ricarica AC (6–32 A) dove supportato. Il controllo viene nascosto se l'API del veicolo segnala che non è supportato.",
+          "sv": "Begränsar AC-laddströmmen (6–32 A) där det stöds. Kontrollen döljs om bilens API rapporterar att funktionen inte stöds.",
+          "no": "Begrenser vekselstrømsladingen (6–32 A) der dette støttes. Kontrollen skjules når bilens API rapporterer at funksjonen ikke støttes.",
+          "es": "Limita la corriente de carga AC (6–32 A) cuando es compatible. El control se oculta si la API del vehículo indica que no es compatible.",
+          "da": "Begrænser AC-ladestrømmen (6–32 A), hvor det understøttes. Betjeningen skjules, hvis bilens API melder, at funktionen ikke understøttes.",
+          "ru": "Ограничивает ток зарядки AC (6–32 A), если функция поддерживается. Элемент управления скрывается, когда API автомобиля сообщает об отсутствии поддержки.",
+          "pl": "Ogranicza prąd ładowania AC (6–32 A), jeśli funkcja jest obsługiwana. Sterowanie jest ukrywane, gdy API pojazdu zgłasza brak obsługi.",
+          "ko": "지원되는 차량에서 AC 충전 전류를 제한합니다(6–32 A). 차량 API가 미지원으로 보고하면 이 제어가 숨겨집니다.",
+          "ja": "対応車両でAC充電電流を制限します（6～32 A）。車両APIが未対応と返した場合、この操作項目は非表示になります。"
         },
         "args": [
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=vehicle"
+            "filter": "driver_id=vehicle&capabilities=target_polestarAmpLimit"
           },
           {
             "type": "number",
@@ -6588,7 +6588,7 @@
       },
       "units": "%",
       "decimals": 0,
-      "min": 50,
+      "min": 40,
       "max": 100,
       "step": 5,
       "getable": true,

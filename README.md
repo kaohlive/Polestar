@@ -10,9 +10,10 @@ status and remote-control commands as Homey capabilities and flow cards.
 - **Polestar 3** — should work via the shared C3 backend (unverified)
 - **Polestar 2** — should work via C3; feedback from P2 owners welcome
 
-Feature availability differs per model. The integration probes each service on
-first use and automatically hides capabilities the car reports as
-`UNIMPLEMENTED` (e.g. charging amperage limit is not exposed on Polestar 4).
+Feature availability differs per vehicle. The integration probes charging controls
+on every successful startup and hides controls that the Polestar backend reports as
+`UNIMPLEMENTED`. Charge-limit bounds are model-aware (Polestar 3: 40–100% in 10%
+steps), while valid values returned by the vehicle API are always preserved.
 
 ## What's included
 
