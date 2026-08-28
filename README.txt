@@ -12,8 +12,8 @@ WHAT YOU CAN SEE
 - Lifetime charging kWh, current-session kWh, total driving kWh
 - Odometer and trip meters
 - Interior temperature, climate target and minutes remaining
-- Central lock status; per-door, per-window, trunk, hood, sunroof and charge-
-  port open alarms
+- Central lock status and individually named door, window and hatch contacts;
+  only contacts reported by the car are shown
 - Tyre pressures (all four wheels, kPa) and tyre-pressure warning
 - Service warnings, days and distance to next service
 - Last known GPS coordinates

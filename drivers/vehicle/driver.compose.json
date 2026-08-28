@@ -43,15 +43,6 @@
     "alarm_polestarOtaAvailable",
     "measure_polestarOtaState",
     "measure_polestarOtaVersion",
-    "alarm_contact.door_front_left",
-    "alarm_contact.door_front_right",
-    "alarm_contact.door_rear_left",
-    "alarm_contact.door_rear_right",
-    "alarm_contact.window_any",
-    "alarm_contact.tailgate",
-    "alarm_contact.hood",
-    "alarm_contact.sunroof",
-    "alarm_contact.tank_lid",
     "alarm_polestarTyrePressure",
     "measure_pressure.front_left",
     "measure_pressure.front_right",
@@ -519,21 +510,72 @@
         "ja": "後右ドア"
       }
     },
-    "alarm_contact.window_any": {
+    "alarm_contact.window_front_left": {
       "title": {
-        "en": "Side window",
-        "nl": "Zijraam",
-        "de": "Seitenfenster",
-        "fr": "Vitre latérale",
-        "it": "Finestrino laterale",
-        "sv": "Sidofönster",
-        "no": "Sidevindu",
-        "es": "Ventana lateral",
-        "da": "Sidevindue",
-        "ru": "Боковое окно",
-        "pl": "Boczne okno",
-        "ko": "측면 창문",
-        "ja": "サイドウィンドウ"
+        "en": "Front-left window",
+        "nl": "Raam linksvoor",
+        "de": "Fenster vorne links",
+        "fr": "Vitre avant gauche",
+        "it": "Finestrino anteriore sinistro",
+        "sv": "Fönster fram vänster",
+        "no": "Vindu foran venstre",
+        "es": "Ventana delantera izquierda",
+        "da": "Vindue foran venstre",
+        "ru": "Переднее левое окно",
+        "pl": "Lewe przednie okno",
+        "ko": "앞 왼쪽 창문",
+        "ja": "左前ウィンドウ"
+      }
+    },
+    "alarm_contact.window_front_right": {
+      "title": {
+        "en": "Front-right window",
+        "nl": "Raam rechtsvoor",
+        "de": "Fenster vorne rechts",
+        "fr": "Vitre avant droite",
+        "it": "Finestrino anteriore destro",
+        "sv": "Fönster fram höger",
+        "no": "Vindu foran høyre",
+        "es": "Ventana delantera derecha",
+        "da": "Vindue foran højre",
+        "ru": "Переднее правое окно",
+        "pl": "Prawe przednie okno",
+        "ko": "앞 오른쪽 창문",
+        "ja": "右前ウィンドウ"
+      }
+    },
+    "alarm_contact.window_rear_left": {
+      "title": {
+        "en": "Rear-left window",
+        "nl": "Raam linksachter",
+        "de": "Fenster hinten links",
+        "fr": "Vitre arrière gauche",
+        "it": "Finestrino posteriore sinistro",
+        "sv": "Fönster bak vänster",
+        "no": "Vindu bak venstre",
+        "es": "Ventana trasera izquierda",
+        "da": "Vindue bag venstre",
+        "ru": "Заднее левое окно",
+        "pl": "Lewe tylne okno",
+        "ko": "뒤 왼쪽 창문",
+        "ja": "左後ウィンドウ"
+      }
+    },
+    "alarm_contact.window_rear_right": {
+      "title": {
+        "en": "Rear-right window",
+        "nl": "Raam rechtsachter",
+        "de": "Fenster hinten rechts",
+        "fr": "Vitre arrière droite",
+        "it": "Finestrino posteriore destro",
+        "sv": "Fönster bak höger",
+        "no": "Vindu bak høyre",
+        "es": "Ventana trasera derecha",
+        "da": "Vindue bag højre",
+        "ru": "Заднее правое окно",
+        "pl": "Prawe tylne okno",
+        "ko": "뒤 오른쪽 창문",
+        "ja": "右後ウィンドウ"
       }
     },
     "alarm_contact.tailgate": {

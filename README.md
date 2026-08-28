@@ -10,18 +10,19 @@ status and remote-control commands as Homey capabilities and flow cards.
 - **Polestar 3** — should work via the shared C3 backend (unverified)
 - **Polestar 2** — should work via C3; feedback from P2 owners welcome
 
-Feature availability differs per model. The integration probes each service on
-first use and automatically hides capabilities the car reports as
-`UNIMPLEMENTED` (e.g. charging amperage limit is not exposed on Polestar 4).
+Feature availability differs per car. The integration discovers exterior
+contacts from each vehicle's reported fields and probes write services on first
+use. Unsupported capabilities are hidden automatically instead of appearing as
+empty tiles.
 
 ## What's included
 
 **Read**: battery level, charging status, power / current / voltage while
 charging, session + lifetime kWh, range, odometer, interior + target
 temperature, parking climatization state and time remaining, lock status,
-per-door and per-closure open/closed alarms, tyre pressures (four wheels in
-kPa), service warnings and distance-to-service, last known GPS location, OTA
-software update state.
+individually named door, window and hatch contacts reported by the car, tyre
+pressures (four wheels in kPa), service warnings and distance-to-service, last
+known GPS location, OTA software update state.
 
 **Write**: start/stop charging, set charge limit and amperage, lock/unlock,
 unlock trunk, honk and flash, start/stop parking climatization (with

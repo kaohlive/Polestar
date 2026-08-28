@@ -154,27 +154,28 @@ class PolestarCompat {
         const e = resp.exterior;
         if (!e) return null;
         const isOpen = (v) => v === 1 || v === 3; // OPEN or AJAR
+        // Preserve field absence for capability discovery. Once present, retain
+        // the existing mapping where UNSPECIFIED (0) resolves to closed/false.
+        const openState = (v) => (v === undefined ? undefined : isOpen(v));
         return {
             isLocked: e.central_lock_label === 'LOCKED',
             lockStatusLabel: e.central_lock_label,
             doors: {
-                frontLeftOpen:  isOpen(e.door_front_left),
-                frontRightOpen: isOpen(e.door_front_right),
-                rearLeftOpen:   isOpen(e.door_rear_left),
-                rearRightOpen:  isOpen(e.door_rear_right),
+                frontLeftOpen:  openState(e.door_front_left),
+                frontRightOpen: openState(e.door_front_right),
+                rearLeftOpen:   openState(e.door_rear_left),
+                rearRightOpen:  openState(e.door_rear_right),
             },
             windows: {
-                frontLeftOpen:  isOpen(e.window_front_left),
-                frontRightOpen: isOpen(e.window_front_right),
-                rearLeftOpen:   isOpen(e.window_rear_left),
-                rearRightOpen:  isOpen(e.window_rear_right),
-                anyOpen: [e.window_front_left, e.window_front_right, e.window_rear_left, e.window_rear_right].some(isOpen),
+                frontLeftOpen:  openState(e.window_front_left),
+                frontRightOpen: openState(e.window_front_right),
+                rearLeftOpen:   openState(e.window_rear_left),
+                rearRightOpen:  openState(e.window_rear_right),
             },
-            hoodOpen: isOpen(e.hood),
-            tailgateOpen: isOpen(e.tailgate),
-            tankLidOpen: isOpen(e.tank_lid),
-            sunroofOpen: isOpen(e.sunroof),
-            anyDoorOpen: [e.door_front_left, e.door_front_right, e.door_rear_left, e.door_rear_right].some(isOpen),
+            hoodOpen: openState(e.hood),
+            tailgateOpen: openState(e.tailgate),
+            tankLidOpen: openState(e.tank_lid),
+            sunroofOpen: openState(e.sunroof),
         };
     }
 

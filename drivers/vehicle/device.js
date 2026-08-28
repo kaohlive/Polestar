@@ -6,6 +6,13 @@ const PolestarC3Compat = require('../../clone_modules/polestar-c3/compat');
 const { transitionPreconditioningState } = require('../../clone_modules/polestar-c3/preconditioning');
 const HomeyCrypt = require('../../lib/homeycrypt')
 const EvChargingState = require('../../lib/evChargingState')
+const {
+    CONTACT_CAPABILITIES,
+    contactStatesFromExterior,
+    mergeSupportedContactCapabilities,
+    isRealContactTransition,
+    aggregateWindowState,
+} = require('./contact-capabilities');
 
 const measureInterval = 60000;
 const KM_TO_MILES = 0.621371;
@@ -397,21 +404,14 @@ class PolestarVehicle extends Device {
         }
 
         // Exterior + climate states (read-only now, future-setable via capabilitiesOptions).
+        // Contact capabilities are reconciled separately from actual fields reported
+        // by this car. Adding every possible contact creates unsupported alarm tiles.
         for (const cap of [
             'locked',
             'onoff.climate',
             'target_temperature',
             'measure_temperature',
             'measure_polestarClimateRemaining',
-            'alarm_contact.door_front_left',
-            'alarm_contact.door_front_right',
-            'alarm_contact.door_rear_left',
-            'alarm_contact.door_rear_right',
-            'alarm_contact.window_any',
-            'alarm_contact.tailgate',
-            'alarm_contact.hood',
-            'alarm_contact.sunroof',
-            'alarm_contact.tank_lid',
             'measure_polestarLocation',
             'measure_polestarAtHome',
             'alarm_polestarOtaAvailable',
@@ -419,6 +419,11 @@ class PolestarVehicle extends Device {
             'measure_polestarOtaVersion',
         ]) {
             if (!this.hasCapability(cap)) await this.addCapability(cap);
+        }
+
+        const discoveredContacts = this.getStoreValue('supportedContactCapabilities');
+        if (Array.isArray(discoveredContacts)) {
+            await this._applyContactCapabilities(new Set(discoveredContacts));
         }
 
         for (const sub of ['front_left', 'front_right', 'rear_left', 'rear_right']) {
@@ -670,7 +675,8 @@ class PolestarVehicle extends Device {
     async _setContact(capId, newValue) {
         const prev = this.getCapabilityValue(capId);
         await this.setCapabilityValue(capId, newValue);
-        if (prev === newValue) return;
+        // Initial population is state synchronization, not a real close/open event.
+        if (!isRealContactTransition(prev, newValue)) return;
         const card = newValue
             ? this.driver && this.driver._contactOpenedTrigger
             : this.driver && this.driver._contactClosedTrigger;
@@ -679,6 +685,32 @@ class PolestarVehicle extends Device {
             await card.trigger(this, {}, { sensor: capId });
         } catch (err) {
             this.homey.app.log(`Contact trigger failed for ${capId}`, this.name, 'ERROR', err);
+        }
+    }
+
+    async _applyContactCapabilities(supported) {
+        for (const cap of CONTACT_CAPABILITIES) {
+            if (supported.has(cap)) {
+                if (!this.hasCapability(cap)) await this.addCapability(cap);
+            } else if (this.hasCapability(cap)) {
+                try { await this.removeCapability(cap); }
+                catch (err) { this.homey.app.log(`Failed to remove unsupported contact ${cap}`, this.name, 'WARNING', err.message); }
+            }
+        }
+    }
+
+    async _discoverContactCapabilities(states) {
+        const stored = this.getStoreValue('supportedContactCapabilities');
+        // The first complete exterior snapshot establishes the set. Later snapshots
+        // may add newly exposed fields, but never remove a known contact merely
+        // because one response was partial.
+        const next = mergeSupportedContactCapabilities(stored, states);
+        if (!next) return;
+
+        if (!Array.isArray(stored) || next.length !== stored.length || next.some((cap, i) => cap !== stored[i])) {
+            await this.setStoreValue('supportedContactCapabilities', next);
+            this.homey.app.log(`Discovered ${next.length} exterior contact capabilities for this vehicle`, this.name, 'DEBUG');
+            await this._applyContactCapabilities(new Set(next));
         }
     }
 
@@ -693,15 +725,19 @@ class PolestarVehicle extends Device {
             if (typeof ext.isLocked === 'boolean') {
                 await this.setCapabilityValue('locked', ext.isLocked);
             }
-            await this._setContact('alarm_contact.door_front_left',  !!ext.doors.frontLeftOpen);
-            await this._setContact('alarm_contact.door_front_right', !!ext.doors.frontRightOpen);
-            await this._setContact('alarm_contact.door_rear_left',   !!ext.doors.rearLeftOpen);
-            await this._setContact('alarm_contact.door_rear_right',  !!ext.doors.rearRightOpen);
-            await this._setContact('alarm_contact.window_any', !!ext.windows.anyOpen);
-            await this._setContact('alarm_contact.tailgate',   !!ext.tailgateOpen);
-            await this._setContact('alarm_contact.hood',       !!ext.hoodOpen);
-            await this._setContact('alarm_contact.sunroof',    !!ext.sunroofOpen);
-            await this._setContact('alarm_contact.tank_lid',   !!ext.tankLidOpen);
+            const contactStates = contactStatesFromExterior(ext);
+            await this._discoverContactCapabilities(contactStates);
+            for (const [cap, value] of Object.entries(contactStates)) {
+                if (typeof value === 'boolean' && this.hasCapability(cap)) {
+                    await this._setContact(cap, value);
+                }
+            }
+            // Feed the deprecated aggregate alias on existing devices so their flows
+            // keep working, but never add it to newly paired devices.
+            const anyWindowOpen = aggregateWindowState(ext);
+            if (typeof anyWindowOpen === 'boolean' && this.hasCapability('alarm_contact.window_any')) {
+                await this._setContact('alarm_contact.window_any', anyWindowOpen);
+            }
         } catch (err) {
             if (err.message === 'Not logged in') {
                 await this.attemptReLogin();
