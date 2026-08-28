@@ -11,6 +11,7 @@ function vehicle(registrationNo) {
         registrationNo,
         internalVehicleIdentifier: 'test-vehicle',
         modelYear: '2025',
+        honkFlashType: 3,
         content: {
             model: { name: 'Polestar 3' },
             images: { studio: { url: 'https://example.invalid/car.png' } },
@@ -41,5 +42,6 @@ for (const { description, registrationNo, expectedName } of nameScenarios) {
         assert.equal(pairedDevice.id, 'YSMTESTCAR0000001');
         assert.equal(pairedDevice.data.vin, 'YSMTESTCAR0000001');
         assert.equal(pairedDevice.data.registration, registrationNo);
+        assert.equal(pairedDevice.data.honkFlashType, 3);
     });
 }

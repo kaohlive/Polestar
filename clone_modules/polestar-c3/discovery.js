@@ -11,6 +11,7 @@ const CarSchema = {
     vehicleTypeCode: { num: 5, type: 'string' },
     vehicleTypeName: { num: 6, type: 'string' },
     modelYear: { num: 7, type: 'string' },
+    honkFlashType: { num: 16, type: 'int32' },
 };
 
 const MyCarSchema = {
@@ -55,6 +56,7 @@ function decodeGetMyCarsResponse(bytes) {
             vin: entry.car.vin,
             registrationNo: entry.registrationPlate || null,
             modelYear: entry.car.modelYear || undefined,
+            honkFlashType: entry.car.honkFlashType,
             userIsLinked: entry.userIsLinked === true,
             userIsOwner: entry.userIsOwner === true,
             content: {

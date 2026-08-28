@@ -6,6 +6,11 @@ const PolestarC3Compat = require('../../clone_modules/polestar-c3/compat');
 const { transitionPreconditioningState } = require('../../clone_modules/polestar-c3/preconditioning');
 const HomeyCrypt = require('../../lib/homeycrypt')
 const EvChargingState = require('../../lib/evChargingState')
+const {
+    resolveFindCarButtonAction,
+    resolveFindCarFlowAction,
+    supportsFindCar,
+} = require('./find-car');
 
 const measureInterval = 60000;
 const KM_TO_MILES = 0.621371;
@@ -118,7 +123,8 @@ class PolestarVehicle extends Device {
             const Client = selectClient(this.homey);
             this.polestar = new Client(PolestarUser, PolestarPwd);
             await this.polestar.login();
-            await this.polestar.setVehicle(this.getData().vin);
+            const vehicle = await this.polestar.setVehicle(this.getData().vin);
+            await this._rememberHonkFlashType(vehicle);
 
             this.homey.app.log('Re-login successful', 'PolestarVehicle', 'DEBUG');
         } catch (err) {
@@ -149,7 +155,8 @@ class PolestarVehicle extends Device {
             }
             try {
                 await this.polestar.login();
-                await this.polestar.setVehicle(this.getData().vin);
+                const vehicle = await this.polestar.setVehicle(this.getData().vin);
+                await this._rememberHonkFlashType(vehicle);
             } catch (err) {
                 this.homey.app.log('Could not login. Please check your credentials or try again later', 'PolestarVehicle', 'ERROR', err);
                 return;
@@ -380,8 +387,12 @@ class PolestarVehicle extends Device {
             await this.addCapability('button.charge_start');
         if (!this.hasCapability('button.charge_stop'))
             await this.addCapability('button.charge_stop');
-        if (!this.hasCapability('button.honk_flash'))
-            await this.addCapability('button.honk_flash');
+        if (supportsFindCar(this._getHonkFlashType())) {
+            if (!this.hasCapability('button.honk_flash'))
+                await this.addCapability('button.honk_flash');
+        } else if (this.hasCapability('button.honk_flash')) {
+            try { await this.removeCapability('button.honk_flash'); } catch (_) {}
+        }
         if (!this.hasCapability('button.unlock_trunk'))
             await this.addCapability('button.unlock_trunk');
         // Windows are optional — skipped on vehicles that don't support remote
@@ -836,10 +847,25 @@ class PolestarVehicle extends Device {
         return r;
     }
     honkFlashAction(args) {
-        const actionMap = { flash: 2, honk: 1, both: 0 };
-        const code = actionMap[args && args.action] !== undefined ? actionMap[args.action] : 2;
+        const { code } = resolveFindCarFlowAction(args && args.action, this._getHonkFlashType());
         return this._invokeWrite('honkFlash', () => this.polestar.honkFlash({ action: code }));
     }
+
+    _getHonkFlashType() {
+        const stored = this.getStoreValue('honkFlashType');
+        if (Number.isInteger(stored)) return stored;
+        const paired = this.getData().honkFlashType;
+        return Number.isInteger(paired) ? paired : undefined;
+    }
+
+    async _rememberHonkFlashType(vehicle) {
+        // UNSPECIFIED does not supersede a previously learned concrete mode.
+        if (!vehicle || !Number.isInteger(vehicle.honkFlashType) || vehicle.honkFlashType === 0) return;
+        if (this.getStoreValue('honkFlashType') !== vehicle.honkFlashType) {
+            await this.setStoreValue('honkFlashType', vehicle.honkFlashType);
+        }
+    }
+
     async climateStartAction(args) {
         const parse = (v) => {
             const n = Number(v);
@@ -1012,7 +1038,9 @@ class PolestarVehicle extends Device {
         });
 
         this.registerCapabilityListener('button.honk_flash', async () => {
-            await this._invokeWrite('button.honk_flash', () => this.polestar.honkFlash());
+            const preferred = this.getSetting('find_car_action') || 'flash';
+            const { code } = resolveFindCarButtonAction(preferred, this._getHonkFlashType());
+            await this._invokeWrite('button.honk_flash', () => this.polestar.honkFlash({ action: code }));
             // No state change — honk/flash is fire-and-forget.
         });
 

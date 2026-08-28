@@ -12,6 +12,7 @@ function toPairingDevice(bev) {
             internalVehicleIdentifier: bev.internalVehicleIdentifier,
             modelName,
             modelYear: bev.modelYear,
+            honkFlashType: bev.honkFlashType,
             carImage: bev.content.images?.studio?.url || null,
             deliveryDate: bev.deliveryDate,
             hasPerformancePackage: bev.hasPerformancePackage

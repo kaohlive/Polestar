@@ -132,6 +132,58 @@
         ]
     },
     {
+        "id": "find_car_action",
+        "type": "dropdown",
+        "label": {
+            "en": "Find car button",
+            "nl": "Knop Auto vinden",
+            "de": "Taste Auto finden",
+            "fr": "Bouton Retrouver la voiture",
+            "it": "Pulsante Trova auto",
+            "sv": "Knappen Hitta bilen",
+            "no": "Finn bilen-knapp",
+            "es": "Botón Encontrar coche",
+            "da": "Find bilen-knap",
+            "ru": "Кнопка «Найти машину»",
+            "pl": "Przycisk Znajdź auto",
+            "ko": "차량 찾기 버튼",
+            "ja": "車を探すボタン"
+        },
+        "value": "flash",
+        "hint": {
+            "en": "Choose what happens when you tap Find car. Cars that support only one action always use that action.",
+            "nl": "Kies wat er gebeurt wanneer je op Auto vinden tikt. Auto's die slechts één actie ondersteunen, gebruiken altijd die actie.",
+            "de": "Wählen Sie, was beim Tippen auf Auto finden passiert. Fahrzeuge mit nur einer unterstützten Aktion verwenden immer diese Aktion.",
+            "fr": "Choisissez l'action du bouton Retrouver la voiture. Les voitures qui ne prennent en charge qu'une seule action utilisent toujours celle-ci.",
+            "it": "Scegli cosa accade toccando Trova auto. Le auto che supportano una sola azione usano sempre quella.",
+            "sv": "Välj vad som händer när du trycker på Hitta bilen. Bilar som bara stöder en åtgärd använder alltid den.",
+            "no": "Velg hva som skjer når du trykker på Finn bilen. Biler som bare støtter én handling, bruker alltid den.",
+            "es": "Elige qué ocurre al pulsar Encontrar coche. Los coches que solo admiten una acción siempre usan esa acción.",
+            "da": "Vælg hvad der sker, når du trykker på Find bilen. Biler, der kun understøtter én handling, bruger altid den.",
+            "ru": "Выберите действие кнопки «Найти машину». Если автомобиль поддерживает только одно действие, всегда используется оно.",
+            "pl": "Wybierz działanie przycisku Znajdź auto. Samochody obsługujące tylko jedną czynność zawsze jej używają.",
+            "ko": "차량 찾기를 탭할 때 실행할 동작을 선택합니다. 한 가지 동작만 지원하는 차량은 항상 해당 동작을 사용합니다.",
+            "ja": "「車を探す」をタップしたときの動作を選びます。1つの動作だけに対応する車両では、その動作が常に使用されます。"
+        },
+        "values": [
+            { "id": "flash", "label": {
+                "en": "Flash lights", "nl": "Lichten knipperen", "de": "Lichter blinken", "fr": "Faire clignoter les phares",
+                "it": "Lampeggia le luci", "sv": "Blinka med ljusen", "no": "Blink med lysene", "es": "Destellar las luces",
+                "da": "Blink med lygterne", "ru": "Мигать фарами", "pl": "Migaj światłami", "ko": "라이트 점멸", "ja": "ライトを点滅"
+            } },
+            { "id": "honk", "label": {
+                "en": "Honk horn", "nl": "Claxonneren", "de": "Hupen", "fr": "Klaxonner", "it": "Suona il clacson",
+                "sv": "Tuta", "no": "Tut med hornet", "es": "Tocar el claxon", "da": "Dyt med hornet", "ru": "Подать сигнал",
+                "pl": "Włącz klakson", "ko": "경적 울림", "ja": "クラクションを鳴らす"
+            } },
+            { "id": "both", "label": {
+                "en": "Honk and flash", "nl": "Claxonneren en knipperen", "de": "Hupen und blinken", "fr": "Klaxonner et faire clignoter",
+                "it": "Clacson e lampeggio", "sv": "Tuta och blinka", "no": "Tut og blink", "es": "Claxon y luces",
+                "da": "Dyt og blink", "ru": "Сигнал и мигание", "pl": "Klakson i miganie", "ko": "경적과 라이트", "ja": "クラクションとライト"
+            } }
+        ]
+    },
+    {
         "id": "home_radius_m",
         "type": "number",
         "label": {
