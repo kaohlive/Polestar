@@ -24,18 +24,42 @@ function generateState() {
     return b64url(crypto.randomBytes(32));
 }
 
+/**
+ * A refresh that the identity provider rejected outright (expired, revoked,
+ * rotated away). Anything else — network trouble, a 5xx — is transient: the
+ * refresh token is kept and the caller simply retries later, instead of
+ * falling back to a password login that would fail for the same reason.
+ */
+class RefreshRejectedError extends Error {}
+
 class AuthManager {
-    constructor() {
-        this._tokens = null;
+    /**
+     * @param {object}   [opts]
+     * @param {object}   [opts.tokens]   previously persisted tokens ({ refresh_token, ... })
+     * @param {function} [opts.onTokens] called with a copy of the tokens after every login/refresh
+     * @param {function} [opts.onEvent]  called with (type, detail) for auth events worth logging:
+     *                                   session_restored, refresh_failed, password_login,
+     *                                   password_login_failed, password_unavailable
+     */
+    constructor({ tokens = null, onTokens = null, onEvent = null } = {}) {
+        this._tokens = tokens && tokens.refresh_token ? { ...tokens, expires_at: 0 } : null;
+        this._onTokens = onTokens;
+        this._onEvent = onEvent;
         this._authEndpoint = null;
         this._tokenEndpoint = null;
+        this._renewing = null;
     }
 
     get accessToken() { return this._tokens ? this._tokens.access_token : null; }
     get isExpired() {
-        if (!this._tokens) return true;
+        if (!this._tokens || !this._tokens.access_token) return true;
         if (!this._tokens.expires_at) return false;
         return Date.now() > this._tokens.expires_at - 60_000;
+    }
+
+    _emit(type, detail = {}) {
+        if (!this._onEvent) return;
+        try { this._onEvent(type, detail); } catch (_) { /* logging must never break auth */ }
     }
 
     async _discover() {
@@ -45,27 +69,76 @@ class AuthManager {
         this._tokenEndpoint = r.data.token_endpoint;
     }
 
+    /**
+     * Log in, preferring a stored refresh token over the password.
+     * @param {string} email
+     * @param {string|function} password  the password, or an (async) function
+     *        returning it — only called when a password login is really needed.
+     */
     async authenticate(email, password) {
         this._email = email;
         this._password = password;
         await this._discover();
-        await this._fullAuth(email, password);
+        await this._renew('startup');
+        if (!this._lastRenewWasPassword) {
+            this._emit('session_restored', {
+                rotated: this._tokens.refresh_rotated,
+                refreshExpiresIn: this._tokens.refresh_expires_in,
+            });
+        }
     }
 
     async ensureValidToken() {
-        if (!this._tokens) throw new Error('Not authenticated');
-        if (this.isExpired) {
-            if (this._tokens.refresh_token) {
-                try { await this._refresh(); return this._tokens.access_token; }
-                catch (_) { /* fall through */ }
-            }
-            if (this._email && this._password) {
-                await this._fullAuth(this._email, this._password);
-            } else {
-                throw new Error('Token expired and no credentials available');
+        if (!this._tokens || !this._tokens.access_token) throw new Error('Not authenticated');
+        if (this.isExpired) await this._renew('runtime');
+        return this._tokens.access_token;
+    }
+
+    /** Single-flight: concurrent callers share one refresh, so a rotating
+     *  refresh token is never spent twice. */
+    _renew(phase) {
+        if (!this._renewing) {
+            this._renewing = this._doRenew(phase).finally(() => { this._renewing = null; });
+        }
+        return this._renewing;
+    }
+
+    async _doRenew(phase) {
+        this._lastRenewWasPassword = false;
+        let reason = 'no_stored_token';
+        if (this._tokens && this._tokens.refresh_token) {
+            try {
+                await this._refresh();
+                return;
+            } catch (err) {
+                if (!(err instanceof RefreshRejectedError)) throw err; // transient: keep token, retry later
+                this._emit('refresh_failed', { phase, reason: err.message });
+                reason = 'refresh_rejected';
             }
         }
-        return this._tokens.access_token;
+        await this._passwordLogin(reason, phase);
+        this._lastRenewWasPassword = true;
+    }
+
+    async _passwordLogin(reason, phase) {
+        let password = null;
+        try {
+            password = typeof this._password === 'function' ? await this._password() : this._password;
+        } catch (err) {
+            this._emit('password_unavailable', { phase, reason, error: err.message });
+            throw new Error('Login required: stored password cannot be read — repair the device');
+        }
+        if (!this._email || !password) {
+            this._emit('password_unavailable', { phase, reason });
+            throw new Error('Login required: no valid session and no password stored — repair the device');
+        }
+        try {
+            await this._fullAuth(this._email, password);
+        } catch (err) {
+            this._emit('password_login_failed', { phase, reason, error: err.message });
+            throw err;
+        }
+        this._emit('password_login', { phase, reason });
     }
 
     async _fullAuth(email, password) {
@@ -182,7 +255,13 @@ class AuthManager {
             validateStatus: () => true,
             timeout: 30000,
         });
-        if (r.status !== 200) throw new Error(`Refresh failed: ${r.status}`);
+        if (r.status !== 200) {
+            const code = r.data && typeof r.data === 'object' && r.data.error ? ` ${r.data.error}` : '';
+            const msg = `Refresh failed: ${r.status}${code}`;
+            // 400/401 = the IdP rejected this refresh token (invalid_grant & co).
+            if (r.status === 400 || r.status === 401) throw new RefreshRejectedError(msg);
+            throw new Error(msg);
+        }
         this._storeTokens(r.data);
     }
 
@@ -193,8 +272,16 @@ class AuthManager {
             token_type: data.token_type || 'Bearer',
             expires_in: data.expires_in || 0,
             expires_at: data.expires_in ? Date.now() + data.expires_in * 1000 : 0,
+            // Diagnostics only: lets the auth log show how long refresh tokens live
+            // and whether Polestar rotates them.
+            refresh_rotated: !!data.refresh_token,
+            refresh_expires_in: data.refresh_expires_in || data.refresh_token_expires_in || null,
+            obtained_at: Date.now(),
         };
+        if (this._onTokens) {
+            try { this._onTokens({ ...this._tokens }); } catch (_) { /* persisting is best-effort */ }
+        }
     }
 }
 
-module.exports = { AuthManager, CLIENT_ID, REDIRECT_URI };
+module.exports = { AuthManager, RefreshRejectedError, CLIENT_ID, REDIRECT_URI };

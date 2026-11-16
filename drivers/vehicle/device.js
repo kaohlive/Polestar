@@ -4,10 +4,44 @@ const { Device } = require('homey');
 const LegacyPolestar = require('../../clone_modules/polestar.js');
 const PolestarC3Compat = require('../../clone_modules/polestar-c3/compat');
 const { transitionPreconditioningState } = require('../../clone_modules/polestar-c3/preconditioning');
-const HomeyCrypt = require('../../lib/homeycrypt')
 const EvChargingState = require('../../lib/evChargingState')
 
 const measureInterval = 60000;
+const DATA_PORTAL_INTERVAL = 5 * 60 * 1000;
+const RECONNECT_DELAYS = [2, 5, 15, 30].map((m) => m * 60 * 1000);
+const SESSION_STORE_KEY = 'c3_session';
+
+// Capabilities that only exist while "Enhanced Polestar EU experience" is on
+// and this car's VIN is visible to the Data Portal credentials.
+const DP_CAP = {
+    avgConsumption: 'measure_polestarAvgConsumption',
+    avgSpeed: 'measure_polestarAvgSpeed',
+    tripManual: 'measure_polestarTripManual',
+    tripAuto: 'measure_polestarTripAuto',
+    carAlarm: 'alarm_generic.car_alarm',
+    tailgateLock: 'measure_polestarTailgateLocked',
+    brakeFluid: 'alarm_generic.brake_fluid',
+    lightFailure: 'alarm_generic.light_failure',
+    chargeTimerActive: 'measure_polestarChargeTimerActive',
+    chargeTimer: 'measure_polestarChargeTimer',
+    climateTimers: 'measure_polestarClimateTimers',
+    climateStartReason: 'measure_polestarClimateStartReason',
+    usageMode: 'measure_polestarUsageMode',
+};
+const DP_CAPS = Object.values(DP_CAP);
+
+// Options for the system sub-capabilities. Applied by hand after addCapability,
+// because capabilitiesOptions from driver.compose.json only reach new devices.
+const DP_CAP_OPTIONS = {
+    [DP_CAP.carAlarm]: { title: { en: 'Car alarm', nl: 'Autoalarm', de: 'Fahrzeugalarm', fr: 'Alarme du véhicule', it: 'Allarme auto', sv: 'Billarm', no: 'Billalarm', es: 'Alarma del coche', da: 'Bilalarm', ru: 'Автосигнализация', pl: 'Alarm samochodu', ko: '차량 경보', ja: '車両アラーム' } },
+    [DP_CAP.brakeFluid]: { title: { en: 'Brake fluid warning', nl: 'Remvloeistofwaarschuwing', de: 'Bremsflüssigkeitswarnung', fr: 'Alerte liquide de frein', it: 'Avviso liquido freni', sv: 'Bromsvätskevarning', no: 'Bremsevæskevarsel', es: 'Aviso de líquido de frenos', da: 'Bremsevæskeadvarsel', ru: 'Предупреждение о тормозной жидкости', pl: 'Ostrzeżenie o płynie hamulcowym', ko: '브레이크액 경고', ja: 'ブレーキ液警告' } },
+    [DP_CAP.lightFailure]: { title: { en: 'Light failure', nl: 'Lampstoring', de: 'Lampenausfall', fr: 'Défaut d\'éclairage', it: 'Guasto luci', sv: 'Lampfel', no: 'Lyspære-feil', es: 'Fallo de luces', da: 'Lygtefejl', ru: 'Неисправность фар', pl: 'Awaria oświetlenia', ko: '조명 고장', ja: 'ライト故障' } },
+};
+
+function titleCase(enumTail) {
+    if (!enumTail) return null;
+    return enumTail.toLowerCase().split('_').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+}
 const KM_TO_MILES = 0.621371;
 const DEFAULT_HOME_RADIUS_M = 150;
 const EARTH_RADIUS_M = 6371000;
@@ -90,42 +124,134 @@ class PolestarVehicle extends Device {
      */
     async updateCapabilityUnits() {
         const unit = this.usesMiles() ? { en: 'mi' } : { en: 'km' };
+        const speedUnit = this.usesMiles() ? { en: 'mph' } : { en: 'km/h' };
+        const caps = [
+            ['measure_vehicleOdometer', unit],
+            ['measure_vehicleRange', unit],
+            ['measure_vehicleDistanceTillService', unit],
+            [DP_CAP.tripManual, unit],
+            [DP_CAP.tripAuto, unit],
+            [DP_CAP.avgSpeed, speedUnit],
+        ];
+        for (const [cap, units] of caps) {
+            if (!this.hasCapability(cap)) continue;
+            try {
+                await this.setCapabilityOptions(cap, { units });
+            } catch (err) {
+                this.homey.app.log(`Failed to update units of ${cap}`, this.name, 'ERROR', err);
+            }
+        }
+        this.homey.app.log(`Updated capability units to ${this.usesMiles() ? 'miles' : 'km'}`, this.name, 'DEBUG');
+    }
+
+    // ---- Session: stored refresh token first, password only when needed ----
+
+    _loadSession() {
+        const stored = this.getStoreValue(SESSION_STORE_KEY);
+        if (!stored) return null;
         try {
-            await this.setCapabilityOptions('measure_vehicleOdometer', { units: unit });
-            await this.setCapabilityOptions('measure_vehicleRange', { units: unit });
-            await this.setCapabilityOptions('measure_vehicleDistanceTillService', { units: unit });
-            this.homey.app.log(`Updated capability units to ${this.usesMiles() ? 'miles' : 'km'}`, 'PolestarVehicle', 'DEBUG');
+            return JSON.parse(this.homey.app.decryptSecret(stored));
         } catch (err) {
-            this.homey.app.log('Failed to update capability units', 'PolestarVehicle', 'ERROR', err);
+            this.homey.app.log('Stored session cannot be read, a password login will follow', this.name, 'WARNING', err.message);
+            return null;
         }
     }
 
+    _saveSession(tokens) {
+        // Refresh token only: the access token is renewed at every start anyway.
+        const session = {
+            refresh_token: tokens.refresh_token,
+            refresh_rotated: tokens.refresh_rotated,
+            refresh_expires_in: tokens.refresh_expires_in,
+            obtained_at: tokens.obtained_at,
+        };
+        if (!session.refresh_token) return;
+        this.setStoreValue(SESSION_STORE_KEY, this.homey.app.encryptSecret(JSON.stringify(session)))
+            .catch((err) => this.homey.app.log('Could not persist session', this.name, 'ERROR', err));
+    }
+
+    async clearSession() {
+        await this.setStoreValue(SESSION_STORE_KEY, null);
+    }
+
+    async _createClient() {
+        const email = this.homey.app.getEmail();
+        if (selectClient(this.homey) === LegacyPolestar) {
+            // The legacy GraphQL backend keeps its own in-memory tokens and
+            // needs the password up front.
+            const password = await this.homey.app.getPassword();
+            this.homey.app.logAuth('legacy_password_login', this.name, { reason: 'legacy backend always logs in with the password' });
+            return new LegacyPolestar(email, password);
+        }
+        return new PolestarC3Compat(email, () => this.homey.app.getPassword(), {
+            tokens: this._loadSession(),
+            onTokens: (tokens) => this._saveSession(tokens),
+            onEvent: (type, detail) => this.homey.app.logAuth(type, this.name, detail),
+        });
+    }
+
+    async _connect() {
+        const client = await this._createClient();
+        await client.login();
+        await client.setVehicle(this.getData().vin);
+        if (this.polestar && this.polestar !== client && typeof this.polestar.close === 'function') {
+            try { this.polestar.close(); } catch (_) {}
+        }
+        this.polestar = client;
+    }
+
     /**
-     * Attempt to re-login when session has expired
+     * Rebuild the client after an error that says the session is gone. Uses
+     * the stored refresh token first, so this rarely costs a password login.
      */
     async attemptReLogin() {
-        // Prevent multiple simultaneous re-login attempts
         if (this._reLoginInProgress) {
-            this.homey.app.log('Re-login already in progress, skipping', 'PolestarVehicle', 'DEBUG');
+            this.homey.app.log('Re-login already in progress, skipping', this.name, 'DEBUG');
             return;
         }
-
         this._reLoginInProgress = true;
         try {
-            let PolestarUser = this.homey.settings.get('user_email');
-            let PolestarPwd = await HomeyCrypt.decrypt(this.homey.settings.get('user_password'), PolestarUser);
-
-            const Client = selectClient(this.homey);
-            this.polestar = new Client(PolestarUser, PolestarPwd);
-            await this.polestar.login();
-            await this.polestar.setVehicle(this.getData().vin);
-
-            this.homey.app.log('Re-login successful', 'PolestarVehicle', 'DEBUG');
+            await this._connect();
+            this.homey.app.log('Re-login successful', this.name, 'DEBUG');
         } catch (err) {
-            this.homey.app.log('Re-login failed', 'PolestarVehicle', 'ERROR', err);
+            this.homey.app.log('Re-login failed', this.name, 'ERROR', err);
         } finally {
             this._reLoginInProgress = false;
         }
+    }
+
+    /** Called after a repair stored new credentials: start a fresh session. */
+    async onCredentialsChanged() {
+        await this.clearSession();
+        this._reconnectAttempt = 0;
+        try {
+            await this._connect();
+            await this.setAvailable();
+            if (!this._running) await this._startRunning();
+        } catch (err) {
+            this.homey.app.log('Login after repair failed', this.name, 'ERROR', err);
+        }
+    }
+
+    _scheduleReconnect() {
+        if (this._destroyed) return;
+        const attempt = this._reconnectAttempt || 0;
+        const delay = RECONNECT_DELAYS[Math.min(attempt, RECONNECT_DELAYS.length - 1)];
+        this._reconnectAttempt = attempt + 1;
+        this.homey.app.log(`Next login attempt in ${Math.round(delay / 60000)} min`, this.name, 'DEBUG');
+        this._reconnectTimer = this.homey.setTimeout(async () => {
+            this._reconnectTimer = null;
+            if (this._destroyed || this._running) return;
+            try {
+                await this._connect();
+                this._reconnectAttempt = 0;
+                await this.setAvailable();
+                await this._startRunning();
+            } catch (err) {
+                this.homey.app.log('Login attempt failed', this.name, 'ERROR', err);
+                this._scheduleReconnect();
+            }
+        }, delay);
     }
 
     async onInit() {
@@ -137,31 +263,38 @@ class PolestarVehicle extends Device {
         // already does it.
         this.name = this.getName();
 
-        if (this.polestar == null) {
-            let PolestarUser = this.homey.settings.get('user_email');
-            try {
-                let PolestarPwd = await HomeyCrypt.decrypt(this.homey.settings.get('user_password'), PolestarUser);
-                const Client = selectClient(this.homey);
-                this.polestar = new Client(PolestarUser, PolestarPwd);
-            } catch (err) {
-                this.homey.app.log('Could not decrypt using salt, network connection changed?', 'PolestarVehicle', 'ERROR', err);
-                return;
-            }
-            try {
-                await this.polestar.login();
-                await this.polestar.setVehicle(this.getData().vin);
-            } catch (err) {
-                this.homey.app.log('Could not login. Please check your credentials or try again later', 'PolestarVehicle', 'ERROR', err);
-                return;
-            }
+        try {
+            await this._connect();
+        } catch (err) {
+            // Used to be a silent dead end until the next app restart. Now the
+            // device says why and keeps retrying.
+            this.homey.app.log('Could not login. Please check your credentials or try again later', this.name, 'ERROR', err);
+            const needsRepair = /repair the device|No password stored|Invalid username or password/.test(err.message || '');
+            await this.setUnavailable(needsRepair
+                ? this.homey.__({ en: 'Login required — repair this device', nl: 'Opnieuw inloggen nodig — repareer dit apparaat', no: 'Innlogging kreves — reparer enheten' })
+                : this.homey.__({ en: 'Cannot reach Polestar, retrying', nl: 'Polestar niet bereikbaar, nieuwe poging volgt', no: 'Får ikke kontakt med Polestar, prøver igjen' })
+            ).catch(() => {});
+            this._scheduleReconnect();
+            return;
         }
-        
+
+        try {
+            await this._startRunning();
+        } catch (err) {
+            this.homey.app.log('Device setup failed', this.name, 'ERROR', err);
+        }
+    }
+
+    async _startRunning() {
+        if (this._running) return;
+        this._running = true;
         await this.fixCapabilities();
         await this.fixEnergy();
         await this.updateCapabilityUnits();
         this._registerWriteCapabilityListeners();
         this.update_loop_timers();
         this.refreshChargingTargets();  // best-effort initial read
+        this._startDataPortal().catch((err) => this.homey.app.log('Data Portal start failed', this.name, 'ERROR', err));
 
         // Listen for distance unit setting changes
         this.homey.settings.on('set', async (key) => {
@@ -171,6 +304,7 @@ class PolestarVehicle extends Device {
                 // Refresh values with new unit
                 await this.updateVehicleState();
                 await this.updateHealthState();
+                await this._updateDataPortal();
                 // Send specific event for widget to refresh
                 this.homey.api.realtime('distanceUnitChanged');
             }
@@ -985,51 +1119,61 @@ class PolestarVehicle extends Device {
 
     /** Register tile/slider handlers for the setable write capabilities. */
     _registerWriteCapabilityListeners() {
-        this.registerCapabilityListener('target_polestarChargeLimit', async (value) => {
+        // registerCapabilityListener throws on a capability the device lacks
+        // (e.g. the amp-limit slider removed on a Polestar 4), which used to
+        // abort the rest of the device setup.
+        // Safe to call again later: already-registered capabilities are skipped.
+        this._registeredListeners = this._registeredListeners || new Set();
+        const reg = (cap, fn) => {
+            if (!this.hasCapability(cap) || this._registeredListeners.has(cap)) return;
+            this.registerCapabilityListener(cap, fn);
+            this._registeredListeners.add(cap);
+        };
+        reg('target_polestarChargeLimit', async (value) => {
             const level = Math.round(value);
             const slot = this._getTargetSocSettingType();
             const returned = await this._invokeWrite('target_polestarChargeLimit',
                 () => this.polestar.setTargetSoc(level, slot));
             await this._applyTargetSocResult(level, returned);
         });
-        this.registerCapabilityListener('target_polestarAmpLimit', async (value) => {
+        reg('target_polestarAmpLimit', async (value) => {
             const amps = Math.round(value);
             const returned = await this._invokeWrite('target_polestarAmpLimit',
                 () => this.polestar.setAmpLimit(amps));
             await this._applyAmpLimitResult(amps, returned);
         });
-        this.registerCapabilityListener('button.charge_start', async () => {
+        reg('button.charge_start', async () => {
             await this._invokeWrite('button.charge_start', () => this.polestar.chargeStart());
         });
-        this.registerCapabilityListener('button.charge_stop', async () => {
+        reg('button.charge_stop', async () => {
             await this._invokeWrite('button.charge_stop', () => this.polestar.chargeStop());
         });
 
-        this.registerCapabilityListener('locked', async (value) => {
+        reg('locked', async (value) => {
             const label = value ? 'lock' : 'unlock';
             await this._invokeWrite(label, () => value ? this.polestar.lock() : this.polestar.unlock());
             this._scheduleStateRefresh(['exterior']);
         });
 
-        this.registerCapabilityListener('button.honk_flash', async () => {
+        reg('button.honk_flash', async () => {
             await this._invokeWrite('button.honk_flash', () => this.polestar.honkFlash());
             // No state change — honk/flash is fire-and-forget.
         });
 
-        this.registerCapabilityListener('button.unlock_trunk', async () => {
+        reg('button.unlock_trunk', async () => {
             await this._invokeWrite('button.unlock_trunk', () => this.polestar.unlockTrunk());
             this._scheduleStateRefresh(['exterior']);
         });
-        this.registerCapabilityListener('button.windows_open', async () => {
+        reg('button.windows_open', async () => {
             await this._invokeWrite('button.windows_open', () => this.polestar.windowsOpen());
             this._scheduleStateRefresh(['exterior'], { delays: [3000, 15000] });
         });
-        this.registerCapabilityListener('button.windows_close', async () => {
+        reg('button.windows_close', async () => {
             await this._invokeWrite('button.windows_close', () => this.polestar.windowsClose());
             this._scheduleStateRefresh(['exterior'], { delays: [3000, 15000] });
         });
 
-        this.registerCapabilityListener('onoff.climate', async (value) => {
+        reg('onoff.climate', async (value) => {
             if (value) {
                 const opts = this._getClimateStartOptions();
                 await this._invokeWrite('climateStart', () => this.polestar.climateStart(opts));
@@ -1041,7 +1185,7 @@ class PolestarVehicle extends Device {
             this._scheduleStateRefresh(['climate']);
         });
 
-        this.registerCapabilityListener('target_temperature', async (temperature) => {
+        reg('target_temperature', async (temperature) => {
             // Target temperature alone doesn't start climate — it just updates the stored
             // default so the next climateStart uses the new value. If climate is already
             // ACTIVE, the user can toggle onoff.climate to restart with the new target.
@@ -1131,6 +1275,125 @@ class PolestarVehicle extends Device {
         }
     }
 
+    // ---- Enhanced Polestar EU experience (Data Portal) -----------------------
+
+    /** Start or stop the Data Portal extras to match the app settings. */
+    async _startDataPortal() {
+        this._stopDataPortalTimer();
+        const client = this.homey.app.getDataPortalClient();
+        if (!client) {
+            await this._removeDataPortalCaps();
+            return;
+        }
+        const vin = this.getData().vin;
+        let vins;
+        try {
+            vins = await client.getVehicles();
+        } catch (err) {
+            // Keep whatever caps the device has; try again on the next cycle.
+            this.homey.app.log('Data Portal: vehicle list failed', this.name, 'ERROR', err.message);
+            this._dataPortalTimer = this.homey.setTimeout(() => this._startDataPortal().catch(() => {}), DATA_PORTAL_INTERVAL);
+            return;
+        }
+        if (!vins.includes(vin)) {
+            this.homey.app.log('Data Portal: this vehicle is not linked to the portal credentials, extras stay off', this.name, 'WARNING');
+            await this._removeDataPortalCaps();
+            return;
+        }
+        await this._addDataPortalCaps();
+        await this.updateCapabilityUnits();
+        await this._updateDataPortal();
+        this._dataPortalTimer = this.homey.setInterval(() => this._updateDataPortal(), DATA_PORTAL_INTERVAL);
+    }
+
+    async onDataPortalChanged() {
+        if (!this._running) return;
+        await this._startDataPortal();
+    }
+
+    _stopDataPortalTimer() {
+        if (!this._dataPortalTimer) return;
+        try { this.homey.clearInterval(this._dataPortalTimer); } catch (_) {}
+        try { this.homey.clearTimeout(this._dataPortalTimer); } catch (_) {}
+        this._dataPortalTimer = null;
+    }
+
+    async _addDataPortalCaps() {
+        for (const cap of DP_CAPS) {
+            if (this.hasCapability(cap)) continue;
+            try {
+                await this.addCapability(cap);
+                if (DP_CAP_OPTIONS[cap]) await this.setCapabilityOptions(cap, DP_CAP_OPTIONS[cap]);
+            } catch (err) {
+                this.homey.app.log(`Data Portal: could not add ${cap}`, this.name, 'ERROR', err.message);
+            }
+        }
+    }
+
+    async _removeDataPortalCaps() {
+        for (const cap of DP_CAPS) {
+            if (!this.hasCapability(cap)) continue;
+            try { await this.removeCapability(cap); }
+            catch (err) { this.homey.app.log(`Data Portal: could not remove ${cap}`, this.name, 'WARNING', err.message); }
+        }
+    }
+
+    async _updateDataPortal() {
+        if (this._destroyed) return;
+        if (this._dataPortalSkip > 0) { this._dataPortalSkip--; return; }
+        const client = this.homey.app.getDataPortalClient();
+        if (!client) return;
+        let snap;
+        try {
+            snap = await client.getSnapshot(this.getData().vin);
+        } catch (err) {
+            if (err.status === 429) {
+                this._dataPortalSkip = 2;
+                this.homey.app.log('Data Portal: rate limited, skipping two rounds', this.name, 'WARNING');
+            } else {
+                this.homey.app.log('Data Portal: update failed', this.name, 'ERROR', err.message);
+            }
+            return;
+        }
+        this.homey.app.log('Data Portal:', this.name, 'DEBUG', snap);
+
+        const miles = this.usesMiles();
+        const dist = (km) => (km === null || km === undefined ? null : Math.round((miles ? km * KM_TO_MILES : km) * 10) / 10);
+        const set = async (cap, value) => {
+            if (value === undefined || !this.hasCapability(cap)) return;
+            try { await this.setCapabilityValue(cap, value); }
+            catch (err) { this.homey.app.log(`Data Portal: could not set ${cap}`, this.name, 'ERROR', err.message); }
+        };
+
+        if (snap.averageConsumptionKwh100km !== undefined) {
+            await set(DP_CAP.avgConsumption, snap.averageConsumptionKwh100km === null ? null : Math.round(snap.averageConsumptionKwh100km * 10) / 10);
+        }
+        if (snap.averageSpeedKmh !== undefined) await set(DP_CAP.avgSpeed, dist(snap.averageSpeedKmh));
+        if (snap.tripManualKm !== undefined) await set(DP_CAP.tripManual, dist(snap.tripManualKm));
+        if (snap.tripAutomaticKm !== undefined) await set(DP_CAP.tripAuto, dist(snap.tripAutomaticKm));
+
+        if (typeof snap.alarmTriggered === 'boolean') await set(DP_CAP.carAlarm, snap.alarmTriggered);
+        if (typeof snap.tailgateLocked === 'boolean') await set(DP_CAP.tailgateLock, snap.tailgateLocked);
+        if (typeof snap.brakeFluidWarning === 'boolean') await set(DP_CAP.brakeFluid, snap.brakeFluidWarning);
+        if (typeof snap.lightWarning === 'boolean') {
+            if (snap.lightWarning && !this.getCapabilityValue(DP_CAP.lightFailure)) {
+                this.homey.app.log('Data Portal: light failure reported', this.name, 'WARNING', snap.lightWarningLamps);
+            }
+            await set(DP_CAP.lightFailure, snap.lightWarning);
+        }
+
+        if (typeof snap.chargeTimerActive === 'boolean') {
+            if (this.hasCapability(DP_CAP.chargeTimerActive)) {
+                await this._setBoolAndTrigger(DP_CAP.chargeTimerActive, snap.chargeTimerActive,
+                    '_chargeTimerActivatedTrigger', '_chargeTimerDeactivatedTrigger');
+            }
+            await set(DP_CAP.chargeTimer, snap.chargeTimerActive ? (snap.chargeTimerWindow || 'On') : 'Off');
+        }
+        if (snap.climateTimerCount !== undefined) await set(DP_CAP.climateTimers, snap.climateTimerCount);
+        if (snap.climateStartReason !== undefined) await set(DP_CAP.climateStartReason, titleCase(snap.climateStartReason) || '');
+        if (snap.usageMode !== undefined) await set(DP_CAP.usageMode, titleCase(snap.usageMode) || '');
+    }
+
     async onAdded() {
         this.homey.app.log('PolestarVehicle has been added', 'PolestarVehicle');
     }
@@ -1147,6 +1410,7 @@ class PolestarVehicle extends Device {
                 delete store.windows;
                 await this.setStoreValue('unsupportedFeatures', store);
                 await this.fixCapabilities();
+                this._registerWriteCapabilityListeners();
                 this.homey.app.log('Windows remote control re-enabled — caps restored', this.name, 'DEBUG');
             }
         }
@@ -1174,6 +1438,8 @@ class PolestarVehicle extends Device {
         this._destroyed = true;
         if (this._timerTimers) { try { this.homey.clearInterval(this._timerTimers); } catch (_) {} this._timerTimers = null; }
         if (this._timerHealth) { try { this.homey.clearInterval(this._timerHealth); } catch (_) {} this._timerHealth = null; }
+        if (this._reconnectTimer) { try { this.homey.clearTimeout(this._reconnectTimer); } catch (_) {} this._reconnectTimer = null; }
+        this._stopDataPortalTimer();
         if (this.polestar && typeof this.polestar.close === 'function') {
             try { this.polestar.close(); } catch (_) {}
         }

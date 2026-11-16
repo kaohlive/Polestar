@@ -19,7 +19,9 @@
             "title": "Settings",
             "tabs": {
                 "account": "Account",
-                "debug": "Debug"
+                "debug": "Debug",
+                "auth": "Login log",
+                "eu": "EU Data Portal"
             },
             "account": {
                 "title": "Account settings",
@@ -28,13 +30,38 @@
                 "saveBtn": "Save",
                 "distanceUnit": "Distance unit",
                 "distanceUnitKm": "Kilometers (km)",
-                "distanceUnitMiles": "Miles (mi)"
+                "distanceUnitMiles": "Miles (mi)",
+                "passwordPlaceholder": "Leave empty to keep the stored password"
             },
             "debug": {
                 "title": "Debug logs",
                 "registered": "Timestamp",
                 "severity": "Severity",
                 "message": "Message"
+            },
+            "auth": {
+                "title": "Login log",
+                "intro": "The app logs in with a stored session (refresh token). This log shows when that did not work and the password was needed, and why. It is kept across restarts (last 50 events).",
+                "event": "Event",
+                "source": "Source",
+                "detail": "Details",
+                "clearBtn": "Clear log",
+                "empty": "No events yet."
+            },
+            "eu": {
+                "title": "Enhanced Polestar EU experience",
+                "intro": "Uses the official Polestar Data Portal (EU cars only, read-only) for extra data: average consumption and speed, trip meters, car alarm, tailgate lock, brake fluid and light warnings, charge and climate timers and usage mode. Create API credentials at data-portal.polestar.com; the account ID is on the API docs page there.",
+                "enable": "Enable",
+                "clientId": "Client ID",
+                "clientSecret": "Client secret",
+                "secretPlaceholder": "Leave empty to keep the stored secret",
+                "accountId": "Account ID",
+                "saveBtn": "Save and test",
+                "testing": "Testing credentials…",
+                "statusOk": "Connected: {vehicles} vehicle(s) in the portal, {matched} of them in Homey.",
+                "statusOff": "Not enabled.",
+                "saved": "Saved",
+                "failed": "Could not connect"
             }
         }
     },

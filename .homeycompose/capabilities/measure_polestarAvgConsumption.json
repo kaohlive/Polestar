@@ -1,0 +1,39 @@
+{
+    "type": "number",
+    "title": {
+        "en": "Average consumption",
+        "nl": "Gemiddeld verbruik",
+        "de": "Durchschnittsverbrauch",
+        "fr": "Consommation moyenne",
+        "it": "Consumo medio",
+        "sv": "Genomsnittlig förbrukning",
+        "no": "Gjennomsnittlig forbruk",
+        "es": "Consumo medio",
+        "da": "Gennemsnitligt forbrug",
+        "ru": "Средний расход",
+        "pl": "Średnie zużycie",
+        "ko": "평균 소비량",
+        "ja": "平均消費量"
+    },
+    "getable": true,
+    "setable": false,
+    "uiComponent": "sensor",
+    "icon": "/drivers/vehicle/assets/hvbattery.svg",
+    "insights": true,
+    "units": {
+        "en": "kWh/100 km",
+        "nl": "kWh/100 km",
+        "de": "kWh/100 km",
+        "fr": "kWh/100 km",
+        "it": "kWh/100 km",
+        "sv": "kWh/100 km",
+        "no": "kWh/100 km",
+        "es": "kWh/100 km",
+        "da": "kWh/100 km",
+        "ru": "kWh/100 km",
+        "pl": "kWh/100 km",
+        "ko": "kWh/100 km",
+        "ja": "kWh/100 km"
+    },
+    "decimals": 1
+}

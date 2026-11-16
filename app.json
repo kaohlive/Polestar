@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.Coderax.Polestar",
-  "version": "3.4.0",
+  "version": "3.5.0",
   "compatibility": ">=12.4.5",
   "sdk": 3,
   "platforms": [
@@ -327,6 +327,24 @@
   "source": "https://github.com/kaohlive/Polestar",
   "bugs": {
     "url": "https://github.com/kaohlive/Polestar/issues"
+  },
+  "api": {
+    "saveAccount": {
+      "method": "POST",
+      "path": "/account"
+    },
+    "getDataPortal": {
+      "method": "GET",
+      "path": "/dataportal"
+    },
+    "saveDataPortal": {
+      "method": "POST",
+      "path": "/dataportal"
+    },
+    "clearAuthLog": {
+      "method": "POST",
+      "path": "/authlog/clear"
+    }
   },
   "flow": {
     "triggers": [
@@ -1644,6 +1662,86 @@
             ]
           }
         ]
+      },
+      {
+        "id": "charge_timer_activated",
+        "title": {
+          "en": "Charge timer was switched on",
+          "nl": "Laadtimer is ingeschakeld",
+          "de": "Lade-Timer wurde eingeschaltet",
+          "fr": "La minuterie de charge a été activée",
+          "it": "Il timer di ricarica è stato attivato",
+          "sv": "Laddningstimern slogs på",
+          "no": "Ladetidtakeren ble slått på",
+          "es": "Se activó el temporizador de carga",
+          "da": "Ladetimeren blev slået til",
+          "ru": "Таймер зарядки включён",
+          "pl": "Harmonogram ładowania został włączony",
+          "ko": "충전 타이머가 켜졌습니다",
+          "ja": "充電タイマーがオンになった"
+        },
+        "hint": {
+          "en": "Requires the Enhanced Polestar EU experience (app settings).",
+          "nl": "Vereist de Enhanced Polestar EU experience (app-instellingen).",
+          "de": "Erfordert die Enhanced Polestar EU experience (App-Einstellungen).",
+          "fr": "Nécessite l'Enhanced Polestar EU experience (paramètres de l'app).",
+          "it": "Richiede l'Enhanced Polestar EU experience (impostazioni app).",
+          "sv": "Kräver Enhanced Polestar EU experience (appinställningar).",
+          "no": "Krever Enhanced Polestar EU experience (appinnstillinger).",
+          "es": "Requiere la Enhanced Polestar EU experience (ajustes de la app).",
+          "da": "Kræver Enhanced Polestar EU experience (appindstillinger).",
+          "ru": "Требуется Enhanced Polestar EU experience (настройки приложения).",
+          "pl": "Wymaga Enhanced Polestar EU experience (ustawienia aplikacji).",
+          "ko": "Enhanced Polestar EU experience가 필요합니다 (앱 설정).",
+          "ja": "Enhanced Polestar EU experience が必要です（アプリ設定）。"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle&capabilities=measure_polestarChargeTimerActive"
+          }
+        ]
+      },
+      {
+        "id": "charge_timer_deactivated",
+        "title": {
+          "en": "Charge timer was switched off",
+          "nl": "Laadtimer is uitgeschakeld",
+          "de": "Lade-Timer wurde ausgeschaltet",
+          "fr": "La minuterie de charge a été désactivée",
+          "it": "Il timer di ricarica è stato disattivato",
+          "sv": "Laddningstimern stängdes av",
+          "no": "Ladetidtakeren ble slått av",
+          "es": "Se desactivó el temporizador de carga",
+          "da": "Ladetimeren blev slået fra",
+          "ru": "Таймер зарядки выключен",
+          "pl": "Harmonogram ładowania został wyłączony",
+          "ko": "충전 타이머가 꺼졌습니다",
+          "ja": "充電タイマーがオフになった"
+        },
+        "hint": {
+          "en": "Requires the Enhanced Polestar EU experience (app settings).",
+          "nl": "Vereist de Enhanced Polestar EU experience (app-instellingen).",
+          "de": "Erfordert die Enhanced Polestar EU experience (App-Einstellungen).",
+          "fr": "Nécessite l'Enhanced Polestar EU experience (paramètres de l'app).",
+          "it": "Richiede l'Enhanced Polestar EU experience (impostazioni app).",
+          "sv": "Kräver Enhanced Polestar EU experience (appinställningar).",
+          "no": "Krever Enhanced Polestar EU experience (appinnstillinger).",
+          "es": "Requiere la Enhanced Polestar EU experience (ajustes de la app).",
+          "da": "Kræver Enhanced Polestar EU experience (appindstillinger).",
+          "ru": "Требуется Enhanced Polestar EU experience (настройки приложения).",
+          "pl": "Wymaga Enhanced Polestar EU experience (ustawienia aplikacji).",
+          "ko": "Enhanced Polestar EU experience가 필요합니다 (앱 설정).",
+          "ja": "Enhanced Polestar EU experience が必要です（アプリ設定）。"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle&capabilities=measure_polestarChargeTimerActive"
+          }
+        ]
       }
     ],
     "conditions": [
@@ -2371,6 +2469,46 @@
                 }
               }
             ]
+          }
+        ]
+      },
+      {
+        "id": "charge_timer_is_active",
+        "title": {
+          "en": "Charge timer !{{is|is not}} active",
+          "nl": "Laadtimer !{{is|is niet}} actief",
+          "de": "Lade-Timer !{{ist|ist nicht}} aktiv",
+          "fr": "La minuterie de charge !{{est|n'est pas}} active",
+          "it": "Il timer di ricarica !{{è|non è}} attivo",
+          "sv": "Laddningstimern !{{är|är inte}} aktiv",
+          "no": "Ladetidtakeren !{{er|er ikke}} aktiv",
+          "es": "El temporizador de carga !{{está|no está}} activo",
+          "da": "Ladetimeren !{{er|er ikke}} aktiv",
+          "ru": "Таймер зарядки !{{активен|не активен}}",
+          "pl": "Harmonogram ładowania !{{jest|nie jest}} aktywny",
+          "ko": "충전 타이머가 !{{활성|비활성}}",
+          "ja": "充電タイマーが!{{有効|無効}}"
+        },
+        "hint": {
+          "en": "Requires the Enhanced Polestar EU experience (app settings).",
+          "nl": "Vereist de Enhanced Polestar EU experience (app-instellingen).",
+          "de": "Erfordert die Enhanced Polestar EU experience (App-Einstellungen).",
+          "fr": "Nécessite l'Enhanced Polestar EU experience (paramètres de l'app).",
+          "it": "Richiede l'Enhanced Polestar EU experience (impostazioni app).",
+          "sv": "Kräver Enhanced Polestar EU experience (appinställningar).",
+          "no": "Krever Enhanced Polestar EU experience (appinnstillinger).",
+          "es": "Requiere la Enhanced Polestar EU experience (ajustes de la app).",
+          "da": "Kræver Enhanced Polestar EU experience (appindstillinger).",
+          "ru": "Требуется Enhanced Polestar EU experience (настройки приложения).",
+          "pl": "Wymaga Enhanced Polestar EU experience (ustawienia aplikacji).",
+          "ko": "Enhanced Polestar EU experience가 필요합니다 (앱 설정).",
+          "ja": "Enhanced Polestar EU experience が必要です（アプリ設定）。"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle&capabilities=measure_polestarChargeTimerActive"
           }
         ]
       }
@@ -5569,6 +5707,84 @@
       "setable": false,
       "insights": true
     },
+    "measure_polestarAvgConsumption": {
+      "type": "number",
+      "title": {
+        "en": "Average consumption",
+        "nl": "Gemiddeld verbruik",
+        "de": "Durchschnittsverbrauch",
+        "fr": "Consommation moyenne",
+        "it": "Consumo medio",
+        "sv": "Genomsnittlig förbrukning",
+        "no": "Gjennomsnittlig forbruk",
+        "es": "Consumo medio",
+        "da": "Gennemsnitligt forbrug",
+        "ru": "Средний расход",
+        "pl": "Średnie zużycie",
+        "ko": "평균 소비량",
+        "ja": "平均消費量"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/drivers/vehicle/assets/hvbattery.svg",
+      "insights": true,
+      "units": {
+        "en": "kWh/100 km",
+        "nl": "kWh/100 km",
+        "de": "kWh/100 km",
+        "fr": "kWh/100 km",
+        "it": "kWh/100 km",
+        "sv": "kWh/100 km",
+        "no": "kWh/100 km",
+        "es": "kWh/100 km",
+        "da": "kWh/100 km",
+        "ru": "kWh/100 km",
+        "pl": "kWh/100 km",
+        "ko": "kWh/100 km",
+        "ja": "kWh/100 km"
+      },
+      "decimals": 1
+    },
+    "measure_polestarAvgSpeed": {
+      "type": "number",
+      "title": {
+        "en": "Average speed",
+        "nl": "Gemiddelde snelheid",
+        "de": "Durchschnittsgeschwindigkeit",
+        "fr": "Vitesse moyenne",
+        "it": "Velocità media",
+        "sv": "Medelhastighet",
+        "no": "Gjennomsnittsfart",
+        "es": "Velocidad media",
+        "da": "Gennemsnitshastighed",
+        "ru": "Средняя скорость",
+        "pl": "Średnia prędkość",
+        "ko": "평균 속도",
+        "ja": "平均速度"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/drivers/vehicle/assets/odometer.svg",
+      "insights": true,
+      "units": {
+        "en": "km/h",
+        "nl": "km/h",
+        "de": "km/h",
+        "fr": "km/h",
+        "it": "km/h",
+        "sv": "km/h",
+        "no": "km/h",
+        "es": "km/h",
+        "da": "km/h",
+        "ru": "km/h",
+        "pl": "km/h",
+        "ko": "km/h",
+        "ja": "km/h"
+      },
+      "decimals": 0
+    },
     "measure_polestarBattery": {
       "type": "number",
       "uiComponent": "sensor",
@@ -5864,6 +6080,52 @@
       "setable": false,
       "insights": true
     },
+    "measure_polestarChargeTimer": {
+      "type": "string",
+      "title": {
+        "en": "Charge timer",
+        "nl": "Laadtimer",
+        "de": "Lade-Timer",
+        "fr": "Minuterie de charge",
+        "it": "Timer di ricarica",
+        "sv": "Laddningstimer",
+        "no": "Ladetidtaker",
+        "es": "Temporizador de carga",
+        "da": "Ladetimer",
+        "ru": "Таймер зарядки",
+        "pl": "Harmonogram ładowania",
+        "ko": "충전 타이머",
+        "ja": "充電タイマー"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/drivers/vehicle/assets/timeremaining.svg",
+      "insights": false
+    },
+    "measure_polestarChargeTimerActive": {
+      "type": "boolean",
+      "title": {
+        "en": "Charge timer active",
+        "nl": "Laadtimer actief",
+        "de": "Lade-Timer aktiv",
+        "fr": "Minuterie de charge active",
+        "it": "Timer di ricarica attivo",
+        "sv": "Laddningstimer aktiv",
+        "no": "Ladetidtaker aktiv",
+        "es": "Temporizador de carga activo",
+        "da": "Ladetimer aktiv",
+        "ru": "Таймер зарядки активен",
+        "pl": "Harmonogram ładowania aktywny",
+        "ko": "충전 타이머 활성",
+        "ja": "充電タイマー有効"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/drivers/vehicle/assets/timeremaining.svg",
+      "insights": true
+    },
     "measure_polestarChargeTimeRemaining": {
       "type": "number",
       "uiComponent": "sensor",
@@ -5948,6 +6210,53 @@
       "getable": true,
       "setable": false,
       "insights": true
+    },
+    "measure_polestarClimateStartReason": {
+      "type": "string",
+      "title": {
+        "en": "Climate start reason",
+        "nl": "Reden start klimaat",
+        "de": "Grund für Klimastart",
+        "fr": "Raison du démarrage de la climatisation",
+        "it": "Motivo avvio clima",
+        "sv": "Orsak till klimatstart",
+        "no": "Årsak til klimastart",
+        "es": "Motivo de inicio de climatización",
+        "da": "Årsag til klimastart",
+        "ru": "Причина запуска климата",
+        "pl": "Powód uruchomienia klimatyzacji",
+        "ko": "공조 시작 사유",
+        "ja": "空調開始理由"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/drivers/vehicle/assets/icon.svg",
+      "insights": false
+    },
+    "measure_polestarClimateTimers": {
+      "type": "number",
+      "title": {
+        "en": "Active climate timers",
+        "nl": "Actieve klimaattimers",
+        "de": "Aktive Klima-Timer",
+        "fr": "Minuteries de climatisation actives",
+        "it": "Timer clima attivi",
+        "sv": "Aktiva klimattimers",
+        "no": "Aktive klimatidtakere",
+        "es": "Temporizadores de climatización activos",
+        "da": "Aktive klimatimere",
+        "ru": "Активные таймеры климата",
+        "pl": "Aktywne harmonogramy klimatyzacji",
+        "ko": "활성 공조 타이머",
+        "ja": "有効な空調タイマー"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/drivers/vehicle/assets/timeremaining.svg",
+      "insights": false,
+      "decimals": 0
     },
     "measure_polestarConnected": {
       "type": "string",
@@ -6283,6 +6592,29 @@
       "setable": false,
       "insights": true
     },
+    "measure_polestarTailgateLocked": {
+      "type": "boolean",
+      "title": {
+        "en": "Tailgate locked",
+        "nl": "Achterklep vergrendeld",
+        "de": "Heckklappe verriegelt",
+        "fr": "Hayon verrouillé",
+        "it": "Portellone bloccato",
+        "sv": "Baklucka låst",
+        "no": "Bakluke låst",
+        "es": "Portón trasero bloqueado",
+        "da": "Bagklap låst",
+        "ru": "Багажник заблокирован",
+        "pl": "Klapa bagażnika zablokowana",
+        "ko": "트렁크 잠김",
+        "ja": "テールゲート施錠"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/drivers/vehicle/assets/icon.svg",
+      "insights": true
+    },
     "measure_polestarTemp": {
       "type": "number",
       "uiComponent": "sensor",
@@ -6307,6 +6639,84 @@
       "setable": false,
       "insights": true
     },
+    "measure_polestarTripAuto": {
+      "type": "number",
+      "title": {
+        "en": "Trip meter (automatic)",
+        "nl": "Tripteller (automatisch)",
+        "de": "Tageskilometerzähler (automatisch)",
+        "fr": "Compteur journalier (automatique)",
+        "it": "Contachilometri parziale (automatico)",
+        "sv": "Trippmätare (automatisk)",
+        "no": "Tripteller (automatisk)",
+        "es": "Cuentakilómetros parcial (automático)",
+        "da": "Triptæller (automatisk)",
+        "ru": "Счётчик поездки (авто)",
+        "pl": "Licznik dzienny (automatyczny)",
+        "ko": "구간 거리계 (자동)",
+        "ja": "トリップメーター（自動）"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/drivers/vehicle/assets/odometer.svg",
+      "insights": true,
+      "units": {
+        "en": "km",
+        "nl": "km",
+        "de": "km",
+        "fr": "km",
+        "it": "km",
+        "sv": "km",
+        "no": "km",
+        "es": "km",
+        "da": "km",
+        "ru": "km",
+        "pl": "km",
+        "ko": "km",
+        "ja": "km"
+      },
+      "decimals": 1
+    },
+    "measure_polestarTripManual": {
+      "type": "number",
+      "title": {
+        "en": "Trip meter (manual)",
+        "nl": "Tripteller (handmatig)",
+        "de": "Tageskilometerzähler (manuell)",
+        "fr": "Compteur journalier (manuel)",
+        "it": "Contachilometri parziale (manuale)",
+        "sv": "Trippmätare (manuell)",
+        "no": "Tripteller (manuell)",
+        "es": "Cuentakilómetros parcial (manual)",
+        "da": "Triptæller (manuel)",
+        "ru": "Счётчик поездки (ручной)",
+        "pl": "Licznik dzienny (ręczny)",
+        "ko": "구간 거리계 (수동)",
+        "ja": "トリップメーター（手動）"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/drivers/vehicle/assets/odometer.svg",
+      "insights": true,
+      "units": {
+        "en": "km",
+        "nl": "km",
+        "de": "km",
+        "fr": "km",
+        "it": "km",
+        "sv": "km",
+        "no": "km",
+        "es": "km",
+        "da": "km",
+        "ru": "km",
+        "pl": "km",
+        "ko": "km",
+        "ja": "km"
+      },
+      "decimals": 1
+    },
     "measure_polestarUpdated": {
       "type": "string",
       "uiComponent": "sensor",
@@ -6329,6 +6739,29 @@
       "getable": true,
       "setable": false,
       "insights": true
+    },
+    "measure_polestarUsageMode": {
+      "type": "string",
+      "title": {
+        "en": "Usage mode",
+        "nl": "Gebruiksmodus",
+        "de": "Nutzungsmodus",
+        "fr": "Mode d'utilisation",
+        "it": "Modalità di utilizzo",
+        "sv": "Användningsläge",
+        "no": "Bruksmodus",
+        "es": "Modo de uso",
+        "da": "Brugstilstand",
+        "ru": "Режим использования",
+        "pl": "Tryb użytkowania",
+        "ko": "사용 모드",
+        "ja": "使用モード"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/drivers/vehicle/assets/icon.svg",
+      "insights": false
     },
     "measure_vehicleChargeState": {
       "type": "boolean",

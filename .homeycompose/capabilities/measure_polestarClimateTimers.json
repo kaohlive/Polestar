@@ -1,0 +1,24 @@
+{
+    "type": "number",
+    "title": {
+        "en": "Active climate timers",
+        "nl": "Actieve klimaattimers",
+        "de": "Aktive Klima-Timer",
+        "fr": "Minuteries de climatisation actives",
+        "it": "Timer clima attivi",
+        "sv": "Aktiva klimattimers",
+        "no": "Aktive klimatidtakere",
+        "es": "Temporizadores de climatización activos",
+        "da": "Aktive klimatimere",
+        "ru": "Активные таймеры климата",
+        "pl": "Aktywne harmonogramy klimatyzacji",
+        "ko": "활성 공조 타이머",
+        "ja": "有効な空調タイマー"
+    },
+    "getable": true,
+    "setable": false,
+    "uiComponent": "sensor",
+    "icon": "/drivers/vehicle/assets/timeremaining.svg",
+    "insights": false,
+    "decimals": 0
+}

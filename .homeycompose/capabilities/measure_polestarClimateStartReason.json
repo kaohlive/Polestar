@@ -1,0 +1,23 @@
+{
+    "type": "string",
+    "title": {
+        "en": "Climate start reason",
+        "nl": "Reden start klimaat",
+        "de": "Grund für Klimastart",
+        "fr": "Raison du démarrage de la climatisation",
+        "it": "Motivo avvio clima",
+        "sv": "Orsak till klimatstart",
+        "no": "Årsak til klimastart",
+        "es": "Motivo de inicio de climatización",
+        "da": "Årsag til klimastart",
+        "ru": "Причина запуска климата",
+        "pl": "Powód uruchomienia klimatyzacji",
+        "ko": "공조 시작 사유",
+        "ja": "空調開始理由"
+    },
+    "getable": true,
+    "setable": false,
+    "uiComponent": "sensor",
+    "icon": "/drivers/vehicle/assets/icon.svg",
+    "insights": false
+}

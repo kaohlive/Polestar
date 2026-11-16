@@ -19,19 +19,46 @@
             "title": "Inställningar",
             "tabs": {
                 "account": "Konto",
-                "debug": "Felsökning"
+                "debug": "Felsökning",
+                "auth": "Inloggningslogg",
+                "eu": "EU Data Portal"
             },
             "account": {
                 "title": "Kontoinställningar",
                 "email": "E-postadress",
                 "password": "Lösenord",
-                "saveBtn": "Spara"
+                "saveBtn": "Spara",
+                "passwordPlaceholder": "Lämna tomt för att behålla sparat lösenord"
             },
             "debug": {
                 "title": "Felsökningsloggar",
                 "registered": "Tidsstämpel",
                 "severity": "Allvarlighetsgrad",
                 "message": "Meddelande"
+            },
+            "auth": {
+                "title": "Inloggningslogg",
+                "intro": "Appen loggar in med en sparad session (refresh-token). Den här loggen visar när det inte fungerade och lösenordet behövdes, och varför. Den sparas vid omstart (senaste 50 händelserna).",
+                "event": "Händelse",
+                "source": "Källa",
+                "detail": "Detaljer",
+                "clearBtn": "Rensa logg",
+                "empty": "Inga händelser ännu."
+            },
+            "eu": {
+                "title": "Enhanced Polestar EU experience",
+                "intro": "Använder den officiella Polestar Data Portal (endast EU-bilar, endast läsning) för extra data: genomsnittlig förbrukning och hastighet, trippmätare, billarm, bakluckslås, varningar för bromsvätska och lampor, laddnings- och klimattimers och användningsläge. Skapa API-uppgifter på data-portal.polestar.com; konto-ID finns på sidan med API-dokumentation.",
+                "enable": "Aktivera",
+                "clientId": "Client ID",
+                "clientSecret": "Client secret",
+                "secretPlaceholder": "Lämna tomt för att behålla sparad secret",
+                "accountId": "Konto-ID",
+                "saveBtn": "Spara och testa",
+                "testing": "Testar uppgifter…",
+                "statusOk": "Ansluten: {vehicles} bil(ar) i portalen, {matched} av dem i Homey.",
+                "statusOff": "Inte aktiverad.",
+                "saved": "Sparat",
+                "failed": "Kunde inte ansluta"
             }
         }
     },

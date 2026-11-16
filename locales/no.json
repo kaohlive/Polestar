@@ -19,7 +19,9 @@
             "title": "Innstillinger",
             "tabs": {
                 "account": "Konto",
-                "debug": "Debug"
+                "debug": "Debug",
+                "auth": "Innloggingslogg",
+                "eu": "EU Data Portal"
             },
             "account": {
                 "title": "Konto-innstillinger",
@@ -28,13 +30,38 @@
                 "saveBtn": "Lagre",
                 "distanceUnit": "Avstandsenhet",
                 "distanceUnitKm": "Kilometer (km)",
-                "distanceUnitMiles": "Miles (mi)"
+                "distanceUnitMiles": "Miles (mi)",
+                "passwordPlaceholder": "La stå tomt for å beholde lagret passord"
             },
             "debug": {
                 "title": "Debug logger",
                 "registered": "Tidsstempel",
                 "severity": "Alvorlighet",
                 "message": "Melding"
+            },
+            "auth": {
+                "title": "Innloggingslogg",
+                "intro": "Appen logger inn med en lagret økt (refresh-token). Denne loggen viser når det ikke fungerte og passordet trengtes, og hvorfor. Den beholdes ved omstart (siste 50 hendelser).",
+                "event": "Hendelse",
+                "source": "Kilde",
+                "detail": "Detaljer",
+                "clearBtn": "Tøm logg",
+                "empty": "Ingen hendelser ennå."
+            },
+            "eu": {
+                "title": "Enhanced Polestar EU experience",
+                "intro": "Bruker den offisielle Polestar Data Portal (kun EU-biler, kun lesing) for ekstra data: gjennomsnittlig forbruk og fart, trippteller, billalarm, baklukelås, varsler for bremsevæske og lys, lade- og klimatidtakere og bruksmodus. Opprett API-legitimasjon på data-portal.polestar.com; konto-ID står på API-dokumentasjonssiden der.",
+                "enable": "Aktiver",
+                "clientId": "Client ID",
+                "clientSecret": "Client secret",
+                "secretPlaceholder": "La stå tomt for å beholde lagret secret",
+                "accountId": "Konto-ID",
+                "saveBtn": "Lagre og test",
+                "testing": "Tester legitimasjon…",
+                "statusOk": "Tilkoblet: {vehicles} bil(er) i portalen, {matched} av dem i Homey.",
+                "statusOff": "Ikke aktivert.",
+                "saved": "Lagret",
+                "failed": "Kunne ikke koble til"
             }
         }
     },

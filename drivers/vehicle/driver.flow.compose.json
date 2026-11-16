@@ -572,6 +572,74 @@
                 ]
             }
         ]
+    },
+    {
+        "id": "charge_timer_activated",
+        "title": {
+            "en": "Charge timer was switched on",
+            "nl": "Laadtimer is ingeschakeld",
+            "de": "Lade-Timer wurde eingeschaltet",
+            "fr": "La minuterie de charge a été activée",
+            "it": "Il timer di ricarica è stato attivato",
+            "sv": "Laddningstimern slogs på",
+            "no": "Ladetidtakeren ble slått på",
+            "es": "Se activó el temporizador de carga",
+            "da": "Ladetimeren blev slået til",
+            "ru": "Таймер зарядки включён",
+            "pl": "Harmonogram ładowania został włączony",
+            "ko": "충전 타이머가 켜졌습니다",
+            "ja": "充電タイマーがオンになった"
+        },
+        "hint": {
+            "en": "Requires the Enhanced Polestar EU experience (app settings).",
+            "nl": "Vereist de Enhanced Polestar EU experience (app-instellingen).",
+            "de": "Erfordert die Enhanced Polestar EU experience (App-Einstellungen).",
+            "fr": "Nécessite l'Enhanced Polestar EU experience (paramètres de l'app).",
+            "it": "Richiede l'Enhanced Polestar EU experience (impostazioni app).",
+            "sv": "Kräver Enhanced Polestar EU experience (appinställningar).",
+            "no": "Krever Enhanced Polestar EU experience (appinnstillinger).",
+            "es": "Requiere la Enhanced Polestar EU experience (ajustes de la app).",
+            "da": "Kræver Enhanced Polestar EU experience (appindstillinger).",
+            "ru": "Требуется Enhanced Polestar EU experience (настройки приложения).",
+            "pl": "Wymaga Enhanced Polestar EU experience (ustawienia aplikacji).",
+            "ko": "Enhanced Polestar EU experience가 필요합니다 (앱 설정).",
+            "ja": "Enhanced Polestar EU experience が必要です（アプリ設定）。"
+        },
+        "$filter": "capabilities=measure_polestarChargeTimerActive"
+    },
+    {
+        "id": "charge_timer_deactivated",
+        "title": {
+            "en": "Charge timer was switched off",
+            "nl": "Laadtimer is uitgeschakeld",
+            "de": "Lade-Timer wurde ausgeschaltet",
+            "fr": "La minuterie de charge a été désactivée",
+            "it": "Il timer di ricarica è stato disattivato",
+            "sv": "Laddningstimern stängdes av",
+            "no": "Ladetidtakeren ble slått av",
+            "es": "Se desactivó el temporizador de carga",
+            "da": "Ladetimeren blev slået fra",
+            "ru": "Таймер зарядки выключен",
+            "pl": "Harmonogram ładowania został wyłączony",
+            "ko": "충전 타이머가 꺼졌습니다",
+            "ja": "充電タイマーがオフになった"
+        },
+        "hint": {
+            "en": "Requires the Enhanced Polestar EU experience (app settings).",
+            "nl": "Vereist de Enhanced Polestar EU experience (app-instellingen).",
+            "de": "Erfordert die Enhanced Polestar EU experience (App-Einstellungen).",
+            "fr": "Nécessite l'Enhanced Polestar EU experience (paramètres de l'app).",
+            "it": "Richiede l'Enhanced Polestar EU experience (impostazioni app).",
+            "sv": "Kräver Enhanced Polestar EU experience (appinställningar).",
+            "no": "Krever Enhanced Polestar EU experience (appinnstillinger).",
+            "es": "Requiere la Enhanced Polestar EU experience (ajustes de la app).",
+            "da": "Kræver Enhanced Polestar EU experience (appindstillinger).",
+            "ru": "Требуется Enhanced Polestar EU experience (настройки приложения).",
+            "pl": "Wymaga Enhanced Polestar EU experience (ustawienia aplikacji).",
+            "ko": "Enhanced Polestar EU experience가 필요합니다 (앱 설정).",
+            "ja": "Enhanced Polestar EU experience が必要です（アプリ設定）。"
+        },
+        "$filter": "capabilities=measure_polestarChargeTimerActive"
     }
     ],
     "conditions": [
@@ -875,7 +943,41 @@
                     ]
                 }
             ]
-        }
+        },
+    {
+        "id": "charge_timer_is_active",
+        "title": {
+            "en": "Charge timer !{{is|is not}} active",
+            "nl": "Laadtimer !{{is|is niet}} actief",
+            "de": "Lade-Timer !{{ist|ist nicht}} aktiv",
+            "fr": "La minuterie de charge !{{est|n'est pas}} active",
+            "it": "Il timer di ricarica !{{è|non è}} attivo",
+            "sv": "Laddningstimern !{{är|är inte}} aktiv",
+            "no": "Ladetidtakeren !{{er|er ikke}} aktiv",
+            "es": "El temporizador de carga !{{está|no está}} activo",
+            "da": "Ladetimeren !{{er|er ikke}} aktiv",
+            "ru": "Таймер зарядки !{{активен|не активен}}",
+            "pl": "Harmonogram ładowania !{{jest|nie jest}} aktywny",
+            "ko": "충전 타이머가 !{{활성|비활성}}",
+            "ja": "充電タイマーが!{{有効|無効}}"
+        },
+        "hint": {
+            "en": "Requires the Enhanced Polestar EU experience (app settings).",
+            "nl": "Vereist de Enhanced Polestar EU experience (app-instellingen).",
+            "de": "Erfordert die Enhanced Polestar EU experience (App-Einstellungen).",
+            "fr": "Nécessite l'Enhanced Polestar EU experience (paramètres de l'app).",
+            "it": "Richiede l'Enhanced Polestar EU experience (impostazioni app).",
+            "sv": "Kräver Enhanced Polestar EU experience (appinställningar).",
+            "no": "Krever Enhanced Polestar EU experience (appinnstillinger).",
+            "es": "Requiere la Enhanced Polestar EU experience (ajustes de la app).",
+            "da": "Kræver Enhanced Polestar EU experience (appindstillinger).",
+            "ru": "Требуется Enhanced Polestar EU experience (настройки приложения).",
+            "pl": "Wymaga Enhanced Polestar EU experience (ustawienia aplikacji).",
+            "ko": "Enhanced Polestar EU experience가 필요합니다 (앱 설정).",
+            "ja": "Enhanced Polestar EU experience が必要です（アプリ設定）。"
+        },
+        "$filter": "capabilities=measure_polestarChargeTimerActive"
+    }
     ],
     "actions": [
         {

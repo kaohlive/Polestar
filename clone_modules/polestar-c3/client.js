@@ -59,8 +59,13 @@ const CHARGE_TARGET_LONG_TRIP = 2;
 const CHARGE_TARGET_CUSTOM = 3;
 
 class PolestarC3 {
-    constructor(email, password) {
-        this._auth = new AuthManager();
+    /**
+     * @param {string} email
+     * @param {string|function} password  string, or (async) function returning it
+     * @param {object} [authOptions]      passed to AuthManager: { tokens, onTokens, onEvent }
+     */
+    constructor(email, password, authOptions = {}) {
+        this._auth = new AuthManager(authOptions);
         this._email = email;
         this._password = password;
         this._endpoint = null;

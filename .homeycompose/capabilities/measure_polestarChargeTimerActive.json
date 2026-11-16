@@ -1,0 +1,23 @@
+{
+    "type": "boolean",
+    "title": {
+        "en": "Charge timer active",
+        "nl": "Laadtimer actief",
+        "de": "Lade-Timer aktiv",
+        "fr": "Minuterie de charge active",
+        "it": "Timer di ricarica attivo",
+        "sv": "Laddningstimer aktiv",
+        "no": "Ladetidtaker aktiv",
+        "es": "Temporizador de carga activo",
+        "da": "Ladetimer aktiv",
+        "ru": "Таймер зарядки активен",
+        "pl": "Harmonogram ładowania aktywny",
+        "ko": "충전 타이머 활성",
+        "ja": "充電タイマー有効"
+    },
+    "getable": true,
+    "setable": false,
+    "uiComponent": "sensor",
+    "icon": "/drivers/vehicle/assets/timeremaining.svg",
+    "insights": true
+}

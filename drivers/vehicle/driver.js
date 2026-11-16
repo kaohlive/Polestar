@@ -3,7 +3,6 @@
 const { Driver } = require('homey');
 const LegacyPolestar = require('../../clone_modules/polestar.js');
 const PolestarC3Compat = require('../../clone_modules/polestar-c3/compat');
-const HomeyCrypt = require('../../lib/homeycrypt')
 const toPairingDevice = require('./pairing-device');
 
 function Polestar(email, password, homey) {
@@ -108,6 +107,12 @@ class Vehicle extends Driver {
         this.homey.flow.getConditionCard('tyre_pressure_warning_active').registerRunListener(boolCondition('alarm_polestarTyrePressure'));
         this.homey.flow.getConditionCard('climate_is_running').registerRunListener(boolCondition('onoff.climate'));
 
+        // Data Portal (EU) charge timer. The car alarm, brake-fluid and light
+        // warnings are alarm_generic sub-capabilities and bring Homey's own cards.
+        this._chargeTimerActivatedTrigger = this.homey.flow.getDeviceTriggerCard('charge_timer_activated');
+        this._chargeTimerDeactivatedTrigger = this.homey.flow.getDeviceTriggerCard('charge_timer_deactivated');
+        this.homey.flow.getConditionCard('charge_timer_is_active').registerRunListener(boolCondition('measure_polestarChargeTimerActive'));
+
         this.homey.app.log('Polestar flow cards registered', 'Polestar Driver', 'DEBUG');
     }
 
@@ -115,25 +120,14 @@ class Vehicle extends Driver {
         session.setHandler("showView", async (data) => {
             this.homey.app.log('Login page of repair is showing, send credentials');
 
-            var username = this.homey.settings.get('user_email');
-            var cryptedpassword = this.homey.settings.get('user_password');
-            try {
-                plainpass = await HomeyCrypt.decrypt(cryptedpassword, username);
-                await session.emit('loadaccount', { username, password: plainpass });
-            } catch (err) {
-                await session.emit('loadaccount', { username, password: '' })
-            }
+            // E-mail only: the password is never sent back to a view.
+            await session.emit('loadaccount', { username: this.homey.app.getEmail(), password: '' });
         });
 
         session.setHandler('testlogin', async (data) => {
             this.homey.app.log('Test login and provide feedback, username length: ' + data.username.length + ' password length: ' + data.password.length, 'Polestar Driver');
-            //Store the provided credentials, but hash and salt it first
-            this.homey.settings.set('user_email', data.username);
-            HomeyCrypt.crypt(data.password, data.username).then(cryptedpass => {
-                //this.homey.app.log(JSON.stringify(cryptedpass));
-                this.homey.settings.set('user_password', cryptedpass);
-            })
-            this.homey.app.log('Password encrypted, credentials stored. Clear existing tokens.', 'Polestar Driver');
+            this.homey.app.setCredentials(data.username, data.password);
+            this.homey.app.log('Password encrypted, credentials stored.', 'Polestar Driver');
             //Now we have the encrypted password stored we can start testing the info
             try {
                 var polestar = Polestar(data.username, data.password, this.homey);
@@ -149,6 +143,9 @@ class Vehicle extends Driver {
                         return true;
                     }
                     return false;
+                }
+                if (device && typeof device.onCredentialsChanged === 'function') {
+                    device.onCredentialsChanged().catch(() => {});
                 }
                 await session.nextView();
                 return true;
@@ -168,14 +165,8 @@ class Vehicle extends Driver {
             if (viewId === 'login') {
                 this.homey.app.log('Login page of pairing is showing, send credentials', 'Polestar Driver');
                 //Send the stored credentials to the 
-                var username = this.homey.settings.get('user_email');
-                var cryptedpassword = this.homey.settings.get('user_password');
-                try {
-                    plainpass = await HomeyCrypt.decrypt(cryptedpassword, username);
-                    await session.emit('loadaccount', { username, password: plainpass });
-                } catch (err) {
-                    await session.emit('loadaccount', { username, password: '' })
-                }
+                // E-mail only: the password is never sent back to a view.
+                await session.emit('loadaccount', { username: this.homey.app.getEmail(), password: '' });
             };
         });
 
@@ -193,9 +184,9 @@ class Vehicle extends Driver {
 
         session.setHandler('discover_vehicles', async (data) => {
             this.homey.app.log('Polestar vehicles discovery started...', 'Polestar Driver');
-            let PolestarUser = this.homey.settings.get('user_email');
-            let PolestarPwd = await HomeyCrypt.decrypt(this.homey.settings.get('user_password'), PolestarUser);
             try {
+                const PolestarUser = this.homey.app.getEmail();
+                const PolestarPwd = await this.homey.app.getPassword();
                 this.homey.app.log('Attempting to login to Polestar', 'Polestar Driver');
                 var polestar = Polestar(PolestarUser, PolestarPwd, this.homey);
                 await polestar.login();
@@ -237,10 +228,7 @@ class Vehicle extends Driver {
 
         session.setHandler('testlogin', async (data) => {
             this.homey.app.log('Test login and provide feedback, username length: ' + data.username.length + ' password length: ' + data.password.length, 'Polestar Driver');
-            this.homey.settings.set('user_email', data.username);
-            HomeyCrypt.crypt(data.password, data.username).then(cryptedpass => {
-                this.homey.settings.set('user_password', cryptedpass);
-            })
+            this.homey.app.setCredentials(data.username, data.password);
             this.homey.app.log('Password encrypted, credentials stored.', 'Polestar Driver');
 
             const polestar = Polestar(data.username, data.password, this.homey);

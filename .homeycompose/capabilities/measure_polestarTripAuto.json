@@ -1,0 +1,39 @@
+{
+    "type": "number",
+    "title": {
+        "en": "Trip meter (automatic)",
+        "nl": "Tripteller (automatisch)",
+        "de": "Tageskilometerzähler (automatisch)",
+        "fr": "Compteur journalier (automatique)",
+        "it": "Contachilometri parziale (automatico)",
+        "sv": "Trippmätare (automatisk)",
+        "no": "Tripteller (automatisk)",
+        "es": "Cuentakilómetros parcial (automático)",
+        "da": "Triptæller (automatisk)",
+        "ru": "Счётчик поездки (авто)",
+        "pl": "Licznik dzienny (automatyczny)",
+        "ko": "구간 거리계 (자동)",
+        "ja": "トリップメーター（自動）"
+    },
+    "getable": true,
+    "setable": false,
+    "uiComponent": "sensor",
+    "icon": "/drivers/vehicle/assets/odometer.svg",
+    "insights": true,
+    "units": {
+        "en": "km",
+        "nl": "km",
+        "de": "km",
+        "fr": "km",
+        "it": "km",
+        "sv": "km",
+        "no": "km",
+        "es": "km",
+        "da": "km",
+        "ru": "km",
+        "pl": "km",
+        "ko": "km",
+        "ja": "km"
+    },
+    "decimals": 1
+}

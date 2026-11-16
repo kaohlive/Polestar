@@ -33,8 +33,8 @@ function toNumber(v) {
 }
 
 class PolestarCompat {
-    constructor(email, password) {
-        this._client = new PolestarC3(email, password);
+    constructor(email, password, authOptions = {}) {
+        this._client = new PolestarC3(email, password, authOptions);
         this._vehicles = null;
         this._batteryCache = { at: 0, data: null };
     }

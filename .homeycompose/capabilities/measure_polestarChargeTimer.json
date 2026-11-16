@@ -1,0 +1,23 @@
+{
+    "type": "string",
+    "title": {
+        "en": "Charge timer",
+        "nl": "Laadtimer",
+        "de": "Lade-Timer",
+        "fr": "Minuterie de charge",
+        "it": "Timer di ricarica",
+        "sv": "Laddningstimer",
+        "no": "Ladetidtaker",
+        "es": "Temporizador de carga",
+        "da": "Ladetimer",
+        "ru": "Таймер зарядки",
+        "pl": "Harmonogram ładowania",
+        "ko": "충전 타이머",
+        "ja": "充電タイマー"
+    },
+    "getable": true,
+    "setable": false,
+    "uiComponent": "sensor",
+    "icon": "/drivers/vehicle/assets/timeremaining.svg",
+    "insights": false
+}

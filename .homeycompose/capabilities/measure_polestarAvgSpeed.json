@@ -1,0 +1,39 @@
+{
+    "type": "number",
+    "title": {
+        "en": "Average speed",
+        "nl": "Gemiddelde snelheid",
+        "de": "Durchschnittsgeschwindigkeit",
+        "fr": "Vitesse moyenne",
+        "it": "Velocità media",
+        "sv": "Medelhastighet",
+        "no": "Gjennomsnittsfart",
+        "es": "Velocidad media",
+        "da": "Gennemsnitshastighed",
+        "ru": "Средняя скорость",
+        "pl": "Średnia prędkość",
+        "ko": "평균 속도",
+        "ja": "平均速度"
+    },
+    "getable": true,
+    "setable": false,
+    "uiComponent": "sensor",
+    "icon": "/drivers/vehicle/assets/odometer.svg",
+    "insights": true,
+    "units": {
+        "en": "km/h",
+        "nl": "km/h",
+        "de": "km/h",
+        "fr": "km/h",
+        "it": "km/h",
+        "sv": "km/h",
+        "no": "km/h",
+        "es": "km/h",
+        "da": "km/h",
+        "ru": "km/h",
+        "pl": "km/h",
+        "ko": "km/h",
+        "ja": "km/h"
+    },
+    "decimals": 0
+}

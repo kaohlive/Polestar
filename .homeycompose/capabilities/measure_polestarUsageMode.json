@@ -1,0 +1,23 @@
+{
+    "type": "string",
+    "title": {
+        "en": "Usage mode",
+        "nl": "Gebruiksmodus",
+        "de": "Nutzungsmodus",
+        "fr": "Mode d'utilisation",
+        "it": "Modalità di utilizzo",
+        "sv": "Användningsläge",
+        "no": "Bruksmodus",
+        "es": "Modo de uso",
+        "da": "Brugstilstand",
+        "ru": "Режим использования",
+        "pl": "Tryb użytkowania",
+        "ko": "사용 모드",
+        "ja": "使用モード"
+    },
+    "getable": true,
+    "setable": false,
+    "uiComponent": "sensor",
+    "icon": "/drivers/vehicle/assets/icon.svg",
+    "insights": false
+}

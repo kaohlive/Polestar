@@ -1,0 +1,23 @@
+{
+    "type": "boolean",
+    "title": {
+        "en": "Tailgate locked",
+        "nl": "Achterklep vergrendeld",
+        "de": "Heckklappe verriegelt",
+        "fr": "Hayon verrouillé",
+        "it": "Portellone bloccato",
+        "sv": "Baklucka låst",
+        "no": "Bakluke låst",
+        "es": "Portón trasero bloqueado",
+        "da": "Bagklap låst",
+        "ru": "Багажник заблокирован",
+        "pl": "Klapa bagażnika zablokowana",
+        "ko": "트렁크 잠김",
+        "ja": "テールゲート施錠"
+    },
+    "getable": true,
+    "setable": false,
+    "uiComponent": "sensor",
+    "icon": "/drivers/vehicle/assets/icon.svg",
+    "insights": true
+}

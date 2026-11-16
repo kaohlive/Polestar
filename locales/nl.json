@@ -19,7 +19,9 @@
             "title": "Instellingen",
             "tabs": {
                 "account": "Rekening",
-                "debug": "Debug"
+                "debug": "Debug",
+                "auth": "Aanmeldlog",
+                "eu": "EU Data Portal"
             },
             "account": {
                 "title": "Accountinstellingen",
@@ -28,13 +30,38 @@
                 "saveBtn": "Opslaan",
                 "distanceUnit": "Afstandseenheid",
                 "distanceUnitKm": "Kilometers (km)",
-                "distanceUnitMiles": "Mijlen (mi)"
+                "distanceUnitMiles": "Mijlen (mi)",
+                "passwordPlaceholder": "Leeg laten om het opgeslagen wachtwoord te houden"
             },
             "debug": {
                 "title": "Debug logger",
                 "registered": "Tijdstempel",
                 "severity": "Ernst",
                 "message": "Bericht"
+            },
+            "auth": {
+                "title": "Aanmeldlog",
+                "intro": "De app meldt zich aan met een opgeslagen sessie (refresh-token). Dit log toont wanneer dat niet lukte en het wachtwoord nodig was, en waarom. Het blijft bewaard na herstarts (laatste 50 gebeurtenissen).",
+                "event": "Gebeurtenis",
+                "source": "Bron",
+                "detail": "Details",
+                "clearBtn": "Log wissen",
+                "empty": "Nog geen gebeurtenissen."
+            },
+            "eu": {
+                "title": "Enhanced Polestar EU experience",
+                "intro": "Gebruikt het officiële Polestar Data Portal (alleen EU-auto's, alleen lezen) voor extra data: gemiddeld verbruik en snelheid, triptellers, autoalarm, slot van de achterklep, waarschuwingen voor remvloeistof en lampen, laad- en klimaattimers en gebruiksmodus. Maak API-credentials aan op data-portal.polestar.com; de account ID staat daar op de pagina met API-documentatie.",
+                "enable": "Inschakelen",
+                "clientId": "Client ID",
+                "clientSecret": "Client secret",
+                "secretPlaceholder": "Leeg laten om het opgeslagen secret te houden",
+                "accountId": "Account ID",
+                "saveBtn": "Opslaan en testen",
+                "testing": "Credentials testen…",
+                "statusOk": "Verbonden: {vehicles} auto('s) in het portaal, waarvan {matched} in Homey.",
+                "statusOff": "Niet ingeschakeld.",
+                "saved": "Opgeslagen",
+                "failed": "Verbinden mislukt"
             }
         }
     },

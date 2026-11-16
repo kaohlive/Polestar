@@ -129,8 +129,10 @@
 
 <body>
 	<div class="tab">
-		<button class="tablinks" id="accountTab"><span data-i18n="Polestar2.settings.tabs.account"></span></button>
-		<button class="tablinks"><span data-i18n="Polestar2.settings.tabs.debug"></span></button>
+		<button class="tablinks" data-tabname="account"><span data-i18n="Polestar2.settings.tabs.account"></span></button>
+		<button class="tablinks" data-tabname="eu"><span data-i18n="Polestar2.settings.tabs.eu"></span></button>
+		<button class="tablinks" data-tabname="auth"><span data-i18n="Polestar2.settings.tabs.auth"></span></button>
+		<button class="tablinks" data-tabname="debug"><span data-i18n="Polestar2.settings.tabs.debug"></span></button>
 	</div>
 
 	<div id="account" class="tabcontent">
@@ -146,7 +148,7 @@
 				<div class="homey-form-group">
 					<label class="homey-form-label" for="password"
 						data-i18n="Polestar2.settings.account.password"></label>
-					<input class="homey-form-input" id="password" type="password" value="" />
+					<input class="homey-form-input" id="password" type="password" value="" autocomplete="new-password" />
 				</div>
 				<div class="homey-form-group">
 					<label class="homey-form-label" for="distanceUnit"
@@ -161,6 +163,62 @@
 			</form>
 		</fieldset>
 	</div>
+
+	<div id="eu" class="tabcontent">
+		<fieldset class="homey-form-fieldset">
+			<header class="homey-header">
+				<h1 class="homey-title" data-i18n="Polestar2.settings.eu.title"></h1>
+				<p class="homey-subtitle" data-i18n="Polestar2.settings.eu.intro"></p>
+			</header>
+			<form>
+				<div class="homey-form-group">
+					<label class="homey-form-checkbox">
+						<input class="homey-form-checkbox-input" id="euEnabled" type="checkbox" />
+						<span class="homey-form-checkbox-checkmark"></span>
+						<span class="homey-form-checkbox-text" data-i18n="Polestar2.settings.eu.enable"></span>
+					</label>
+				</div>
+				<div class="homey-form-group">
+					<label class="homey-form-label" for="euClientId" data-i18n="Polestar2.settings.eu.clientId"></label>
+					<input class="homey-form-input" id="euClientId" type="text" value="" autocomplete="off" />
+				</div>
+				<div class="homey-form-group">
+					<label class="homey-form-label" for="euClientSecret" data-i18n="Polestar2.settings.eu.clientSecret"></label>
+					<input class="homey-form-input" id="euClientSecret" type="password" value="" autocomplete="new-password" />
+				</div>
+				<div class="homey-form-group">
+					<label class="homey-form-label" for="euAccountId" data-i18n="Polestar2.settings.eu.accountId"></label>
+					<input class="homey-form-input" id="euAccountId" type="text" value="" autocomplete="off" />
+				</div>
+				<p id="euStatus"></p>
+				<button id="euSave" type="submit" class="homey-button-primary-full"
+					data-i18n="Polestar2.settings.eu.saveBtn"></button>
+			</form>
+		</fieldset>
+	</div>
+
+	<div id="auth" class="tabcontent">
+		<header class="homey-header">
+			<h1 class="homey-title" data-i18n="Polestar2.settings.auth.title"></h1>
+			<p class="homey-subtitle" data-i18n="Polestar2.settings.auth.intro"></p>
+		</header>
+		<div class="tg-wrap">
+			<table class="tg">
+				<thead>
+					<tr>
+						<th class="tg-0lax" style="text-align:center"><b><span data-i18n="Polestar2.settings.debug.registered"></span></b></th>
+						<th class="tg-0lax" style="text-align:center"><b><span data-i18n="Polestar2.settings.auth.event"></span></b></th>
+						<th class="tg-0lax" style="text-align:center"><b><span data-i18n="Polestar2.settings.auth.source"></span></b></th>
+						<th class="tg-0lax" style="text-align:center" width="50%"><b><span data-i18n="Polestar2.settings.auth.detail"></span></b></th>
+					</tr>
+				</thead>
+				<tbody id="authLogs"></tbody>
+			</table>
+		</div>
+		<p id="authEmpty" data-i18n="Polestar2.settings.auth.empty"></p>
+		<button id="authClear" class="homey-button-secondary-full" data-i18n="Polestar2.settings.auth.clearBtn"></button>
+	</div>
+
 	<div id="debug" class="tabcontent">
 		<header class="homey-header">
 			<h1 class="homey-title" data-i18n="Polestar2.settings.debug.title"></h1>
@@ -195,136 +253,149 @@
 	integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
 	crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script type="text/javascript">
-	document.addEventListener('DOMContentLoaded', (event) => {
-		// Definer funksjonen openTab her eller sørg for at den er definert i et skript som er lastet
-		function openTab(evt, tabName) {
-			// Declare all variables
-			var i, tabcontent, tablinks;
-
-			// Get all elements with class="tabcontent" and hide them
-			tabcontent = document.getElementsByClassName("tabcontent");
-			for (i = 0; i < tabcontent.length; i++) {
-				tabcontent[i].style.display = "none";
+	document.addEventListener('DOMContentLoaded', () => {
+		function openTab(tabName) {
+			for (const el of document.getElementsByClassName('tabcontent')) el.style.display = 'none';
+			for (const btn of document.getElementsByClassName('tablinks')) {
+				btn.classList.toggle('active', btn.getAttribute('data-tabname') === tabName);
 			}
-
-			// Get all elements with class="tablinks" and remove the class "active"
-			tablinks = document.getElementsByClassName("tablinks");
-			for (i = 0; i < tablinks.length; i++) {
-				tablinks[i].className = tablinks[i].className.replace(" active", "");
-			}
-
-			// Show the current tab, and add an "active" class to the button that opened the tab
-			var currentTab = document.getElementById(tabName);
-			if (currentTab) {
-				currentTab.style.display = "block";
-				if (evt) evt.currentTarget.className += " active";
-				else {
-					// Finn knappen som samsvarer med tabName og legg til "active" klassen
-					var button = document.querySelector(`.tablinks[data-tabname="${tabName}"]`);
-					if (button) button.className += " active";
-				}
-			} else {
-				console.error('Det finnes ingen tab med ID:', tabName);
-			}
+			const tab = document.getElementById(tabName);
+			if (tab) tab.style.display = 'block';
 		}
-
-		// Funksjon for å åpne en standardfane uten et event-objekt
-		function openDefaultTab(tabName) {
-			openTab(null, tabName);
-		}
-
-		// Bind openTab funksjonen til knappene
-		document.querySelectorAll('.tablinks').forEach(button => {
-			const tabName = button.id === 'accountTab' ? 'account' : 'debug';
-			button.setAttribute('data-tabname', tabName);
-
-			button.addEventListener('click', function (event) {
-				openTab(event, this.getAttribute('data-tabname'));
-			});
+		document.querySelectorAll('.tablinks').forEach((button) => {
+			button.addEventListener('click', () => openTab(button.getAttribute('data-tabname')));
 		});
-
-		// Aktiver standard tab
-		openDefaultTab("account");
+		openTab('account');
 	});
+
+	function severityHtml(severity) {
+		const color = severity === 'ERROR' ? 'red' : severity === 'WARNING' ? 'orange' : 'blue';
+		return $('<span>').css('color', color).append($('<b>').text(severity));
+	}
 
 	function onHomeyReady(Homey) {
 		Homey.ready();
-		console.log('[\x1b[36mDEBUG\x1b[0m]', 'Homey is ready!')
 
+		// ---- Debug log ----
 		function addLogEntry(registered, severity, message, data) {
-			var msg;
-			if (data == null) {
-				msg = $('<b>').text(message);
-			} else {
-				msg = $('<b>').text(message).add($('<br>')).add($('<code>').text(JSON.stringify(data, ' ', 1)));
-			}
-
-			switch (severity) {
-				case 'DEBUG':
-					severity = `<span style="color:blue"><b>${severity}</b></span>`;
-					break;
-				case 'WARNING':
-					severity = `<span style="color:orange"><b>${severity}</b></span>`;
-					break;
-				case 'ERROR':
-					severity = `<span style="color:red"><b>${severity}</b></span>`;
-					break;
-				default:
-					severity = `<span style="color:blue"><b>${severity}</b></span>`;
-					break;
-			}
-			var html = $('<tr>').addClass('event').append($('<td style="text-align:center">').text(registered)).append($('<td style="text-align:center">').html(severity)).append($('<td>').append(msg));
-			$('#logs').prepend(html);
+			let msg = $('<b>').text(message);
+			if (data != null) msg = msg.add($('<br>')).add($('<code>').text(JSON.stringify(data, ' ', 1)));
+			const row = $('<tr>').addClass('event')
+				.append($('<td style="text-align:center">').text(registered))
+				.append($('<td style="text-align:center">').append(severityHtml(severity)))
+				.append($('<td>').append(msg));
+			$('#logs').prepend(row);
 		}
+		Homey.get('debugLog', (error, value) => {
+			if (error) return console.error(error);
+			(value || []).forEach((item) => addLogEntry(item.registered, item.severity, item.message, item.data));
+		});
+		Homey.on('debugLog', (item) => addLogEntry(item.registered, item.severity, item.message, item.data));
 
-		Homey.get('debugLog', function (error, value) {
-			if (error) {
-				return console.error(error);
-			}
-			if (value != null) {
-				value.forEach(function (item) {
-					addLogEntry(item.registered, item.severity, item.message, item.data);
-				});
-			}
+		// ---- Auth log ----
+		function addAuthEntry(item) {
+			$('#authEmpty').hide();
+			const detail = item.detail && Object.keys(item.detail).length ? JSON.stringify(item.detail, ' ', 1) : '';
+			const row = $('<tr>')
+				.append($('<td style="text-align:center">').text(item.registered))
+				.append($('<td style="text-align:center">').append(severityHtml(item.severity)).append($('<br>')).append($('<span>').text(item.type)))
+				.append($('<td style="text-align:center">').text(item.source || ''))
+				.append($('<td>').append($('<code>').text(detail)));
+			$('#authLogs').prepend(row);
+		}
+		Homey.get('authLog', (error, value) => {
+			if (error) return console.error(error);
+			const list = value || [];
+			if (list.length === 0) $('#authEmpty').show(); else $('#authEmpty').hide();
+			list.forEach(addAuthEntry);
+		});
+		Homey.on('authLog', addAuthEntry);
+		document.getElementById('authClear').addEventListener('click', () => {
+			Homey.api('POST', '/authlog/clear', {}, (err) => {
+				if (err) return Homey.alert(err.message || String(err));
+				$('#authLogs').empty();
+				$('#authEmpty').show();
+			});
 		});
 
-		Homey.on('debugLog', function (item) {
-			addLogEntry(item.registered, item.severity, item.message, item.data);
-		});
+		// ---- Account ----
+		const emailElement = document.getElementById('email');
+		const passwordElement = document.getElementById('password');
+		const distanceUnitElement = document.getElementById('distanceUnit');
+		passwordElement.placeholder = Homey.__('Polestar2.settings.account.passwordPlaceholder');
 
-		var emailElement = document.getElementById("email");
-		var passwordElement = document.getElementById("password");
-		var distanceUnitElement = document.getElementById("distanceUnit");
-		var saveElement = document.getElementById("save");
-
-		Homey.get("user_email", function (err, username) {
+		Homey.get('user_email', (err, username) => {
 			if (err) return Homey.alert(err);
-			emailElement.value = username;
+			emailElement.value = username || '';
 		});
-
-		Homey.get("user_password", function (err, password) {
-			if (err) return Homey.alert(err);
-			passwordElement.value = password;
-		});
-
-		Homey.get("distance_unit", function (err, distanceUnit) {
+		Homey.get('distance_unit', (err, distanceUnit) => {
 			if (err) return Homey.alert(err);
 			distanceUnitElement.value = distanceUnit || 'km';
 		});
 
-		saveElement.addEventListener("click", function (e) {
+		document.getElementById('save').addEventListener('click', (e) => {
 			e.preventDefault();
+			// Through the app API so the password is encrypted before it is
+			// stored; an empty field keeps the stored password.
+			Homey.api('POST', '/account', {
+				email: emailElement.value,
+				password: passwordElement.value || null,
+				distanceUnit: distanceUnitElement.value,
+			}, (err) => {
+				if (err) return Homey.alert(err.message || String(err));
+				passwordElement.value = '';
+				Homey.alert(Homey.__({ en: 'Settings saved', no: 'Innstillinger lagret', nl: 'Instellingen opgeslagen' }));
+			});
+		});
 
-			Homey.set("user_email", emailElement.value, function (err) {
-				if (err) return Homey.alert(err);
+		// ---- EU Data Portal ----
+		const euEnabled = document.getElementById('euEnabled');
+		const euClientId = document.getElementById('euClientId');
+		const euClientSecret = document.getElementById('euClientSecret');
+		const euAccountId = document.getElementById('euAccountId');
+		const euStatus = document.getElementById('euStatus');
+		const euSave = document.getElementById('euSave');
+
+		function showEuStatus(cfg) {
+			if (!cfg.enabled) {
+				euStatus.textContent = Homey.__('Polestar2.settings.eu.statusOff');
+				return;
+			}
+			const s = cfg.status || {};
+			euStatus.textContent = Homey.__('Polestar2.settings.eu.statusOk')
+				.replace('{vehicles}', s.vehicles != null ? s.vehicles : '?')
+				.replace('{matched}', s.matched != null ? s.matched : '?');
+		}
+		function loadEu(cfg) {
+			euEnabled.checked = !!cfg.enabled;
+			euClientId.value = cfg.clientId || '';
+			euAccountId.value = cfg.accountId || '';
+			euClientSecret.value = '';
+			euClientSecret.placeholder = cfg.hasSecret ? Homey.__('Polestar2.settings.eu.secretPlaceholder') : '';
+			showEuStatus(cfg);
+		}
+		Homey.api('GET', '/dataportal', null, (err, cfg) => {
+			if (err) return console.error(err);
+			loadEu(cfg);
+		});
+		euSave.addEventListener('click', (e) => {
+			e.preventDefault();
+			euStatus.textContent = euEnabled.checked ? Homey.__('Polestar2.settings.eu.testing') : '';
+			euSave.disabled = true;
+			Homey.api('POST', '/dataportal', {
+				enabled: euEnabled.checked,
+				clientId: euClientId.value,
+				clientSecret: euClientSecret.value,
+				accountId: euAccountId.value,
+			}, (err, cfg) => {
+				euSave.disabled = false;
+				if (err) {
+					euStatus.textContent = Homey.__('Polestar2.settings.eu.failed') + ': ' + (err.message || String(err));
+					return;
+				}
+				loadEu(cfg);
+				Homey.alert(Homey.__('Polestar2.settings.eu.saved'));
 			});
-			Homey.set("user_password", passwordElement.value, function (err) {
-				if (err) return Homey.alert(err);
-			});
-			Homey.set("distance_unit", distanceUnitElement.value, function (err) {
-				if (err) return Homey.alert(err);
-			});
-			Homey.alert(Homey.__({ en: "Settings saved", no: "Innstillinger lagret", nl: "Instellingen opgeslagen" }));
 		});
 	}
 </script>

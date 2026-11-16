@@ -19,19 +19,46 @@
             "title": "Einstellungen",
             "tabs": {
                 "account": "Konto",
-                "debug": "Debuggen"
+                "debug": "Debuggen",
+                "auth": "Anmeldeprotokoll",
+                "eu": "EU Data Portal"
             },
             "account": {
                 "title": "Kontoeinstellungen",
                 "email": "E-Mail-Adresse",
                 "password": "Passwort",
-                "saveBtn": "Speichern"
+                "saveBtn": "Speichern",
+                "passwordPlaceholder": "Leer lassen, um das gespeicherte Passwort zu behalten"
             },
             "debug": {
                 "title": "Debug-Logger",
                 "registered": "Zeitstempel",
                 "severity": "Schweregrad",
                 "message": "Nachricht"
+            },
+            "auth": {
+                "title": "Anmeldeprotokoll",
+                "intro": "Die App meldet sich mit einer gespeicherten Sitzung (Refresh-Token) an. Dieses Protokoll zeigt, wann das nicht klappte und das Passwort nötig war, und warum. Es bleibt über Neustarts erhalten (letzte 50 Ereignisse).",
+                "event": "Ereignis",
+                "source": "Quelle",
+                "detail": "Details",
+                "clearBtn": "Protokoll löschen",
+                "empty": "Noch keine Ereignisse."
+            },
+            "eu": {
+                "title": "Enhanced Polestar EU experience",
+                "intro": "Nutzt das offizielle Polestar Data Portal (nur EU-Fahrzeuge, nur lesend) für zusätzliche Daten: Durchschnittsverbrauch und -geschwindigkeit, Tageskilometerzähler, Fahrzeugalarm, Heckklappenschloss, Warnungen für Bremsflüssigkeit und Lampen, Lade- und Klima-Timer und Nutzungsmodus. API-Zugangsdaten auf data-portal.polestar.com erstellen; die Account-ID steht dort auf der Seite mit der API-Dokumentation.",
+                "enable": "Aktivieren",
+                "clientId": "Client ID",
+                "clientSecret": "Client Secret",
+                "secretPlaceholder": "Leer lassen, um das gespeicherte Secret zu behalten",
+                "accountId": "Account-ID",
+                "saveBtn": "Speichern und testen",
+                "testing": "Zugangsdaten werden getestet…",
+                "statusOk": "Verbunden: {vehicles} Fahrzeug(e) im Portal, davon {matched} in Homey.",
+                "statusOff": "Nicht aktiviert.",
+                "saved": "Gespeichert",
+                "failed": "Verbindung fehlgeschlagen"
             }
         }
     },

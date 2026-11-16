@@ -218,5 +218,10 @@
     "en": "New battery preconditioning sensor, with a flow trigger for changes and a condition to check the state. It only appears on cars that report it. Log lines now name the car they came from.",
     "no": "Ny sensor for batteriforvarming, med en flytutløser for endringer og en betingelse for å sjekke tilstanden. Den vises kun på biler som rapporterer den. Logglinjer navngir nå bilen de kommer fra.",
     "nl": "Nieuwe sensor voor accu-voorverwarming, met een flow-trigger bij wijzigingen en een conditie om de status te controleren. Hij verschijnt alleen op auto's die het melden. Logregels vermelden nu bij welke auto ze horen."
+  },
+  "3.5.0": {
+    "en": "Logins now reuse a stored session, so the app keeps working when your Homey changes network, and a new Login log in the app settings shows when the password was needed. New optional Enhanced Polestar EU experience: connect the official Polestar Data Portal for extra sensors such as average consumption, trip meters, car alarm, charge timer and brake and light warnings.",
+    "nl": "Aanmelden hergebruikt nu een opgeslagen sessie, zodat de app blijft werken als je Homey van netwerk wisselt, en een nieuw Aanmeldlog in de app-instellingen toont wanneer het wachtwoord nodig was. Nieuw en optioneel: Enhanced Polestar EU experience koppelt het officiële Polestar Data Portal voor extra sensoren zoals gemiddeld verbruik, triptellers, autoalarm, laadtimer en waarschuwingen voor remvloeistof en lampen.",
+    "no": "Innlogging gjenbruker nå en lagret økt, så appen fortsetter å virke når Homey bytter nettverk, og en ny innloggingslogg i appinnstillingene viser når passordet trengtes. Nytt og valgfritt: Enhanced Polestar EU experience kobler til den offisielle Polestar Data Portal for ekstra sensorer som gjennomsnittlig forbruk, trippteller, billalarm, ladetidtaker og varsler for bremsevæske og lys."
   }
 }

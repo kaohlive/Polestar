@@ -19,19 +19,46 @@
             "title": "Indstillinger",
             "tabs": {
                 "account": "Konto",
-                "debug": "Fejlfinding"
+                "debug": "Fejlfinding",
+                "auth": "Login-log",
+                "eu": "EU Data Portal"
             },
             "account": {
                 "title": "Kontoindstillinger",
                 "email": "Email-adresse",
                 "password": "Adgangskode",
-                "saveBtn": "Gem"
+                "saveBtn": "Gem",
+                "passwordPlaceholder": "Lad stå tomt for at beholde den gemte adgangskode"
             },
             "debug": {
                 "title": "Debug logger",
                 "registered": "Tidsstempel",
                 "severity": "Alvorlighed",
                 "message": "Meddelelse"
+            },
+            "auth": {
+                "title": "Login-log",
+                "intro": "Appen logger ind med en gemt session (refresh-token). Denne log viser, hvornår det ikke lykkedes og adgangskoden var nødvendig, og hvorfor. Den bevares ved genstart (seneste 50 hændelser).",
+                "event": "Hændelse",
+                "source": "Kilde",
+                "detail": "Detaljer",
+                "clearBtn": "Ryd log",
+                "empty": "Ingen hændelser endnu."
+            },
+            "eu": {
+                "title": "Enhanced Polestar EU experience",
+                "intro": "Bruger den officielle Polestar Data Portal (kun EU-biler, kun læsning) til ekstra data: gennemsnitligt forbrug og hastighed, triptællere, bilalarm, bagklapslås, advarsler for bremsevæske og lygter, lade- og klimatimere og brugstilstand. Opret API-legitimationsoplysninger på data-portal.polestar.com; konto-ID står på siden med API-dokumentation.",
+                "enable": "Aktivér",
+                "clientId": "Client ID",
+                "clientSecret": "Client secret",
+                "secretPlaceholder": "Lad stå tomt for at beholde det gemte secret",
+                "accountId": "Konto-ID",
+                "saveBtn": "Gem og test",
+                "testing": "Tester legitimationsoplysninger…",
+                "statusOk": "Forbundet: {vehicles} bil(er) i portalen, {matched} af dem i Homey.",
+                "statusOff": "Ikke aktiveret.",
+                "saved": "Gemt",
+                "failed": "Kunne ikke forbinde"
             }
         }
     },
