@@ -38,6 +38,35 @@ const DP_CAP_OPTIONS = {
     [DP_CAP.lightFailure]: { title: { en: 'Light failure', nl: 'Lampstoring', de: 'Lampenausfall', fr: 'Défaut d\'éclairage', it: 'Guasto luci', sv: 'Lampfel', no: 'Lyspære-feil', es: 'Fallo de luces', da: 'Lygtefejl', ru: 'Неисправность фар', pl: 'Awaria oświetlenia', ko: '조명 고장', ja: 'ライト故障' } },
 };
 
+// Data Portal enum values, shown in the Homey language. The usage modes come
+// from the Volvo platform (abandoned = parked and asleep, inactive = parked,
+// convenience = comfort mode); only ABANDONED, INACTIVE and TIMER have been
+// seen live. Unknown values fall back to title case and are logged once.
+const USAGE_MODE_LABELS = {
+    ABANDONED:   { en: 'Parked (asleep)', nl: 'Geparkeerd (slaapstand)', no: 'Parkert (dvale)', de: 'Geparkt (Ruhezustand)', da: 'Parkeret (dvale)', sv: 'Parkerad (viloläge)' },
+    INACTIVE:    { en: 'Parked', nl: 'Geparkeerd', no: 'Parkert', de: 'Geparkt', da: 'Parkeret', sv: 'Parkerad' },
+    CONVENIENCE: { en: 'Comfort', nl: 'Comfort', no: 'Komfort', de: 'Komfort', da: 'Komfort', sv: 'Komfort' },
+    ACTIVE:      { en: 'Active', nl: 'Actief', no: 'Aktiv', de: 'Aktiv', da: 'Aktiv', sv: 'Aktiv' },
+    DRIVING:     { en: 'Driving', nl: 'Rijdend', no: 'Kjører', de: 'Fährt', da: 'Kører', sv: 'Kör' },
+    UNSPECIFIED: { en: 'Unknown', nl: 'Onbekend', no: 'Ukjent', de: 'Unbekannt', da: 'Ukendt', sv: 'Okänd' },
+};
+const START_REASON_LABELS = {
+    timer:  { en: 'Timer', nl: 'Timer', no: 'Tidtaker', de: 'Timer', da: 'Timer', sv: 'Timer' },
+    remote: { en: 'From app', nl: 'Via app', no: 'Fra app', de: 'Per App', da: 'Fra app', sv: 'Från app' },
+    car:    { en: 'From car', nl: 'Vanuit auto', no: 'Fra bilen', de: 'Im Auto', da: 'Fra bilen', sv: 'Från bilen' },
+    none:   { en: 'None', nl: 'Geen', no: 'Ingen', de: 'Keine', da: 'Ingen', sv: 'Ingen' },
+};
+// Start reasons are matched on keywords: only TIMER is confirmed, the names
+// of the others are a guess based on the C3 request types (HMI / REMOTE).
+function startReasonKey(value) {
+    if (!value) return null;
+    if (/TIMER/.test(value)) return 'timer';
+    if (/REMOTE|APP/.test(value)) return 'remote';
+    if (/HMI|DIRECT|CAR|MANUAL/.test(value)) return 'car';
+    if (/UNSPECIFIED|NO_REQUEST|NONE/.test(value)) return 'none';
+    return null;
+}
+
 function titleCase(enumTail) {
     if (!enumTail) return null;
     return enumTail.toLowerCase().split('_').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
@@ -1387,11 +1416,35 @@ class PolestarVehicle extends Device {
                 await this._setBoolAndTrigger(DP_CAP.chargeTimerActive, snap.chargeTimerActive,
                     '_chargeTimerActivatedTrigger', '_chargeTimerDeactivatedTrigger');
             }
-            await set(DP_CAP.chargeTimer, snap.chargeTimerActive ? (snap.chargeTimerWindow || 'On') : 'Off');
+            await set(DP_CAP.chargeTimer, snap.chargeTimerActive
+                ? (snap.chargeTimerWindow || this.homey.__(BATTERY_PRECONDITIONING_LABELS.on))
+                : this.homey.__(BATTERY_PRECONDITIONING_LABELS.off));
         }
         if (snap.climateTimerCount !== undefined) await set(DP_CAP.climateTimers, snap.climateTimerCount);
-        if (snap.climateStartReason !== undefined) await set(DP_CAP.climateStartReason, titleCase(snap.climateStartReason) || '');
-        if (snap.usageMode !== undefined) await set(DP_CAP.usageMode, titleCase(snap.usageMode) || '');
+        if (snap.climateStartReason !== undefined) {
+            const key = startReasonKey(snap.climateStartReason);
+            await set(DP_CAP.climateStartReason, key
+                ? this.homey.__(START_REASON_LABELS[key])
+                : this._unknownEnumLabel('climate start reason', snap.climateStartReason));
+        }
+        if (snap.usageMode !== undefined) {
+            const labels = USAGE_MODE_LABELS[snap.usageMode];
+            await set(DP_CAP.usageMode, labels
+                ? this.homey.__(labels)
+                : this._unknownEnumLabel('usage mode', snap.usageMode));
+        }
+    }
+
+    /** Readable fallback for an enum value we have no translation for yet; logged once per value. */
+    _unknownEnumLabel(kind, value) {
+        if (!value) return '';
+        this._loggedEnums = this._loggedEnums || new Set();
+        const key = `${kind}:${value}`;
+        if (!this._loggedEnums.has(key)) {
+            this._loggedEnums.add(key);
+            this.homey.app.log(`Data Portal: untranslated ${kind} "${value}"`, this.name, 'WARNING');
+        }
+        return titleCase(value);
     }
 
     async onAdded() {

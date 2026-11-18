@@ -223,5 +223,10 @@
     "en": "Logins now reuse a stored session, so the app keeps working when your Homey changes network, and a new Login log in the app settings shows when the password was needed. New optional Enhanced Polestar EU experience: connect the official Polestar Data Portal for extra sensors such as average consumption, trip meters, car alarm, charge timer and brake and light warnings.",
     "nl": "Aanmelden hergebruikt nu een opgeslagen sessie, zodat de app blijft werken als je Homey van netwerk wisselt, en een nieuw Aanmeldlog in de app-instellingen toont wanneer het wachtwoord nodig was. Nieuw en optioneel: Enhanced Polestar EU experience koppelt het officiële Polestar Data Portal voor extra sensoren zoals gemiddeld verbruik, triptellers, autoalarm, laadtimer en waarschuwingen voor remvloeistof en lampen.",
     "no": "Innlogging gjenbruker nå en lagret økt, så appen fortsetter å virke når Homey bytter nettverk, og en ny innloggingslogg i appinnstillingene viser når passordet trengtes. Nytt og valgfritt: Enhanced Polestar EU experience kobler til den offisielle Polestar Data Portal for ekstra sensorer som gjennomsnittlig forbruk, trippteller, billalarm, ladetidtaker og varsler for bremsevæske og lys."
+  },
+  "3.5.1": {
+    "en": "Usage mode, climate start reason and charge timer status are now shown in your language.",
+    "nl": "Gebruiksmodus, reden voor klimaatstart en laadtimerstatus worden nu in je eigen taal getoond.",
+    "no": "Bruksmodus, årsak til klimastart og ladetidtakerstatus vises nå på ditt språk."
   }
 }
